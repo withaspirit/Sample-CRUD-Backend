@@ -6,10 +6,13 @@ public class Item {
     private String name;
     private BigDecimal price;
     private int stock;
+    private static int COUNT = 0;
 
     public Item(int id, String name) {
-        this.id = id;
+        this.id = COUNT++;
         this.name = name;
+        price = new BigDecimal(0);
+        stock = 0;
     }
 
     public Item(int id, String name, BigDecimal price) {
@@ -53,6 +56,7 @@ public class Item {
 
     @Override
     public String toString() {
+        getClass();
         String formattedString = id + ", '" + name + "', " + price + ", " + stock;
         return formattedString;
     }

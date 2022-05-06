@@ -1,6 +1,11 @@
 {
   "items": [
     {
+      "name": "Item",
+      "price": 0,
+      "stock": 0
+    },
+    {
       "name": "Action Figure",
       "price": 399,
       "stock": 12
@@ -33,7 +38,7 @@
     {
       "name": "Bubby",
       "price": 10000,
-      "stock": 0;
+      "stock": 0
     }
   ]
 }
