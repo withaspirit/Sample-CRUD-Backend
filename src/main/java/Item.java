@@ -8,21 +8,21 @@ public class Item {
     private int stock;
     private static int COUNT = 0;
 
-    public Item(int id, String name) {
+    public Item(String name) {
         this.id = COUNT++;
         this.name = name;
         price = new BigDecimal(0);
         stock = 0;
     }
 
-    public Item(int id, String name, BigDecimal price) {
-       this(id, name);
+    public Item(String name, BigDecimal price) {
+       this(name);
        this.price = price;
        this.stock = 0;
     }
 
-    public Item(int id, String name, BigDecimal price, int stock) {
-        this(id, name, price);
+    public Item(String name, BigDecimal price, int stock) {
+        this(name, price);
         this.stock = stock;
     }
 

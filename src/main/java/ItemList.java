@@ -2,7 +2,7 @@ import java.util.HashMap;
 
 public class ItemList {
 
-    private HashMap<Integer, Item> itemList;
+    private final HashMap<Integer, Item> itemList;
 
     public ItemList() {
         this.itemList = new HashMap<>();
