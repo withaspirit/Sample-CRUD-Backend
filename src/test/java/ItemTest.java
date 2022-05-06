@@ -21,4 +21,9 @@ public class ItemTest {
         assertEquals(new BigDecimal(0), item.getPrice());
         assertEquals(0, item.getStock());
     }
+
+    @Test
+    void testGettingPropertiesAsString() {
+        System.out.println(item.getAttributeNames());
+    }
 }

@@ -1,3 +1,4 @@
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 
 public class Item {
@@ -56,8 +57,20 @@ public class Item {
 
     @Override
     public String toString() {
-        getClass();
         String formattedString = id + ", '" + name + "', " + price + ", " + stock;
         return formattedString;
+    }
+
+    // https://stackoverflow.com/questions/3333974/how-to-loop-over-a-class-attributes-in-java
+    public String getAttributeNames() {
+        String str = "";
+        Field[] attributes = getClass().getDeclaredFields();
+
+        int indexBeforeCOUNT = attributes.length - 2;
+        for (int i = 0; i < indexBeforeCOUNT; i++) {
+            str += attributes[i].getName() + ", ";
+        }
+        str += attributes[indexBeforeCOUNT].getName();
+        return str;
     }
 }
