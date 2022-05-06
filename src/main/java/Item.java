@@ -1,0 +1,59 @@
+import java.math.BigDecimal;
+
+public class Item {
+
+    private final int id;
+    private String name;
+    private BigDecimal price;
+    private int stock;
+
+    public Item(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public Item(int id, String name, BigDecimal price) {
+       this(id, name);
+       this.price = price;
+       this.stock = 0;
+    }
+
+    public Item(int id, String name, BigDecimal price, int stock) {
+        this(id, name, price);
+        this.stock = stock;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
+
+    @Override
+    public String toString() {
+        String formattedString = id + ", '" + name + "', " + price + ", " + stock;
+        return formattedString;
+    }
+}
