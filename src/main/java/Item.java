@@ -73,4 +73,6 @@ public class Item {
         str += attributes[indexBeforeCOUNT].getName();
         return str;
     }
+
+    // TODO: convert to and from JSONObject
 }
