@@ -13,17 +13,21 @@ import java.nio.charset.StandardCharsets;
  */
 public class InputFileReader {
 
-    public static final String ITEMS_FILENAME = "items";
+    private final String fileName;
+    // TODO: ? add file ending to class
+//    private final String fileEnding;
 
     /**
      * Constructor for InputFileReader.
+     * 
+     * @param fileName the name of the file being read
      */
-    public InputFileReader() {
+    public InputFileReader(String fileName) {
+        this.fileName = fileName;
     }
 
     public String[] getValuesToInsert() {
-
-        JSONArray itemsJSONArray = createJSONArray(ITEMS_FILENAME);
+        JSONArray itemsJSONArray = createJSONArray(fileName);
 
         String[] valuesToInsert = new String[itemsJSONArray.size()];
         for (int i = 0; i < itemsJSONArray.size(); i++) {
@@ -42,22 +46,21 @@ public class InputFileReader {
     /**
      * Returns a JSONArray for a JSON file with the specified name.
      *
-     * @param name the name for the JSON file
+     * @param variableName the variable name to retrieve from a JSON file
      * @return JSONArray the JSON file converted to a JSON array
      */
-    public JSONArray createJSONArray(String name) {
-        return (JSONArray) getJSONFileAsObject(name).get(name);
+    public JSONArray createJSONArray(String variableName) {
+        return (JSONArray) getJSONFileAsObject().get(variableName);
     }
 
     /**
      * Returns a JSON file with the specified name as a JSONObject.
      *
-     * @param name the name of the JSON file
      * @return JSONObject a JSON file as a JSONObject
      */
-    public JSONObject getJSONFileAsObject(String name) {
+    public JSONObject getJSONFileAsObject() {
         try {
-            InputStreamReader inputStreamReader = createInputStreamReader(name + ".json");
+            InputStreamReader inputStreamReader = createInputStreamReader(fileName + ".json");
             JSONParser parser = new JSONParser();
             Object obj = parser.parse(inputStreamReader);
             return (JSONObject) obj;
