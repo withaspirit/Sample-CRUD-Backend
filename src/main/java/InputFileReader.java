@@ -1,7 +1,9 @@
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -14,19 +16,23 @@ import java.nio.charset.StandardCharsets;
 public class InputFileReader {
 
     private final String fileName;
-    // TODO: ? add file ending to class
-//    private final String fileEnding;
+    private final String fileEnding;
+    private final static String JSON = "json";
 
     /**
      * Constructor for InputFileReader.
      * 
      * @param fileName the name of the file being read
      */
-    public InputFileReader(String fileName) {
+    public InputFileReader(String fileName, String fileEnding) {
         this.fileName = fileName;
+        this.fileEnding = fileEnding;
     }
 
     public String[] getValuesToInsert() {
+        if (!fileEnding.equals(JSON)) {
+            throw new IllegalArgumentException("File type must be .json.");
+        }
         JSONArray itemsJSONArray = createJSONArray(fileName);
 
         String[] valuesToInsert = new String[itemsJSONArray.size()];
@@ -50,6 +56,9 @@ public class InputFileReader {
      * @return JSONArray the JSON file converted to a JSON array
      */
     public JSONArray createJSONArray(String variableName) {
+        if (!fileEnding.equals(JSON)) {
+            throw new IllegalArgumentException("File type must be .json.");
+        }
         return (JSONArray) getJSONFileAsObject().get(variableName);
     }
 
@@ -59,33 +68,37 @@ public class InputFileReader {
      * @return JSONObject a JSON file as a JSONObject
      */
     public JSONObject getJSONFileAsObject() {
-        try {
-            InputStreamReader inputStreamReader = createInputStreamReader(fileName + ".json");
-            JSONParser parser = new JSONParser();
-            Object obj = parser.parse(inputStreamReader);
-            return (JSONObject) obj;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+        if (!fileEnding.equals(JSON)) {
+            throw new IllegalArgumentException("File type must be .json.");
         }
+        InputStreamReader inputStreamReader = createInputStreamReader();
+        JSONParser parser = new JSONParser();
+        Object obj = null;
+
+        try {
+            obj = parser.parse(inputStreamReader);
+        } catch (IOException | ParseException e) {
+            throw new RuntimeException(e);
+        }
+        return (JSONObject) obj;
     }
 
     /**
      * Creates an InputStreamReader for a file with the specified name.
-     * If the project is not a Maven project, prepend "[file's package]/
+     * If the project is not a Maven project, prepend "[file's package]/"
      * if necessary.
      *
-     * @param name the name of the file
      * @return inputStreamReader an InputStreamReader for the file
      */
-    private InputStreamReader createInputStreamReader(String name) {
+    private InputStreamReader createInputStreamReader() {
         try {
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream(name);
+            InputStream inputStream = getClass().getClassLoader().
+                    getResourceAsStream(fileName + "." + fileEnding);
             assert inputStream != null;
             // Specify CharSet as UTF-8
             return new InputStreamReader(inputStream, StandardCharsets.UTF_8);
         } catch (Exception e) {
-            System.err.println(name + " was not found.");
+            System.err.println(fileName + " was not found.");
             e.printStackTrace();
             return null;
         }

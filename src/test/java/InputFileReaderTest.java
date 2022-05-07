@@ -17,7 +17,7 @@ public class InputFileReaderTest {
 
     @BeforeEach
     void setup() {
-        final InputFileReader inputFileReader = new InputFileReader(Database.ITEMS);
+        final InputFileReader inputFileReader = new InputFileReader(Database.ITEMS, "json");
         jsonObject = inputFileReader.getJSONFileAsObject();
         itemsJSONArray = inputFileReader.createJSONArray(Database.ITEMS);
     }
