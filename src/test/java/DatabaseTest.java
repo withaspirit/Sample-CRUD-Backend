@@ -71,7 +71,8 @@ public class DatabaseTest {
     void testInvalidIdWithDatabaseDeletion() {
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
                 testItem.getAttributeValuesExceptID());
-        database.deleteFromItems(String.valueOf(2));
+        int invalidId = 2;
+        database.deleteFromItems(String.valueOf(invalidId));
         itemsList = database.selectFromItems("*");
         assertEquals(1, itemsList.size());
     }
