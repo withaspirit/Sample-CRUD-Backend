@@ -31,11 +31,21 @@ public class Database {
     }
 
     public void initializeDatabase() {
+        InputFileReader inputFileReader = new InputFileReader("DDL", "sql");
+        String sqlTableCreateStatement = inputFileReader.getSQLFileAsString();
+        try {
+            statement.executeUpdate(sqlTableCreateStatement);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void populateDatabase() {
         String[] columns = { "id", "name", "price", "stock" };
         String[] allColumnsExceptID = Arrays.copyOfRange(columns, 1, columns.length - 1);
         String columnsToInsert = String.join(",", allColumnsExceptID);
 
-        InputFileReader inputFileReader = new InputFileReader(ITEMS);
+        InputFileReader inputFileReader = new InputFileReader(ITEMS, "json");
         String[] valuesToInsert = inputFileReader.getValuesToInsert();
 
         for (String values : valuesToInsert) {
@@ -61,7 +71,6 @@ public class Database {
      * @param values the set of values to insert
      */
     public void insert(String tableName, String columns, String values) {
-
         String statementToExecute = "INSERT INTO " + tableName +
                 "(" + columns + ") VALUES (" + values + ");";
         try {

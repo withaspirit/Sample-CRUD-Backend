@@ -29,6 +29,27 @@ public class InputFileReader {
         this.fileEnding = fileEnding;
     }
 
+    /**
+     * Returns an SQL file as a String.
+     *
+     * @return the sql file as a String
+     */
+    public String getSQLFileAsString() {
+        if (!fileEnding.equalsIgnoreCase("SQL")) {
+            throw new IllegalArgumentException("File type must be .sql");
+        }
+        // IntelliJ says the inputStream could be null, but that's handled in
+        // createInputStream(). Ignore the warning
+        InputStream inputStream = createInputStream();
+        String sqlTable;
+        try {
+            sqlTable = new String(inputStream.readAllBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return sqlTable;
+    }
+
     public String[] getValuesToInsert() {
         if (!fileEnding.equals(JSON)) {
             throw new IllegalArgumentException("File type must be .json.");
@@ -68,10 +89,11 @@ public class InputFileReader {
      * @return JSONObject a JSON file as a JSONObject
      */
     public JSONObject getJSONFileAsObject() {
-        if (!fileEnding.equals(JSON)) {
+        if (!fileEnding.equalsIgnoreCase(JSON)) {
             throw new IllegalArgumentException("File type must be .json.");
         }
-        InputStreamReader inputStreamReader = createInputStreamReader();
+        InputStream inputStream = createInputStream();
+        InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
         JSONParser parser = new JSONParser();
         Object obj = null;
 
@@ -88,15 +110,14 @@ public class InputFileReader {
      * If the project is not a Maven project, prepend "[file's package]/"
      * if necessary.
      *
-     * @return inputStreamReader an InputStreamReader for the file
+     * @return inputStream an InputStreamReader for the file
      */
-    private InputStreamReader createInputStreamReader() {
+    private InputStream createInputStream() {
         try {
             InputStream inputStream = getClass().getClassLoader().
                     getResourceAsStream(fileName + "." + fileEnding);
             assert inputStream != null;
-            // Specify CharSet as UTF-8
-            return new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+            return inputStream;
         } catch (Exception e) {
             System.err.println(fileName + " was not found.");
             e.printStackTrace();

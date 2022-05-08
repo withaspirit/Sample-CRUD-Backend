@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * InputFileReaderTest ensures that the input is read correctly.
@@ -28,5 +29,11 @@ public class InputFileReaderTest {
         final JSONArray jsonArray = (JSONArray) obj;
         assertEquals(jsonArray.size(), itemsJSONArray.size());
         assertEquals(jsonArray, itemsJSONArray);
+    }
+
+    @Test
+    void testReadingOfSQLFile() {
+        final InputFileReader inputFileReader = new InputFileReader("DDL", "sql");
+        assertNotNull(inputFileReader.getSQLFileAsString());
     }
 }
