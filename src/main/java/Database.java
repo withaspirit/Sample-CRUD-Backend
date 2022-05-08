@@ -86,7 +86,7 @@ public class Database {
      * @param selectedItems the range of items to be selected
      * @return arrayList of items contained in the items table
      */
-    public ArrayList<Item> selectItems(String selectedItems) {
+    public ArrayList<Item> selectFromItems(String selectedItems) {
         ResultSet resultSet = getResultSet(ITEMS, selectedItems);
         ArrayList<Item> items = new ArrayList<>();
 
@@ -100,6 +100,20 @@ public class Database {
             throw new RuntimeException(e);
         }
         return items;
+    }
+
+    /**
+     * Deletes items matching the provided ids from the table.
+     *
+     * @param itemId the provided item ids
+     */
+    public void deleteFromItems(String itemId) {
+        String statementToExecute = "DELETE FROM " + ITEMS + " WHERE id =" + itemId;
+        try {
+            statement.executeUpdate(statementToExecute);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

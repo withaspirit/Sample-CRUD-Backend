@@ -17,12 +17,13 @@ public class DatabaseTest {
     private Database database;
     private ArrayList<Item> itemsList;
     private JSONArray itemsJSONArray;
+    private Item testItem = new Item(1, "testItem", 0, 0);
 
     @BeforeEach
     void setup() {
         database = new Database();
         database.initializeDatabase();
-        InputFileReader inputFileReader = new InputFileReader("items", "json");
+        InputFileReader inputFileReader = new InputFileReader(Database.ITEMS, "json");
         itemsJSONArray = inputFileReader.createJSONArray(Database.ITEMS);
     }
 
@@ -33,21 +34,45 @@ public class DatabaseTest {
 
     @Test
     void testDatabaseInsertionForOneItem() {
-        Item item = new Item(0, "Default", 0, 0);
-        // TODO: replace magic strings
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
-                item.getAttributeValuesExceptID());
+                testItem.getAttributeValuesExceptID());
 
-        itemsList = database.selectItems("*");
+        itemsList = database.selectFromItems("*");
         assertEquals(1, itemsList.size());
         Item itemFromDatabase = itemsList.get(0);
-        assertEquals(item, itemFromDatabase);
+        assertEquals(testItem, itemFromDatabase);
     }
 
     @Test
     void testDatabasePopulatedWithCorrectNumberOfItems() {
         database.populateDatabase();
-        itemsList = database.selectItems("*");
+        itemsList = database.selectFromItems("*");
         assertEquals(itemsJSONArray.size(), itemsList.size());
+    }
+
+    @Test
+    void testPopulatedDatabaseItemEquality() {
+        database.populateDatabase();
+        itemsList = database.selectFromItems("*");
+        // TODO: compare itemList Items with those from itemsJSONArray
+        //   maybe add constructor for Item from JSONObject
+    }
+
+    @Test
+    void testValidIdWithDatabaseDeletion() {
+        database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
+                testItem.getAttributeValuesExceptID());
+        database.deleteFromItems(String.valueOf(testItem.getId()));
+        itemsList = database.selectFromItems("*");
+        assertEquals(0, itemsList.size());
+    }
+
+    @Test
+    void testInvalidIdWithDatabaseDeletion() {
+        database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
+                testItem.getAttributeValuesExceptID());
+        database.deleteFromItems(String.valueOf(2));
+        itemsList = database.selectFromItems("*");
+        assertEquals(1, itemsList.size());
     }
 }
