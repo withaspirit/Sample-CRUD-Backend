@@ -1,6 +1,7 @@
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class Item {
 
@@ -17,11 +18,11 @@ public class Item {
     }
 
     public Item(int id, String name, int price) {
-       this(id, name);
-       // quotient.remainder from / 100
-       String formattedPrice = price / 100 + "." + price % 100;
-       this.price = new BigDecimal(formattedPrice);
-       this.stock = 0;
+        this(id, name);
+        // quotient.remainder from / 100
+        String formattedPrice = price / 100 + "." + price % 100;
+        this.price = new BigDecimal(formattedPrice);
+        this.stock = 0;
     }
 
     public Item(int id, String name, int price, int stock) {
@@ -57,11 +58,7 @@ public class Item {
         this.stock = stock;
     }
 
-    @Override
-    public String toString() {
-        final String formattedString = id + ", '" + name + "', " + price + ", " + stock;
-        return formattedString;
-    }
+    // TODO?: convert to and from JSONObject
 
     // https://stackoverflow.com/questions/3333974/how-to-loop-over-a-class-attributes-in-java
     public static String getAttributeNamesExceptId() {
@@ -81,5 +78,25 @@ public class Item {
     public String getAttributeValuesExceptID() {
         return "'" + name + "'," + price + ", " + stock;
     }
-    // TODO: convert to and from JSONObject
+
+    @Override
+    public boolean equals(Object object) {
+        if (object == this) {
+            return true;
+        }
+
+        if (!(object instanceof Item item)) {
+            return false;
+        }
+
+        return id == item.getId() &&
+                name.equals(item.getName()) &&
+                Objects.equals(price, item.getPrice()) &&
+                stock == item.getStock();
+    }
+
+    @Override
+    public String toString() {
+        return id + ", '" + name + "', " + price + ", " + stock;
+    }
 }

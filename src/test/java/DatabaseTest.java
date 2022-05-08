@@ -40,11 +40,7 @@ public class DatabaseTest {
         itemsList = database.selectItems("*");
         assertEquals(1, itemsList.size());
         Item itemFromDatabase = itemsList.get(0);
-
-        assertEquals(item.getId(), itemFromDatabase.getId());
-        assertEquals(item.getName(), itemFromDatabase.getName());
-        assertEquals(item.getPrice(), itemFromDatabase.getPrice());
-        assertEquals(item.getStock(), itemFromDatabase.getStock());
+        assertEquals(item, itemFromDatabase);
     }
 
     @Test
