@@ -1,5 +1,5 @@
 import java.sql.*;
-import java.util.Arrays;
+import java.util.ArrayList;
 
 /**
  * Database contains the CRUD functionality for the SQLite database.
@@ -22,11 +22,11 @@ public class Database {
             connection = DriverManager.getConnection(DATABASE_NAME);
             statement = connection.createStatement();
         } catch (ClassNotFoundException e) {
-            System.err.println(e.getMessage());
+            throw new RuntimeException(e);
         } catch (SQLException e) {
             // if the error message is "out of memory",
             // it probably means no database file is found
-            System.err.println(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
@@ -41,12 +41,10 @@ public class Database {
     }
 
     public void populateDatabase() {
-        String[] columns = { "id", "name", "price", "stock" };
-        String[] allColumnsExceptID = Arrays.copyOfRange(columns, 1, columns.length);
-        String columnsToInsert = String.join(",", allColumnsExceptID);
-
         InputFileReader inputFileReader = new InputFileReader(ITEMS, "json");
+        // FIXME: insertion arguments inconsistent
         String[] valuesToInsert = inputFileReader.getValuesToInsert();
+        String columnsToInsert = Item.getAttributeNamesExceptId();
 
         for (String values : valuesToInsert) {
             insert(ITEMS, columnsToInsert, values);
@@ -55,11 +53,12 @@ public class Database {
 
     public void closeDatabase() {
         try {
-            if (connection != null)
+            if (connection != null) {
                 connection.close();
+            }
         } catch (SQLException e) {
             // connection close failed.
-            System.err.println(e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -67,14 +66,60 @@ public class Database {
      * Inserts a set of values into a table.
      *
      * @param tableName the name of the table to insert into
-     * @param columns the set of columns selected for insertion
-     * @param values the set of values to insert
+     * @param columns the set of columns selected for insertion as a string
+     * @param values the set of values to insert as a string
      */
     public void insert(String tableName, String columns, String values) {
         String statementToExecute = "INSERT INTO " + tableName +
                 "(" + columns + ") VALUES (" + values + ");";
         try {
+            // TODO?: used executeUpdate with columns names
             statement.executeUpdate(statementToExecute);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Selects and returns an ArrayList of Items from the items table
+     *
+     * @param selectedItems the range of items to be selected
+     * @return arrayList of items contained in the items table
+     */
+    public ArrayList<Item> selectItems(String selectedItems) {
+        ResultSet resultSet = getResultSet(ITEMS, selectedItems);
+        ArrayList<Item> items = new ArrayList<>();
+
+        try {
+            while (resultSet.next()) {
+                // TODO?: move to Item as constructor
+                int id = resultSet.getInt(Attributes.ID.getName());
+                String name = resultSet.getString(Attributes.NAME.getName());
+                int price = resultSet.getInt((Attributes.PRICE.getName()));
+                int stock = resultSet.getInt(Attributes.STOCK.getName());
+
+                Item item = new Item(id, name, price, stock);
+                items.add(item);
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return items;
+    }
+
+    /**
+     * Selects and returns a ResultSet of selected rows from a selected table.
+     *
+     * @param tableName the name of the table
+     * @param selectedRows the rows to be selected
+     * @return resultSet containing rows of a table
+     */
+    public ResultSet getResultSet(String tableName, String selectedRows) {
+        // TODO?: add "where"
+        String statementToExecute = "SELECT " + selectedRows + " FROM " + tableName;
+        try {
+            return statement.executeQuery(statementToExecute);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
