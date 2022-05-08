@@ -1,5 +1,6 @@
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.util.Arrays;
 
 public class Item {
 
@@ -7,23 +8,24 @@ public class Item {
     private String name;
     private BigDecimal price;
     private int stock;
-    private static int COUNT = 0;
 
-    public Item(String name) {
-        this.id = COUNT++;
+    public Item(int id, String name) {
+        this.id = id;
         this.name = name;
         price = new BigDecimal(0);
         stock = 0;
     }
 
-    public Item(String name, BigDecimal price) {
-       this(name);
-       this.price = price;
+    public Item(int id, String name, int price) {
+       this(id, name);
+       // quotient.remainder from / 100
+       String formattedPrice = price / 100 + "." + price % 100;
+       this.price = new BigDecimal(formattedPrice);
        this.stock = 0;
     }
 
-    public Item(String name, BigDecimal price, int stock) {
-        this(name, price);
+    public Item(int id, String name, int price, int stock) {
+        this(id, name, price);
         this.stock = stock;
     }
 
@@ -57,7 +59,7 @@ public class Item {
 
     @Override
     public String toString() {
-        String formattedString = id + ", '" + name + "', " + price + ", " + stock;
+        final String formattedString = id + ", '" + name + "', " + price + ", " + stock;
         return formattedString;
     }
 
@@ -73,6 +75,12 @@ public class Item {
         str += attributes[indexBeforeCOUNT].getName();
         return str;
     }
+
+    public String getAttributeValuesExceptID() {
+        return "'" + name + "'," + price + ", " + stock;
+    }
+
+
 
     // TODO: convert to and from JSONObject
 }
