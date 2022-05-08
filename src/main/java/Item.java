@@ -1,5 +1,7 @@
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -28,6 +30,20 @@ public class Item {
     public Item(int id, String name, int price, int stock) {
         this(id, name, price);
         this.stock = stock;
+    }
+
+    public Item(ResultSet resultSet) {
+        final Field[] attributes = Item.class.getDeclaredFields();
+
+        try {
+            id = resultSet.getInt(attributes[0].getName());
+            name = resultSet.getString(attributes[1].getName());
+            int price = resultSet.getInt((attributes[2].getName()));
+            this.price = new BigDecimal(price / 100 + "." + price % 100);
+            stock = resultSet.getInt(attributes[3].getName());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public int getId() {

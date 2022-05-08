@@ -92,13 +92,7 @@ public class Database {
 
         try {
             while (resultSet.next()) {
-                // TODO?: move to Item as constructor
-                int id = resultSet.getInt(Attributes.ID.getName());
-                String name = resultSet.getString(Attributes.NAME.getName());
-                int price = resultSet.getInt((Attributes.PRICE.getName()));
-                int stock = resultSet.getInt(Attributes.STOCK.getName());
-
-                Item item = new Item(id, name, price, stock);
+                Item item = new Item(resultSet);
                 items.add(item);
             }
             resultSet.close();

@@ -37,6 +37,7 @@ public class DatabaseTest {
         // TODO: replace magic strings
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
                 item.getAttributeValuesExceptID());
+
         itemsList = database.selectItems("*");
         assertEquals(1, itemsList.size());
         Item itemFromDatabase = itemsList.get(0);
