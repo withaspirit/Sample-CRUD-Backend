@@ -42,7 +42,7 @@ public class Database {
 
     public void populateDatabase() {
         String[] columns = { "id", "name", "price", "stock" };
-        String[] allColumnsExceptID = Arrays.copyOfRange(columns, 1, columns.length - 1);
+        String[] allColumnsExceptID = Arrays.copyOfRange(columns, 1, columns.length);
         String columnsToInsert = String.join(",", allColumnsExceptID);
 
         InputFileReader inputFileReader = new InputFileReader(ITEMS, "json");

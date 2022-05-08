@@ -1,11 +1,11 @@
 DROP TABLE IF EXISTS items;
+
 CREATE TABLE IF NOT EXISTS items (
   id INTEGER AUTO_INCREMENT,
   name TEXT NOT NULL,
-  price NUMERIC(15,2) DEFAULT 0,
+  price INTEGER DEFAULT 0,
   stock INTEGER DEFAULT 0,
   PRIMARY KEY (id),
   CHECK (length(name) > 0 AND
     price >= 0 AND
-    stock >= 0)
-) STRICT;
+    stock >= 0));
