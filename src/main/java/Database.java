@@ -33,11 +33,7 @@ public class Database {
     public void initializeDatabase() {
         InputFileReader inputFileReader = new InputFileReader("DDL", "sql");
         String sqlTableCreateStatement = inputFileReader.getSQLFileAsString();
-        try {
-            statement.executeUpdate(sqlTableCreateStatement);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        executeStatement(sqlTableCreateStatement);
     }
 
     public void populateDatabase() {
@@ -72,12 +68,8 @@ public class Database {
     public void insert(String tableName, String columns, String values) {
         String statementToExecute = "INSERT INTO " + tableName +
                 "(" + columns + ") VALUES (" + values + ");";
-        try {
-            // TODO?: used executeUpdate with columns names
-            statement.executeUpdate(statementToExecute);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        // TODO?: used executeUpdate with columns names
+        executeStatement(statementToExecute);
     }
 
     /**
@@ -109,11 +101,12 @@ public class Database {
      */
     public void deleteFromItems(String itemId) {
         String statementToExecute = "DELETE FROM " + ITEMS + " WHERE id =" + itemId;
-        try {
-            statement.executeUpdate(statementToExecute);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        executeStatement(statementToExecute);
+    }
+
+    public void updateItems(String updateStatement) {
+        String statementToExecute = "UPDATE " + ITEMS + " SET (";
+        executeStatement(statementToExecute);
     }
 
     /**
@@ -128,6 +121,19 @@ public class Database {
         String statementToExecute = "SELECT " + selectedRows + " FROM " + tableName;
         try {
             return statement.executeQuery(statementToExecute);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Executes an SQL statement on a table.
+     *
+     * @param sqlStatement the SQL statement to execute
+     */
+    public void executeStatement(String sqlStatement) {
+        try {
+            statement.executeUpdate(sqlStatement);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
