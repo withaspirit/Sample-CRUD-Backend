@@ -64,23 +64,22 @@ public class Item {
     }
 
     // https://stackoverflow.com/questions/3333974/how-to-loop-over-a-class-attributes-in-java
-    public String getAttributeNames() {
-        String str = "";
-        Field[] attributes = getClass().getDeclaredFields();
+    public static String getAttributeNamesExceptId() {
+        final Field[] attributes = Item.class.getDeclaredFields();
+        final Field[] attributesExceptId = Arrays.copyOfRange(attributes, 1, attributes.length);
 
-        int indexBeforeCOUNT = attributes.length - 2;
-        for (int i = 0; i < indexBeforeCOUNT; i++) {
-            str += attributes[i].getName() + ", ";
+        StringBuilder commaSeparatedAttributes = new StringBuilder();
+        for (int i = 0; i < attributesExceptId.length; i++) {
+            commaSeparatedAttributes.append(attributesExceptId[i].getName());
+            if (i != attributesExceptId.length - 1) {
+                commaSeparatedAttributes.append(", ");
+            }
         }
-        str += attributes[indexBeforeCOUNT].getName();
-        return str;
+        return commaSeparatedAttributes.toString();
     }
 
     public String getAttributeValuesExceptID() {
         return "'" + name + "'," + price + ", " + stock;
     }
-
-
-
     // TODO: convert to and from JSONObject
 }
