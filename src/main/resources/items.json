@@ -2,42 +2,42 @@
   "items": [
     {
       "name": "Item",
-      "price": 0.00,
+      "price": 0,
       "stock": 0
     },
     {
       "name": "Action Figure",
-      "price": 3.99,
+      "price": 399,
       "stock": 12
     },
     {
       "name": "Toy Car",
-      "price": 2.099,
+      "price": 2099,
       "stock": 4
     },
     {
       "name": "Dollhouse",
-      "price": 6.599,
+      "price": 6599,
       "stock": 5
     },
     {
       "name": "Mini-Oven",
-      "price": 3.99,
+      "price": 399,
       "stock": 2
     },
     {
       "name": "Slinky",
-      "price": 0.99,
+      "price": 99,
       "stock": 3
     },
     {
       "name": "Cards",
-      "price": 1.99,
+      "price": 199,
       "stock": 6
     },
     {
       "name": "Bubby",
-      "price": 10000.00,
+      "price": 1000000,
       "stock": 0
     }
   ]
