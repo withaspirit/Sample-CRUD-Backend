@@ -105,6 +105,17 @@ public class Item {
         return "'" + name + "'," + price.scaleByPowerOfTen(2).intValue() + ", " + stock;
     }
 
+    public static String[] getAttributeNamesAsArray() {
+        Field[] attributes = Item.class.getDeclaredFields();
+        Field[] attributesExceptId = Arrays.copyOfRange(attributes, 1, attributes.length);
+        String[] attributeNames = new String[attributesExceptId.length];
+
+        for (int i = 0; i < attributesExceptId.length; i++) {
+            attributeNames[i] = attributesExceptId[i].getName();
+        }
+        return attributeNames;
+    }
+
     public String[] getValuesAsArray() {
         return new String[] { name, price.toString(), String.valueOf(stock) };
     }

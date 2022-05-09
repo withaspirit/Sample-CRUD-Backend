@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -75,6 +76,10 @@ public class DatabaseCLI {
      * @return a String indicating the completion success
      */
     public String updateItem(String userInput) {
+        String itemAttributesPipeSeparated =
+                String.join("|", Item.getAttributeNamesAsArray());
+        String updateRegex = "(\\d+) (" + itemAttributesPipeSeparated + ") = (\\w+|\\d+\\.\\d+|\\d+)";
+        Matcher matcher = getMatcher(updateRegex, userInput);
         return "";
     }
 
