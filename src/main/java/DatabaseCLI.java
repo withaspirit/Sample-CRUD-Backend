@@ -11,6 +11,8 @@ import java.util.regex.Pattern;
  */
 public class DatabaseCLI {
 
+    private boolean userWantsToQuit;
+
     private static final String CREATE_REGEX = "(CREATE) (\\w+) (\\d+\\.\\d+) (\\d+)";
     private static final String UPDATE_REGEX = "(UPDATE) (\\d+) (name = \\w+|price = \\d+\\.\\d+|stock = \\d+)";
     private static final String READ_REGEX = "(READ) (" + Database.ITEMS + ")";
@@ -20,7 +22,7 @@ public class DatabaseCLI {
      * Constructor for Database CLI.
      */
     public DatabaseCLI() {
-
+        userWantsToQuit = false;
     }
 
     public void start() {
@@ -30,7 +32,6 @@ public class DatabaseCLI {
     }
 
     public void loop() {
-        boolean userWantsToQuit = false;
         Scanner scanner = new Scanner(System.in);
         scanner.useLocale(Locale.US);
 
@@ -48,6 +49,7 @@ public class DatabaseCLI {
             String[] commandAndSQLInput = separateCommandAndSQLInput(matcher);
             if (commandAndSQLInput == null) {
                 System.out.println("Error: matcher.matches() passed, but matcher.find() failed.");
+                continue;
             }
 
             Command command = Command.getCommand(commandAndSQLInput[0]);
