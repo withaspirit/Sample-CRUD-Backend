@@ -1,4 +1,7 @@
+import java.util.Locale;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * DatabaseCLI is a command-line interface that allows users to interact with
@@ -24,6 +27,7 @@ public class DatabaseCLI {
     public void loop() {
         boolean userWantsToQuit = false;
         Scanner scanner = new Scanner(System.in);
+        scanner.useLocale(Locale.US);
 
         do {
             String consoleOutput = "";
@@ -44,13 +48,16 @@ public class DatabaseCLI {
                         help();
                         break;
                     case CREATE:
-                        System.out.println();
+                        consoleOutput = createItem(userInput);
                         break;
                     case READ:
+                        consoleOutput = read();
                         break;
                     case UPDATE:
+                        consoleOutput = updateItem(userInput);
                         break;
                     case DELETE:
+                        consoleOutput = delete();
                         break;
                     default:
                         break;
@@ -59,6 +66,65 @@ public class DatabaseCLI {
             System.out.println(consoleOutput);
             System.out.println();
         } while (userWantsToQuit == false);
+    }
+
+    /**
+     * Updates an Item and returns a String indicating the level of success.
+     *
+     * @param userInput the user's input to the program
+     * @return a String indicating the completion success
+     */
+    public String updateItem(String userInput) {
+        return "";
+    }
+
+    /**
+     * Creates an Item and returns a String indicating the level of success.
+     *
+     * @param userInput the user's input to the program
+     * @return a String indicating the completion success
+     */
+    public String createItem(String userInput) {
+        String createPrompt = "Enter values for: (" + Item.getAttributeNamesExceptId() + ") for the new Item: ";
+        System.out.print(createPrompt);
+
+        // name price[dollar.cent] stock
+        String createRegex = "(\\w+) (\\d+\\.\\d+) (\\d+)";
+        Matcher createMatcher = getMatcher(createRegex, userInput);
+        if (createMatcher.matches() == false) {
+            return "Invalid input.";
+        }
+        createMatcher.reset();
+
+        Item item;
+        if (createMatcher.find()) {
+            item = new Item(createMatcher);
+            System.out.println(item.getAttributeValuesExceptId());
+
+        } else {
+            return "ERROR: Input matches creation regex but could not be found.";
+        }
+        return "FIXME: Successfully created item: " + item.getAttributeValuesExceptId();
+    }
+
+    /**
+     * Returns a Matcher matching input to a given Regular Expression.
+     *
+     * @param regex a Regular Expression to capture
+     * @param userInput the input to the matcher
+     * @return the matcher after matching the userInput to the regex
+     */
+    public Matcher getMatcher(String regex, String userInput) {
+        Pattern createPattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+        return createPattern.matcher(userInput);
+    }
+
+    private String read() {
+        return "";
+    }
+
+    private String delete() {
+        return "";
     }
 
     /**

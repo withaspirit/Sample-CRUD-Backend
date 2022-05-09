@@ -3,6 +3,7 @@ import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.regex.Matcher;
 
 public class Item {
 
@@ -42,6 +43,13 @@ public class Item {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public Item(Matcher matcher) {
+        id = -1; // id is not used
+        name = matcher.group(1);
+        price = new BigDecimal(matcher.group(2));
+        stock = Integer.parseInt(matcher.group(3));
     }
 
     public int getId() {
@@ -91,8 +99,14 @@ public class Item {
         return commaSeparatedAttributes.toString();
     }
 
+    // FIXME: used for database insertion
+    //  probably should use string array instead
     public String getAttributeValuesExceptId() {
         return "'" + name + "'," + price.scaleByPowerOfTen(2).intValue() + ", " + stock;
+    }
+
+    public String[] getValuesAsArray() {
+        return new String[] { name, price.toString(), String.valueOf(stock) };
     }
 
     public String getAttributeNameValueListExceptId() {
