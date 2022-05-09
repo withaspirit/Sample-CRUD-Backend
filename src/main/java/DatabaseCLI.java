@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -38,69 +37,106 @@ public class DatabaseCLI {
         do {
             String consoleOutput = "";
             System.out.print("Enter command: ");
-            String userInput = scanner.nextLine().toLowerCase();
-            Command command = Command.getCommand(userInput);
+            String initialInput = scanner.nextLine().toLowerCase();
 
+            Matcher matcher = inputMatchesFormat(initialInput);
+            if (matcher == null) {
+                System.out.println("Input is invalid. Enter 'HELP' for options.");
+                continue;
+            }
+
+            String[] commandAndSQLInput = separateCommandAndSQLInput(matcher);
+            if (commandAndSQLInput == null) {
+                System.out.println("Error: matcher.matches() passed, but matcher.find() failed.");
+            }
+
+            Command command = Command.getCommand(commandAndSQLInput[0]);
             if (command == null) {
-                consoleOutput = "Please enter a valid command. " +
-                        "Enter ' " + Command.HELP.getName() + "' for a list of them.";
-            } else {
-                switch (command) {
-                    case QUIT:
-                        userWantsToQuit = true;
-                        consoleOutput = "Exiting program.";
-                        break;
-                    case HELP:
-                        help();
-                        break;
-                    case CREATE:
-                        consoleOutput = createItem(userInput);
-                        break;
-                    case READ:
-                        consoleOutput = read();
-                        break;
-                    case UPDATE:
-                        consoleOutput = updateItem(userInput);
-                        break;
-                    case DELETE:
-                        consoleOutput = delete();
-                        break;
-                    default:
-                        break;
-                }
+                System.out.println("Please enter a valid command. " +
+                        "Enter ' " + Command.HELP.getName() + "' for a list of them.");
+                continue;
+            }
+
+            String sqlInput = commandAndSQLInput[1];
+            switch (command) {
+                case QUIT:
+                    userWantsToQuit = true;
+                    consoleOutput = "Exiting program.";
+                    break;
+                case HELP:
+                    help();
+                    break;
+                case CREATE:
+                    consoleOutput = createItem(sqlInput);
+                    break;
+                case READ:
+                    consoleOutput = read(sqlInput);
+                    break;
+                case UPDATE:
+                    consoleOutput = updateItem(sqlInput);
+                    break;
+                case DELETE:
+                    consoleOutput = delete(sqlInput);
+                    break;
+                default:
+                    break;
             }
             System.out.println(consoleOutput);
             System.out.println();
         } while (userWantsToQuit == false);
     }
 
+    String[] separateCommandAndSQLInput(Matcher matcher) {
+        String[] commandAndSQL = new String[2];
+        if (!matcher.find()) {
+            return null;
+        } else {
+            commandAndSQL[0] = matcher.group(1);
+            commandAndSQL[1] = matcher.group(2);
+            return commandAndSQL;
+        }
+    }
+
+    Matcher inputMatchesFormat(String initialInput) {
+        String wordSpaceAnythingRegex = "(\\w+) (.+)";
+        Matcher matcher = getMatcher(wordSpaceAnythingRegex, initialInput);
+
+        if (!matcher.matches()) {
+            System.out.println("");
+            return null;
+        } else {
+            matcher.reset();
+            return matcher;
+        }
+    }
+
     /**
      * Updates an Item and returns a String indicating the level of success.
      *
-     * @param userInput the user's input to the program
+     * @param sqlInput the user's SQL input to the program
      * @return a String indicating the completion success
      */
-    public String updateItem(String userInput) {
+    public String updateItem(String sqlInput) {
         String itemAttributesPipeSeparated =
                 String.join("|", Item.getAttributeNamesAsArray());
         String updateRegex = "(\\d+) (" + itemAttributesPipeSeparated + ") = (\\w+|\\d+\\.\\d+|\\d+)";
-        Matcher matcher = getMatcher(updateRegex, userInput);
+        Matcher matcher = getMatcher(updateRegex, sqlInput);
         return "";
     }
 
     /**
      * Creates an Item and returns a String indicating the level of success.
      *
-     * @param userInput the user's input to the program
+     * @param sqlInput the user's SQL input to the program
      * @return a String indicating the completion success
      */
-    public String createItem(String userInput) {
+    public String createItem(String sqlInput) {
         String createPrompt = "Enter values for: (" + Item.getAttributeNamesExceptId() + ") for the new Item: ";
         System.out.print(createPrompt);
 
         // name price[dollar.cent] stock
-        String createRegex = "(\\w+) (\\d+\\.\\d+) (\\d+)";
-        Matcher createMatcher = getMatcher(createRegex, userInput);
+
+        Matcher createMatcher = getMatcher(CREATE_REGEX, sqlInput);
         if (createMatcher.matches() == false) {
             return "Invalid input.";
         }
@@ -129,11 +165,17 @@ public class DatabaseCLI {
         return createPattern.matcher(userInput);
     }
 
-    private String read() {
+    private String read(String sqlInput) {
+        String readStatement = "";
+        if (sqlInput.equals(Database.ITEMS)) {
+            // TODO: read from database;
+        } else {
+            return "InvalidInput";
+        }
         return "";
     }
 
-    private String delete() {
+    private String delete(String sqlInput) {
         return "";
     }
 
