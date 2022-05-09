@@ -12,6 +12,11 @@ import java.util.regex.Pattern;
  */
 public class DatabaseCLI {
 
+    private static final String CREATE_REGEX = "(CREATE) (\\w+) (\\d+\\.\\d+) (\\d+)";
+    private static final String UPDATE_REGEX = "(UPDATE) (\\d+) (name = \\w+|price = \\d+\\.\\d+|stock = \\d+)";
+    private static final String READ_REGEX = "(READ) (" + Database.ITEMS + ")";
+    private static final String DELETE_REGEX = "(DELETE) \\d+";
+
     /**
      * Constructor for Database CLI.
      */
