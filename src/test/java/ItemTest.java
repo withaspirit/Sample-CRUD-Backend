@@ -24,6 +24,19 @@ public class ItemTest {
     }
 
     @Test
+    void testItemEqualityNoDecimalPrice() {
+        Item itemWithNoDecimalPrice = new Item(0, testName, "0", 0);
+        assertEquals(item, itemWithNoDecimalPrice);
+    }
+
+    @Test
+    void testItemEqualityWithDecimalPrice() {
+        Item itemWithNoDecimalPrice = new Item(0, testName, "1", 0);
+        Item itemWithDecimalPrice = new Item(0, testName, "1.0", 0);
+        assertEquals(itemWithNoDecimalPrice, itemWithDecimalPrice);
+    }
+
+    @Test
     void testGettingPropertiesAsString() {
         System.out.println(Item.getAttributeNamesExceptId());
     }

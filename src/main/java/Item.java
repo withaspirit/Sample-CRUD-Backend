@@ -3,7 +3,6 @@ import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.Objects;
 
 public class Item {
 
@@ -19,15 +18,13 @@ public class Item {
         stock = 0;
     }
 
-    public Item(int id, String name, int price) {
+    public Item(int id, String name, String price) {
         this(id, name);
-        // quotient.remainder from / 100
-        String formattedPrice = price / 100 + "." + price % 100;
-        this.price = new BigDecimal(formattedPrice);
+        this.price = new BigDecimal(price);
         this.stock = 0;
     }
 
-    public Item(int id, String name, int price, int stock) {
+    public Item(int id, String name, String price, int stock) {
         this(id, name, price);
         this.stock = stock;
     }
@@ -39,6 +36,7 @@ public class Item {
             id = resultSet.getInt(attributes[0].getName());
             name = resultSet.getString(attributes[1].getName());
             int price = resultSet.getInt((attributes[2].getName()));
+            System.out.println(price);
             this.price = new BigDecimal(price / 100 + "." + price % 100);
             stock = resultSet.getInt(attributes[3].getName());
         } catch (SQLException e) {
@@ -62,8 +60,10 @@ public class Item {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
+    public void setPrice(String priceAsDecimalString) {
+        double priceAsDouble = Double.parseDouble(priceAsDecimalString);
+        String priceAsDecimal = String.format("%.2f", priceAsDouble);
+        this.price = new BigDecimal(priceAsDecimal);
     }
 
     public int getStock() {
@@ -91,8 +91,13 @@ public class Item {
         return commaSeparatedAttributes.toString();
     }
 
-    public String getAttributeValuesExceptID() {
-        return "'" + name + "'," + price + ", " + stock;
+    public String getAttributeValuesExceptId() {
+        return "'" + name + "'," + price.scaleByPowerOfTen(2).intValue() + ", " + stock;
+    }
+
+    public String getAttributeNameValueListExceptId() {
+        return "name = " + "'" + name + "', price = " +
+                price.scaleByPowerOfTen(2).intValue() + ", stock = " + stock;
     }
 
     @Override
@@ -107,7 +112,7 @@ public class Item {
 
         return id == item.getId() &&
                 name.equals(item.getName()) &&
-                Objects.equals(price, item.getPrice()) &&
+                price.compareTo(item.getPrice()) == 0 &&
                 stock == item.getStock();
     }
 
