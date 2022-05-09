@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 /**
  * DatabaseCLI is a command-line interface that allows users to interact with
  * the Database.
@@ -11,6 +13,52 @@ public class DatabaseCLI {
      */
     public DatabaseCLI() {
 
+    }
+
+    public void start() {
+        String introduction = "Welcome to Liam Tripp's Backend CRUD Sample.\n";
+        introduction += "Here is a list of commands you may choose from:\n";
+        System.out.println(introduction + help());
+    }
+
+    public void loop() {
+        boolean userWantsToQuit = false;
+        Scanner scanner = new Scanner(System.in);
+
+        do {
+            String consoleOutput = "";
+            System.out.print("Enter command: ");
+            String userInput = scanner.nextLine().toLowerCase();
+            Command command = Command.getCommand(userInput);
+
+            if (command == null) {
+                consoleOutput = "Please enter a valid command. " +
+                        "Enter ' " + Command.HELP.getName() + "' for a list of them.";
+            } else {
+                switch (command) {
+                    case QUIT:
+                        userWantsToQuit = true;
+                        consoleOutput = "Exiting program.";
+                        break;
+                    case HELP:
+                        help();
+                        break;
+                    case CREATE:
+                        System.out.println();
+                        break;
+                    case READ:
+                        break;
+                    case UPDATE:
+                        break;
+                    case DELETE:
+                        break;
+                    default:
+                        break;
+                }
+            }
+            System.out.println(consoleOutput);
+            System.out.println();
+        } while (userWantsToQuit == false);
     }
 
     /**

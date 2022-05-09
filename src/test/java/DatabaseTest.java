@@ -35,7 +35,7 @@ public class DatabaseTest {
     @Test
     void testDatabaseInsertionForOneItem() {
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
-                testItem.getAttributeNameValueListExceptId());
+                testItem.getAttributeValuesExceptId());
 
         itemsList = database.selectFromItems("*");
         assertEquals(1, itemsList.size());
