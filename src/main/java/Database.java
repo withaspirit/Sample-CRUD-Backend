@@ -104,8 +104,9 @@ public class Database {
         executeStatement(statementToExecute);
     }
 
-    public void updateItems(String updateStatement) {
-        String statementToExecute = "UPDATE " + ITEMS + " SET (";
+    public void updateItems(String itemId, String columnValuePairs) {
+        String statementToExecute = "UPDATE " + ITEMS + " SET " +
+                columnValuePairs + " WHERE id = " + itemId;
         executeStatement(statementToExecute);
     }
 

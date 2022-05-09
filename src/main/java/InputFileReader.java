@@ -6,6 +6,7 @@ import org.json.simple.parser.ParseException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -62,10 +63,12 @@ public class InputFileReader {
 
             // TODO: don't use magic strings
             String name = "'" + item.get("name") + "'";
-            String price = Long.toString((long) item.get("price"));
+            BigDecimal bigDecimalPrice = new BigDecimal((String) item.get("price"));
+            System.out.println(bigDecimalPrice);
+            int price = bigDecimalPrice.scaleByPowerOfTen(2).intValue();
             String stock = Long.toString((long) item.get("stock"));
 
-            valuesToInsert[i] = String.join(",", name, price, stock);
+            valuesToInsert[i] = String.join(",", name, String.valueOf(price), stock);
         }
         return valuesToInsert;
     }
