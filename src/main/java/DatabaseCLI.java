@@ -52,40 +52,41 @@ public class DatabaseCLI {
                 continue;
             }
 
-            Command command = Command.getCommand(commandAndSQLInput[0]);
-            if (command == null) {
-                System.out.println("Please enter a valid command. " +
-                        "Enter ' " + Command.HELP.getName() + "' for a list of them.");
-                continue;
-            }
-
+            String command = commandAndSQLInput[0];
             String sqlInput = commandAndSQLInput[1];
-            switch (command) {
-                case QUIT:
-                    userWantsToQuit = true;
-                    consoleOutput = "Exiting program.";
-                    break;
-                case HELP:
-                    help();
-                    break;
-                case CREATE:
-                    consoleOutput = createItem(sqlInput);
-                    break;
-                case READ:
-                    consoleOutput = read(sqlInput);
-                    break;
-                case UPDATE:
-                    consoleOutput = updateItem(sqlInput);
-                    break;
-                case DELETE:
-                    consoleOutput = delete(sqlInput);
-                    break;
-                default:
-                    break;
-            }
+            consoleOutput = executeCommand(command, sqlInput);
+
             System.out.println(consoleOutput);
             System.out.println();
         } while (userWantsToQuit == false);
+    }
+
+    /**
+     * Given a command, execute that command's correpsonding SQL statement
+     * with the given inputs.
+     *
+     * @param commandAsString the command to be executed as a String
+     * @param sqlInput the inputs for the SQL statement to be executed
+     * @return a statement indicating the operation and its level of success
+     */
+    String executeCommand(String commandAsString, String sqlInput) {
+        Command command = Command.getCommand(commandAsString);
+        if (command == null) {
+            return "Please enter a valid command. " + "Enter ' " +
+                    Command.HELP.getName() + "' for a list of them.";
+        }
+
+        String consoleOutput = "";
+        switch (command) {
+            case CREATE -> consoleOutput = createItem(sqlInput);
+            case READ -> consoleOutput = read(sqlInput);
+            case UPDATE -> consoleOutput = updateItem(sqlInput);
+            case DELETE -> consoleOutput = delete(sqlInput);
+            case HELP -> consoleOutput = help();
+            case QUIT -> consoleOutput = quit();
+            default -> consoleOutput = "ERROR: unhandled command.";
+        }
+        return consoleOutput;
     }
 
     String[] separateCommandAndSQLInput(Matcher matcher) {
@@ -197,5 +198,16 @@ public class DatabaseCLI {
         stringBuilder.append("HELP - view the list of valid commands\n");
         stringBuilder.append("QUIT - exit the command-line interface\n");
         return stringBuilder.toString();
+    }
+
+    /**
+     * Prepares the program to terminate and returns a string indicating the
+     * end of the program.
+     *
+     * @return a string indicating the end of the program
+     */
+    public String quit() {
+        userWantsToQuit = true;
+        return "Exiting program.";
     }
 }
