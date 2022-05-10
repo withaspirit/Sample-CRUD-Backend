@@ -29,7 +29,7 @@ public class DatabasePresenter {
     }
 
     /**
-     * Inserts an item into the correct table.
+     * Inserts an item into the items table.
      *
      * @param item the item being inserted into the table
      */
