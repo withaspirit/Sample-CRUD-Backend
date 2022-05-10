@@ -1,26 +1,36 @@
 package view;
 
+import model.Database;
 import model.Item;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import presenter.DatabasePresenter;
 
 import java.util.regex.Matcher;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * DatabaseCLITest ensures the DatabaseCLI's CRUD methods manipulates
- * the Database correctly.
+ * DatabaseCLITest ensures that DatabaseCLI's CRUD methods work properly. It
+ * also ensures the Command.Regex functions work properly with DatabaseCLI's
+ * Matcher functions.
  *
  * @author Liam Tripp
  */
 public class DatabaseCLITest {
 
+    private Database database;
+    private DatabasePresenter databasePresenter;
     private DatabaseCLI databaseCLI;
 
     @BeforeEach
     void setup() {
+        database = new Database();
+        database.initializeDatabase();
+        databasePresenter = new DatabasePresenter();
+        databasePresenter.addModel(database);
         databaseCLI = new DatabaseCLI();
+        databaseCLI.addPresenter(databasePresenter);
     }
 
     @Test
@@ -51,5 +61,10 @@ public class DatabaseCLITest {
         Matcher matcher = databaseCLI.getMatcher(Command.CREATE.getRegex(), sqlInput);
         assertEquals("", databaseCLI.getMatcherError(matcher));
         databaseCLI.createItem(matcher);
+    }
+
+    @Test
+    void testDeleteItem() {
+
     }
 }
