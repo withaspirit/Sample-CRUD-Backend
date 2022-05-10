@@ -79,10 +79,10 @@ public class DatabaseCLI {
 
         String consoleOutput = "";
         switch (command) {
-            case CREATE -> consoleOutput = createItem(sqlInput);
-            case READ -> consoleOutput = read(sqlInput);
-            case UPDATE -> consoleOutput = updateItem(sqlInput);
-            case DELETE -> consoleOutput = delete(sqlInput);
+            case CREATE -> consoleOutput = createItem(matcher);
+            case READ -> consoleOutput = read(matcher);
+            case UPDATE -> consoleOutput = updateItem(matcher);
+            case DELETE -> consoleOutput = delete(matcher);
             case HELP -> consoleOutput = help();
             case QUIT -> consoleOutput = quit();
             default -> consoleOutput = "ERROR: unhandled command.";
@@ -117,43 +117,23 @@ public class DatabaseCLI {
     /**
      * Updates an Item and returns a String indicating the level of success.
      *
-     * @param sqlInput the user's SQL input to the program
+     * @param matcher the matcher containing the user's command
      * @return a String indicating the completion success
      */
-    public String updateItem(String sqlInput) {
-        String itemAttributesPipeSeparated =
-                String.join("|", Item.getAttributeNamesAsArray());
-        String updateRegex = "(\\d+) (" + itemAttributesPipeSeparated + ") = (\\w+|\\d+\\.\\d+|\\d+)";
-        Matcher matcher = getMatcher(updateRegex, sqlInput);
+    public String updateItem(Matcher matcher) {
         return "";
     }
 
     /**
      * Creates an Item and returns a String indicating the level of success.
      *
-     * @param sqlInput the user's SQL input to the program
+     * @param matcher the matcher containing the user's command
      * @return a String indicating the completion success
      */
-    public String createItem(String sqlInput) {
-        String createPrompt = "Enter values for: (" + Item.getAttributeNamesExceptId() + ") for the new Item: ";
-        System.out.print(createPrompt);
-
-        // name price[dollar.cent] stock
-
-        Matcher createMatcher = getMatcher(Command.CREATE.getRegex(), sqlInput);
-        if (createMatcher.matches() == false) {
-            return "Invalid input.";
-        }
-        createMatcher.reset();
-
+    public String createItem(Matcher matcher) {
         Item item;
-        if (createMatcher.find()) {
-            item = new Item(createMatcher);
-            System.out.println(item.getAttributeValuesExceptId());
-
-        } else {
-            return "ERROR: Input matches creation regex but could not be found.";
-        }
+        item = new Item(matcher);
+        System.out.println(item.getAttributeValuesExceptId());
         return "FIXME: Successfully created item: " + item.getAttributeValuesExceptId();
     }
 
@@ -187,17 +167,12 @@ public class DatabaseCLI {
         return "";
     }
 
-    private String read(String sqlInput) {
+    private String read(Matcher matcher) {
         String readStatement = "";
-        if (sqlInput.equals(Database.ITEMS)) {
-            // TODO: read from database;
-        } else {
-            return "InvalidInput";
-        }
         return "";
     }
 
-    private String delete(String sqlInput) {
+    private String delete(Matcher matcher) {
         return "";
     }
 
