@@ -65,7 +65,7 @@ public class DatabaseCLI {
      * with the given inputs.
      *
      * @param command the command to be executed
-     * @param initialInput the user's input
+     * @param initialInput the user's input containing the SQL information
      * @return a statement indicating the operation and its level of success
      */
     String executeCommand(Command command, String initialInput) {
