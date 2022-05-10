@@ -3,6 +3,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -73,7 +74,7 @@ public class DatabaseTest {
     void testValidIdWithDatabaseDeletion() {
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
                 testItem.getAttributeValuesExceptId());
-        database.deleteFromItems(String.valueOf(testItem.getId()));
+        database.deleteFromTable(Database.ITEMS, String.valueOf(testItem.getId()));
 
         itemsList = database.selectFromTable(Database.ITEMS, "*");
         assertEquals(0, itemsList.size());
@@ -96,7 +97,7 @@ public class DatabaseTest {
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
                 testItem.getAttributeValuesExceptId());
         int invalidId = 2;
-        database.deleteFromItems(String.valueOf(invalidId));
+        database.deleteFromTable(Database.ITEMS, String.valueOf(invalidId));
 
         itemsList = database.selectFromTable(Database.ITEMS, "*");
         assertEquals(1, itemsList.size());

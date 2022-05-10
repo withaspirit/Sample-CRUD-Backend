@@ -97,12 +97,13 @@ public class Database {
 
 
     /**
-     * Deletes items matching the provided ids from the table.
+     * Deletes items matching the provided ids from the selected table.
      *
+     * @param tableName the table being selected
      * @param itemId the provided item ids
      */
-    public void deleteFromItems(String itemId) {
-        String statementToExecute = "DELETE FROM " + ITEMS + " WHERE id =" + itemId;
+    public void deleteFromTable(String tableName, String itemId) {
+        String statementToExecute = "DELETE FROM " + tableName + " WHERE id =" + itemId;
         executeStatement(statementToExecute);
     }
 
