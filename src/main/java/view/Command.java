@@ -1,3 +1,7 @@
+package view;
+
+import model.Database;
+
 /**
  * Command contains the commands used for the DatabaseCLI.
  *
