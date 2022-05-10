@@ -1,3 +1,8 @@
+package view;
+
+import model.Database;
+import model.Item;
+
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Scanner;

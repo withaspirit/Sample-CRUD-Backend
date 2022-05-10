@@ -1,3 +1,5 @@
+package model;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -64,7 +66,6 @@ public class InputFileReader {
             // TODO: don't use magic strings
             String name = "'" + item.get("name") + "'";
             BigDecimal bigDecimalPrice = new BigDecimal((String) item.get("price"));
-            System.out.println(bigDecimalPrice);
             int price = bigDecimalPrice.scaleByPowerOfTen(2).intValue();
             String stock = Long.toString((long) item.get("stock"));
 

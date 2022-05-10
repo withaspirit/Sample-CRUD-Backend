@@ -1,9 +1,10 @@
+package model;
+
 import org.json.simple.JSONArray;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -1,3 +1,5 @@
+package model;
+
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -68,7 +70,6 @@ public class Database {
     public void insert(String tableName, String columns, String values) {
         String statementToExecute = "INSERT INTO " + tableName +
                 "(" + columns + ") VALUES (" + values + ");";
-        // TODO?: used executeUpdate with columns names
         executeStatement(statementToExecute);
     }
 
