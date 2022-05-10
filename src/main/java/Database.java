@@ -73,13 +73,14 @@ public class Database {
     }
 
     /**
-     * Selects and returns an ArrayList of Items from the items table
+     * Selects and returns an ArrayList of Items from the selected table.
      *
+     * @param tableName the name of the table being selected from
      * @param selectedItems the range of items to be selected
-     * @return arrayList of items contained in the items table
+     * @return arrayList of selected items in the selected table
      */
-    public ArrayList<Item> selectFromItems(String selectedItems) {
-        ResultSet resultSet = getResultSet(ITEMS, selectedItems);
+    public ArrayList<Item> selectFromTable(String tableName, String selectedItems) {
+        ResultSet resultSet = getResultSet(tableName, selectedItems);
         ArrayList<Item> items = new ArrayList<>();
 
         try {
@@ -93,6 +94,7 @@ public class Database {
         }
         return items;
     }
+
 
     /**
      * Deletes items matching the provided ids from the table.

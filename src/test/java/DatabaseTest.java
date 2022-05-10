@@ -37,7 +37,7 @@ public class DatabaseTest {
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
                 testItem.getAttributeValuesExceptId());
 
-        itemsList = database.selectFromItems("*");
+        itemsList = database.selectFromTable(Database.ITEMS, "*");
         assertEquals(1, itemsList.size());
         Item itemFromDatabase = itemsList.get(0);
         assertEquals(testItem, itemFromDatabase);
@@ -48,7 +48,7 @@ public class DatabaseTest {
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
                 testItem.getAttributeValuesExceptId());
 
-        itemsList = database.selectFromItems("*");
+        itemsList = database.selectFromTable(Database.ITEMS, "*");
         assertEquals(1, itemsList.size());
         Item itemFromDatabase = itemsList.get(0);
         assertEquals(testItem, itemFromDatabase);
@@ -57,14 +57,14 @@ public class DatabaseTest {
     @Test
     void testDatabasePopulatedWithCorrectNumberOfItems() {
         database.populateDatabase();
-        itemsList = database.selectFromItems("*");
+        itemsList = database.selectFromTable(Database.ITEMS, "*");
         assertEquals(itemsJSONArray.size(), itemsList.size());
     }
 
     @Test
     void testPopulatedDatabaseItemEquality() {
         database.populateDatabase();
-        itemsList = database.selectFromItems("*");
+        itemsList = database.selectFromTable(Database.ITEMS, "*");
         // TODO: compare itemList Items with those from itemsJSONArray
         //   maybe add constructor for Item from JSONObject
     }
@@ -75,7 +75,7 @@ public class DatabaseTest {
                 testItem.getAttributeValuesExceptId());
         database.deleteFromItems(String.valueOf(testItem.getId()));
 
-        itemsList = database.selectFromItems("*");
+        itemsList = database.selectFromTable(Database.ITEMS, "*");
         assertEquals(0, itemsList.size());
     }
 
@@ -87,7 +87,7 @@ public class DatabaseTest {
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
                 itemWithDecimalPrice.getAttributeValuesExceptId());
 
-        itemsList = database.selectFromItems("*");
+        itemsList = database.selectFromTable(Database.ITEMS, "*");
         assertEquals(itemWithDecimalPrice, itemsList.get(0));
     }
 
@@ -98,7 +98,7 @@ public class DatabaseTest {
         int invalidId = 2;
         database.deleteFromItems(String.valueOf(invalidId));
 
-        itemsList = database.selectFromItems("*");
+        itemsList = database.selectFromTable(Database.ITEMS, "*");
         assertEquals(1, itemsList.size());
     }
 
@@ -111,7 +111,7 @@ public class DatabaseTest {
         database.updateItems(String.valueOf(testItem.getId()), updateStatement);
         testItem.setName(newName);
 
-        itemsList = database.selectFromItems("*");
+        itemsList = database.selectFromTable(Database.ITEMS, "*");
         assertEquals(testItem, itemsList.get(0));
     }
 
@@ -129,7 +129,7 @@ public class DatabaseTest {
 
         database.updateItems(String.valueOf(testItem.getId()),
                 testItem.getAttributeNameValueListExceptId());
-        itemsList = database.selectFromItems("*");
+        itemsList = database.selectFromTable(Database.ITEMS, "*");
         assertEquals(testItem, itemsList.get(0));
     }
 }
