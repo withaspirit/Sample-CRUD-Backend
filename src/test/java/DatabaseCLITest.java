@@ -44,7 +44,9 @@ public class DatabaseCLITest {
 
     @Test
     void testCreateItem() {
-        String newItemValues = "testName 10.30 4";
-        databaseCLI.createItem(newItemValues);
+        String sqlInput = "CREATE testName 10.30 4".toLowerCase();
+        Matcher matcher = databaseCLI.getMatcher(Command.CREATE.getRegex(), sqlInput);
+        assertEquals("", databaseCLI.getMatcherError(matcher));
+        databaseCLI.createItem(matcher);
     }
 }

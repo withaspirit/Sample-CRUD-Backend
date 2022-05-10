@@ -41,7 +41,7 @@ public class DatabasePresenterTest {
         databasePresenter.createItem(testItem);
         String updatedName = "chowder";
 
-        String UPDATE_REGEX = "(UPDATE) (\\d+) (name = '\\w+'|price = \\d+\\.\\d+|stock = \\d+)";
+        String UPDATE_REGEX = Command.UPDATE.getRegex();
         String updatePhrase = "UPDATE 1 name = '" + updatedName + "'";
         Matcher matcher = (new DatabaseCLI()).getMatcher(UPDATE_REGEX, updatePhrase);
         assertNotNull(matcher);

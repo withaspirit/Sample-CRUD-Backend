@@ -47,9 +47,10 @@ public class Item {
 
     public Item(Matcher matcher) {
         id = -1; // id is not used
-        name = matcher.group(1);
-        price = new BigDecimal(matcher.group(2));
-        stock = Integer.parseInt(matcher.group(3));
+        // group(1) is the CREATE command
+        name = matcher.group(2);
+        price = new BigDecimal(matcher.group(3));
+        stock = Integer.parseInt(matcher.group(4));
     }
 
     public int getId() {
