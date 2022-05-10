@@ -70,6 +70,7 @@ public class DatabaseCLI {
      */
     String executeCommand(Command command, String initialInput) {
         // check that initial input matches command regex
+        // TODO?: could have iterated over the loop Command.regex instead
         Matcher matcher = getMatcher(command.getRegex(), initialInput);
         String matcherError = checkMatcherError(matcher);
         if (!matcherError.equals("")) {
