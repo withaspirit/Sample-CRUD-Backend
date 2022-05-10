@@ -2,6 +2,7 @@ package view;
 
 import model.Database;
 import model.Item;
+import presenter.DatabasePresenter;
 
 import java.util.ArrayList;
 import java.util.Locale;
