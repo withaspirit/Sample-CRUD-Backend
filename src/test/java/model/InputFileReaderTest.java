@@ -1,7 +1,5 @@
 package model;
 
-import model.Database;
-import model.InputFileReader;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.BeforeEach;

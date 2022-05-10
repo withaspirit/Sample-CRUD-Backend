@@ -2,16 +2,16 @@ package presenter;
 
 import model.Database;
 import model.Item;
-import presenter.DatabasePresenter;
-import view.Command;
-import view.DatabaseCLI;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import view.Command;
+import view.DatabaseCLI;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * DatabasePresenterTest ensures the DatabasePresenter's methods work
