@@ -1,4 +1,6 @@
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * DatabasePresenter allows the DatabaseCLI to interact with the model and
@@ -40,6 +42,9 @@ public class DatabasePresenter {
      * Returns a list of all items from the selected table.
      */
     public ArrayList<Item> readFromTable(String tableName) {
+        if (!tableName.equals(Database.ITEMS)) {
+            return null;
+        }
         return database.selectFromTable(tableName, "*");
     }
 
