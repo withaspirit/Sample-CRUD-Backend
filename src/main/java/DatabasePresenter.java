@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  * DatabasePresenter allows the DatabaseCLI to interact with the model and
  * receive a response.
@@ -32,5 +34,12 @@ public class DatabasePresenter {
     public void createItem(Item item) {
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
                 item.getAttributeValuesExceptId());
+    }
+
+    /**
+     * Returns a list of all items from the selected table.
+     */
+    public ArrayList<Item> readFromTable(String tableName) {
+        return database.selectFromTable(tableName, "*");
     }
 }
