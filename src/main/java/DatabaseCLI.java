@@ -71,6 +71,12 @@ public class DatabaseCLI {
                     Command.HELP.getName() + "' for a list of them.";
         }
 
+        Matcher matcher = getMatcher(command.getRegex(), sqlInput);
+        String matcherError = checkMatcherError(matcher);
+        if (!matcherError.equals("")) {
+            return "Error: " + matcherError;
+        }
+
         String consoleOutput = "";
         switch (command) {
             case CREATE -> consoleOutput = createItem(sqlInput);
@@ -161,6 +167,24 @@ public class DatabaseCLI {
     public Matcher getMatcher(String regex, String userInput) {
         Pattern createPattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
         return createPattern.matcher(userInput);
+    }
+
+    /**
+     * Returns a String indicating whether the Matcher has an error.
+     * Also prepares the matcher to be used.
+     *
+     * @param matcher the matcher being examined
+     * @return a String with an error statement if there is an error, "" otherwise
+     */
+    public String checkMatcherError(Matcher matcher) {
+        if (!matcher.matches()) {
+            return "Bad input formatting.";
+        }
+        matcher.reset();
+        if (!matcher.find()) {
+            return "Matcher.find() fail.";
+        }
+        return "";
     }
 
     private String read(String sqlInput) {
