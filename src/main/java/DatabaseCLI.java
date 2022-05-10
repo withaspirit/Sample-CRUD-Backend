@@ -13,11 +13,6 @@ public class DatabaseCLI {
 
     private boolean userWantsToQuit;
 
-    private static final String CREATE_REGEX = "(CREATE) (\\w+) (\\d+\\.\\d+) (\\d+)";
-    private static final String UPDATE_REGEX = "(UPDATE) (\\d+) (name = '\\w+'|price = \\d+\\.\\d+|stock = \\d+)";
-    private static final String READ_REGEX = "(READ) (" + Database.ITEMS + ")";
-    private static final String DELETE_REGEX = "(DELETE) \\d+";
-
     /**
      * Constructor for Database CLI.
      */
@@ -139,7 +134,7 @@ public class DatabaseCLI {
 
         // name price[dollar.cent] stock
 
-        Matcher createMatcher = getMatcher(CREATE_REGEX, sqlInput);
+        Matcher createMatcher = getMatcher(Command.CREATE.getRegex(), sqlInput);
         if (createMatcher.matches() == false) {
             return "Invalid input.";
         }

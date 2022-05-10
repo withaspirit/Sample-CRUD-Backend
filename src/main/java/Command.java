@@ -4,12 +4,32 @@
  * @author Liam Tripp
  */
 public enum Command {
-    CREATE,
-    READ,
-    UPDATE,
-    DELETE,
-    HELP,
-    QUIT;
+    CREATE("(CREATE) (\\w+) (\\d+\\.\\d+) (\\d+)"),
+    READ("(READ) (" + Database.ITEMS + ")"),
+    UPDATE("(UPDATE) (\\d+) (name = '\\w+'|price = \\d+\\.\\d+|stock = \\d+)"),
+    DELETE("(DELETE) \\d+"),
+    HELP("help"),
+    QUIT("quit");
+
+    private String regex;
+
+    /**
+     * Constructor for Command.
+     *
+     * @param regex the regular expression for the
+     */
+    Command(String regex) {
+        this.regex = regex;
+    }
+
+    /**
+     * Returns the Regular Expression associated with the Command.
+     *
+     * @return the Regular Expression associated with the Command.
+     */
+    public String getRegex() {
+        return regex;
+    }
 
     /**
      * Returns the Command as a String.
