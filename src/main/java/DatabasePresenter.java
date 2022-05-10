@@ -42,4 +42,13 @@ public class DatabasePresenter {
     public ArrayList<Item> readFromTable(String tableName) {
         return database.selectFromTable(tableName, "*");
     }
+
+    /**
+     * Deletes an item from the items table.
+     *
+     * @param itemId the id of the table being deleted from
+     */
+    public void deleteItem(String itemId) {
+        database.deleteFromTable(Database.ITEMS, itemId);
+    }
 }
