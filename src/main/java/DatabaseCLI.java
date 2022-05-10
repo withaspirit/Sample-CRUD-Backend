@@ -91,16 +91,6 @@ public class DatabaseCLI {
     }
 
     /**
-     * Updates an Item and returns a String indicating the level of success.
-     *
-     * @param matcher the matcher containing the user's command
-     * @return a String indicating the completion success
-     */
-    public String updateItem(Matcher matcher) {
-        return "";
-    }
-
-    /**
      * Creates an Item and returns a String indicating the level of success.
      *
      * @param matcher the matcher containing the user's command
@@ -113,42 +103,22 @@ public class DatabaseCLI {
         return "FIXME: Successfully created item: " + item.getAttributeValuesExceptId();
     }
 
-    /**
-     * Returns a Matcher matching input to a given Regular Expression.
-     *
-     * @param regex a Regular Expression to capture
-     * @param userInput the input to the matcher
-     * @return the matcher after matching the userInput to the regex
-     */
-    public Matcher getMatcher(String regex, String userInput) {
-        Pattern createPattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-        return createPattern.matcher(userInput);
-    }
-
-    /**
-     * Returns a String indicating whether the Matcher has an error.
-     * Also prepares the matcher to be used.
-     *
-     * @param matcher the matcher being examined
-     * @return a String with an error statement if there is an error, "" otherwise
-     */
-    public String checkMatcherError(Matcher matcher) {
-        if (!matcher.matches()) {
-            return "Bad input formatting. Enter 'HELP' for options.";
-        }
-        matcher.reset();
-        if (!matcher.find()) {
-            return "Matcher.find() fail.";
-        }
-        return "";
-    }
-
-    private String read(Matcher matcher) {
+    public String read(Matcher matcher) {
         String readStatement = "";
         return "";
     }
 
-    private String delete(Matcher matcher) {
+    /**
+     * Updates an Item and returns a String indicating the level of success.
+     *
+     * @param matcher the matcher containing the user's command
+     * @return a String indicating the completion success
+     */
+    public String updateItem(Matcher matcher) {
+        return "";
+    }
+
+    public String delete(Matcher matcher) {
         return "";
     }
 
@@ -179,5 +149,35 @@ public class DatabaseCLI {
     public String quit() {
         userWantsToQuit = true;
         return "Exiting program.";
+    }
+
+    /**
+     * Returns a Matcher matching input to a given Regular Expression.
+     *
+     * @param regex a Regular Expression to capture
+     * @param userInput the input to the matcher
+     * @return the matcher after matching the userInput to the regex
+     */
+    public Matcher getMatcher(String regex, String userInput) {
+        Pattern createPattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+        return createPattern.matcher(userInput);
+    }
+
+    /**
+     * Returns a String indicating whether the Matcher has an error.
+     * Also prepares the matcher to be used.
+     *
+     * @param matcher the matcher being examined
+     * @return a String with an error statement if there is an error, "" otherwise
+     */
+    public String checkMatcherError(Matcher matcher) {
+        if (!matcher.matches()) {
+            return "Bad input formatting. Enter 'HELP' for options.";
+        }
+        matcher.reset();
+        if (!matcher.find()) {
+            return "Matcher.find() fail.";
+        }
+        return "";
     }
 }
