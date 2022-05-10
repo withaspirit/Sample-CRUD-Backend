@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 
 /**
- * DatabasePresenter allows the DatabaseCLI to interact with the model and
+ * DatabasePresenter allows the DatabaseCLI to interact with the Database and
  * receive a response.
  *
  * @author Liam Tripp
