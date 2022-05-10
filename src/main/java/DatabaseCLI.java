@@ -31,53 +31,52 @@ public class DatabaseCLI {
         scanner.useLocale(Locale.US);
 
         do {
-            String consoleOutput = "";
+            String consoleOutput;
             System.out.print("Enter command: ");
             String initialInput = scanner.nextLine().toLowerCase();
 
-            Matcher matcher = inputMatchesFormat(initialInput);
-            if (matcher == null) {
-                System.out.println("Input is invalid. Enter 'HELP' for options.");
+            // check command is in a valid format
+            String wordSpaceAnythingRegex = "(\\w+) (.+)";
+            Matcher matcher = getMatcher(wordSpaceAnythingRegex, initialInput);
+            String matcherError = checkMatcherError(matcher);
+            if (!matcherError.equals("")) {
+                System.out.println(matcherError);
                 continue;
             }
 
-            String[] commandAndSQLInput = separateCommandAndSQLInput(matcher);
-            if (commandAndSQLInput == null) {
-                System.out.println("Error: matcher.matches() passed, but matcher.find() failed.");
+            // check command is valid
+            String commandAsString = matcher.group(1);
+            Command command = Command.getCommand(commandAsString);
+            if (command == null) {
+                String errorMessage = "Please enter a valid command. " + "Enter ' " +
+                        Command.HELP.getName() + "' for a list of them.";
+                System.out.println(errorMessage);
                 continue;
             }
-
-            String command = commandAndSQLInput[0];
-            String sqlInput = commandAndSQLInput[1];
-            consoleOutput = executeCommand(command, sqlInput);
-
+            // check if input matches the regex of its command
+            consoleOutput = executeCommand(command, initialInput);
             System.out.println(consoleOutput);
             System.out.println();
         } while (userWantsToQuit == false);
     }
 
     /**
-     * Given a command, execute that command's correpsonding SQL statement
+     * Given a command, execute that command's corresponding SQL statement
      * with the given inputs.
      *
-     * @param commandAsString the command to be executed as a String
-     * @param sqlInput the inputs for the SQL statement to be executed
+     * @param command the command to be executed
+     * @param initialInput the user's input
      * @return a statement indicating the operation and its level of success
      */
-    String executeCommand(String commandAsString, String sqlInput) {
-        Command command = Command.getCommand(commandAsString);
-        if (command == null) {
-            return "Please enter a valid command. " + "Enter ' " +
-                    Command.HELP.getName() + "' for a list of them.";
-        }
-
-        Matcher matcher = getMatcher(command.getRegex(), sqlInput);
+    String executeCommand(Command command, String initialInput) {
+        // check that
+        Matcher matcher = getMatcher(command.getRegex(), initialInput);
         String matcherError = checkMatcherError(matcher);
         if (!matcherError.equals("")) {
             return "Error: " + matcherError;
         }
 
-        String consoleOutput = "";
+        String consoleOutput;
         switch (command) {
             case CREATE -> consoleOutput = createItem(matcher);
             case READ -> consoleOutput = read(matcher);
@@ -88,30 +87,6 @@ public class DatabaseCLI {
             default -> consoleOutput = "ERROR: unhandled command.";
         }
         return consoleOutput;
-    }
-
-    String[] separateCommandAndSQLInput(Matcher matcher) {
-        String[] commandAndSQL = new String[2];
-        if (!matcher.find()) {
-            return null;
-        } else {
-            commandAndSQL[0] = matcher.group(1);
-            commandAndSQL[1] = matcher.group(2);
-            return commandAndSQL;
-        }
-    }
-
-    Matcher inputMatchesFormat(String initialInput) {
-        String wordSpaceAnythingRegex = "(\\w+) (.+)";
-        Matcher matcher = getMatcher(wordSpaceAnythingRegex, initialInput);
-
-        if (!matcher.matches()) {
-            System.out.println("");
-            return null;
-        } else {
-            matcher.reset();
-            return matcher;
-        }
     }
 
     /**
@@ -158,7 +133,7 @@ public class DatabaseCLI {
      */
     public String checkMatcherError(Matcher matcher) {
         if (!matcher.matches()) {
-            return "Bad input formatting.";
+            return "Bad input formatting. Enter 'HELP' for options.";
         }
         matcher.reset();
         if (!matcher.find()) {
