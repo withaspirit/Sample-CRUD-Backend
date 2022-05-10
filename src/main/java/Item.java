@@ -37,7 +37,6 @@ public class Item {
             id = resultSet.getInt(attributes[0].getName());
             name = resultSet.getString(attributes[1].getName());
             int price = resultSet.getInt((attributes[2].getName()));
-            System.out.println(price);
             this.price = new BigDecimal(price / 100 + "." + price % 100);
             stock = resultSet.getInt(attributes[3].getName());
         } catch (SQLException e) {
