@@ -1,6 +1,5 @@
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
-import java.util.Objects;
+import java.util.regex.Matcher;
 
 /**
  * DatabasePresenter allows the DatabaseCLI to interact with the model and
@@ -46,6 +45,17 @@ public class DatabasePresenter {
             return null;
         }
         return database.selectFromTable(tableName, "*");
+    }
+
+    /**
+     * Updates an Item in the items table.
+     *
+     * @param matcher the matcher containing the itemId and column/ValuePairs for the item
+     */
+    public void updateItem(Matcher matcher) {
+        String itemId = matcher.group(2);
+        String columnValuePair = matcher.group(3);
+        database.updateItems(itemId, columnValuePair);
     }
 
     /**
