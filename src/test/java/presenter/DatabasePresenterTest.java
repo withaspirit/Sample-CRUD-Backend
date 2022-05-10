@@ -1,3 +1,10 @@
+package presenter;
+
+import model.Database;
+import model.Item;
+import presenter.DatabasePresenter;
+import view.Command;
+import view.DatabaseCLI;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

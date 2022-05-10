@@ -1,3 +1,8 @@
+package view;
+
+import model.Item;
+import view.Command;
+import view.DatabaseCLI;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

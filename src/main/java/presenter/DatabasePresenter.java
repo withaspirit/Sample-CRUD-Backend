@@ -1,3 +1,8 @@
+package presenter;
+
+import model.Database;
+import model.Item;
+
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 
