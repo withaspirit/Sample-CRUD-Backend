@@ -38,7 +38,7 @@ public class DatabaseCLI {
             // check command is in a valid format
             String wordSpaceAnythingRegex = "(\\w+) (.+)";
             Matcher matcher = getMatcher(wordSpaceAnythingRegex, initialInput);
-            String matcherError = checkMatcherError(matcher);
+            String matcherError = getMatcherError(matcher);
             if (!matcherError.equals("")) {
                 System.out.println(matcherError);
                 continue;
@@ -72,7 +72,7 @@ public class DatabaseCLI {
         // check that initial input matches command regex
         // TODO?: could have iterated over the loop Command.regex instead
         Matcher matcher = getMatcher(command.getRegex(), initialInput);
-        String matcherError = checkMatcherError(matcher);
+        String matcherError = getMatcherError(matcher);
         if (!matcherError.equals("")) {
             return "Error: " + matcherError;
         }
@@ -170,7 +170,7 @@ public class DatabaseCLI {
      * @param matcher the matcher being examined
      * @return a String with an error statement if there is an error, "" otherwise
      */
-    public String checkMatcherError(Matcher matcher) {
+    public String getMatcherError(Matcher matcher) {
         if (!matcher.matches()) {
             return "Bad input formatting. Enter 'HELP' for options.";
         }

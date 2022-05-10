@@ -46,7 +46,7 @@ public class DatabaseCLITest {
     void testCreateItem() {
         String sqlInput = "CREATE testName 10.30 4".toLowerCase();
         Matcher m = databaseCLI.getMatcher(Command.CREATE.getRegex(), sqlInput);
-        assertEquals("", databaseCLI.checkMatcherError(m));
+        assertEquals("", databaseCLI.getMatcherError(m));
         databaseCLI.createItem(m);
     }
 }
