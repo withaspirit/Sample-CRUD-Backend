@@ -69,7 +69,7 @@ public class DatabaseCLI {
      * @return a statement indicating the operation and its level of success
      */
     String executeCommand(Command command, String initialInput) {
-        // check that
+        // check that initial input matches command regex
         Matcher matcher = getMatcher(command.getRegex(), initialInput);
         String matcherError = checkMatcherError(matcher);
         if (!matcherError.equals("")) {
