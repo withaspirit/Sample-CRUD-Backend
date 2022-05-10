@@ -29,7 +29,7 @@ public class DatabasePresenter {
      *
      * @param item the item being inserted into the table
      */
-    public void insertItem(Item item) {
+    public void createItem(Item item) {
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
                 item.getAttributeValuesExceptId());
     }

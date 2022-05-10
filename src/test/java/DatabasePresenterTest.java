@@ -27,7 +27,7 @@ public class DatabasePresenterTest {
     @Test
     void testDatabaseInsertionOneItem() {
         Item item = new Item(1, "testName", "0.0", 1);
-        databasePresenter.insertItem(item);
+        databasePresenter.createItem(item);
         ArrayList<Item> items = database.selectFromTable(Database.ITEMS, "*");
         assertEquals(1, items.size());
         assertEquals(item, items.get(0));
