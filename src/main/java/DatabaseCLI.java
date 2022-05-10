@@ -172,7 +172,8 @@ public class DatabaseCLI {
      */
     public String getMatcherError(Matcher matcher) {
         if (!matcher.matches()) {
-            return "Bad input formatting. Enter 'HELP' for options.";
+            return "Bad input formatting. Enter '" + Command.HELP.getName() +
+                    "' for options.";
         }
         matcher.reset();
         if (!matcher.find()) {
