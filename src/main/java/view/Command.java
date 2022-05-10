@@ -11,7 +11,7 @@ public enum Command {
     CREATE("(CREATE) (\\w+) (\\d+\\.\\d+) (\\d+)"),
     READ("(READ) (" + Database.ITEMS + ")"),
     UPDATE("(UPDATE) (\\d+) (name = '\\w+'|price = \\d+\\.\\d+|stock = \\d+)"),
-    DELETE("(DELETE) \\d+"),
+    DELETE("(DELETE) (\\d+)"),
     HELP("help"),
     QUIT("quit");
 
