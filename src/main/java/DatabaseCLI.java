@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -11,6 +12,8 @@ import java.util.regex.Pattern;
  */
 public class DatabaseCLI {
 
+    /** DatabaseCLI interacts with the model through databasePresenter */
+    private DatabasePresenter databasePresenter;
     private boolean userWantsToQuit;
 
     /**
@@ -18,6 +21,15 @@ public class DatabaseCLI {
      */
     public DatabaseCLI() {
         userWantsToQuit = false;
+    }
+
+    /**
+     * Adds a databasePresenter to the DatabaseCLI (View).
+     *
+     * @param databasePresenter the database presenter through which the
+     */
+    void addPresenter(DatabasePresenter databasePresenter) {
+        this.databasePresenter = databasePresenter;
     }
 
     public void start() {
@@ -99,13 +111,16 @@ public class DatabaseCLI {
     public String createItem(Matcher matcher) {
         Item item;
         item = new Item(matcher);
-        System.out.println(item.getAttributeValuesExceptId());
+        databasePresenter.createItem(item);
         return "FIXME: Successfully created item: " + item.getAttributeValuesExceptId();
     }
 
     public String read(Matcher matcher) {
-        String readStatement = "";
-        return "";
+        // matcher.group(1) is "READ", group(2) is tableName
+        String tableName = matcher.group(2);
+        ArrayList<Item> items = databasePresenter.readFromTable(tableName);
+        String readStatement = "FIXME: Items: " + items;
+        return readStatement;
     }
 
     /**
@@ -115,11 +130,15 @@ public class DatabaseCLI {
      * @return a String indicating the completion success
      */
     public String updateItem(Matcher matcher) {
-        return "";
+        databasePresenter.updateItem(matcher);
+        return "FIXME: update";
     }
 
     public String delete(Matcher matcher) {
-        return "";
+        // matcher.group(1) is "create"
+        String itemId = matcher.group(2);
+        databasePresenter.deleteItem(itemId);
+        return "FIXME: delete";
     }
 
     /**
