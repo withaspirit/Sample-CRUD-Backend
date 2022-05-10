@@ -23,4 +23,14 @@ public class DatabasePresenter {
     public void addModel(Database database) {
         this.database = database;
     }
+
+    /**
+     * Inserts an item into the correct table.
+     *
+     * @param item the item being inserted into the table
+     */
+    public void insertItem(Item item) {
+        database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
+                item.getAttributeValuesExceptId());
+    }
 }
