@@ -97,7 +97,6 @@ public class Database {
         return items;
     }
 
-
     /**
      * Deletes items matching the provided ids from the selected table.
      *
