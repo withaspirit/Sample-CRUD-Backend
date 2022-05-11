@@ -84,6 +84,23 @@ public class DatabaseCLITest {
     }
 
     @Test
+    void testUpdateOneItemOneAttribute() {
+        String createStatement = "CREATE WalterWhite 1.99 1".toLowerCase();
+        databaseCLI.executeCommand(Command.CREATE, createStatement);
+        ArrayList<Item> items = database.selectFromTable(Database.ITEMS, "*");
+        Item originalItem = items.get(0);
+
+        String newName = "Heisenberg";
+        String updateStatement = "UPDATE 1 name = '" + newName + "'";
+        databaseCLI.executeCommand(Command.UPDATE, updateStatement);
+        originalItem.setName(newName);
+
+        items = database.selectFromTable(Database.ITEMS, "*");
+        Item updatedItem = items.get(0);
+        assertEquals(originalItem, updatedItem);
+    }
+
+    @Test
     void testDeleteOneItem() {
         testCreateOneItem();
 
