@@ -10,7 +10,7 @@ import view.DatabaseCLI;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * DatabasePresenterTest ensures the DatabasePresenter's methods work
@@ -40,6 +40,19 @@ public class DatabasePresenterTest {
 
         ArrayList<Item> items = database.selectFromTable(Database.ITEMS, "*");
         assertEquals(testItem, items.get(0));
+    }
+
+    @Test
+    void testReadValidTableName() {
+        ArrayList<Item> items = databasePresenter.readFromTable(Database.ITEMS);
+        assertNotNull(items);
+    }
+
+    @Test
+    void testReadInvalidTableName() {
+        String testName = "InvalidName";
+        ArrayList<Item> items = databasePresenter.readFromTable(testName);
+        assertNull(items);
     }
 
     @Test
