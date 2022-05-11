@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * DatabasePresenterTest ensures the DatabasePresenter's methods work
@@ -50,8 +49,12 @@ public class DatabasePresenterTest {
 
         String UPDATE_REGEX = Command.UPDATE.getRegex();
         String updatePhrase = "UPDATE 1 name = '" + updatedName + "'";
-        Matcher matcher = (new DatabaseCLI()).getMatcher(UPDATE_REGEX, updatePhrase);
-        assertNotNull(matcher);
+
+        // we need databaseCLI for its matcher methods
+        DatabaseCLI databaseCLI = new DatabaseCLI();
+        Matcher matcher = databaseCLI.getMatcher(UPDATE_REGEX, updatePhrase);
+        String matcherError = databaseCLI.getMatcherError(matcher);
+        assertEquals("", matcherError);
 
         databasePresenter.updateItem(matcher);
         testItem.setName(updatedName);
