@@ -86,7 +86,6 @@ public class CommandTest {
             String invalidStatements = (String) object;
             Matcher matcher = databaseCLI.getMatcher(command.getRegex(), invalidStatements);
             String error = databaseCLI.getMatcherError(matcher);
-            System.out.println(error);
             assertNotEquals("", error);
         }
     }

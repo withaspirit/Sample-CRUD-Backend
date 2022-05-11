@@ -107,10 +107,7 @@ public class DatabaseCLITest {
         Command command = Command.DELETE;
         int itemId = 1;
         String userInput = "DELETE " + itemId;
-        System.out.println(databaseCLI.executeCommand(command, userInput));
-
-        ArrayList<Item> items = database.selectFromTable(Database.ITEMS, "*");
-        System.out.println(items);
+        databaseCLI.executeCommand(command, userInput);
         assertEquals(0, database.getSizeOfTable(Database.ITEMS));
     }
 }
