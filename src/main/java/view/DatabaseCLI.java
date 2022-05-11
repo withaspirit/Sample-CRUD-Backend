@@ -34,14 +34,16 @@ public class DatabaseCLI {
      *
      * @param databasePresenter the database presenter through which the
      */
-    void addPresenter(DatabasePresenter databasePresenter) {
+    public void addPresenter(DatabasePresenter databasePresenter) {
         this.databasePresenter = databasePresenter;
     }
 
     public void start() {
-        String introduction = "Welcome to Liam Tripp's Backend CRUD Sample.\n";
-        introduction += "Here is a list of commands you may choose from:\n";
-        System.out.println(introduction + help());
+        String introduction = "Welcome to Liam Tripp's Backend CRUD Sample.\n\n";
+        introduction += "Here is a list of commands you may choose from:\n\n";
+        System.out.println(introduction + help() + "\n");
+        System.out.println("The following tables are part of the program:");
+        System.out.println(tables() + "\n");
     }
 
     public void loop() {
@@ -49,70 +51,63 @@ public class DatabaseCLI {
         scanner.useLocale(Locale.US);
 
         do {
-            String consoleOutput;
             System.out.print("Enter command: ");
             String initialInput = scanner.nextLine().toLowerCase();
-
-            // check command is in a valid format
-            String wordSpaceAnythingRegex = "(\\w+) (.+)";
-            Matcher matcher = getMatcher(wordSpaceAnythingRegex, initialInput);
-            String matcherError = getMatcherError(matcher);
-            if (!matcherError.equals("")) {
-                System.out.println(matcherError);
-                continue;
-            }
-
-            // check command is valid
-            String commandAsString = matcher.group(1);
-            Command command = Command.getCommand(commandAsString);
-            if (command == null) {
-                String errorMessage = "Please enter a valid command. " + "Enter ' " +
-                        Command.HELP.getName() + "' for a list of them.";
-                System.out.println(errorMessage);
-                continue;
-            }
-            // check if input matches the regex of its command
-            consoleOutput = executeCommand(command, initialInput);
+            String consoleOutput = processInput(initialInput);
             System.out.println(consoleOutput);
             System.out.println();
         } while (userWantsToQuit == false);
     }
 
     /**
-     * Given a command, execute that command's corresponding SQL statement
-     * with the given inputs.
+     * Processes an input, matching and executing it.
      *
-     * @param command the command to be executed
-     * @param initialInput the user's input containing the SQL information
+     * @param userInput the user's input
+     * @return output message if input is valid, error message otherwise
+     */
+    public String processInput(String userInput) {
+        Matcher matcher = matchInput(userInput);
+        String matcherError = validateMatcher(matcher);
+        if (!matcherError.equals("")) {
+            return matcherError;
+        }
+        String consoleOutput = executeInput(matcher);
+        return consoleOutput;
+    }
+
+    /**
+     * Executes a Command given its associated SQL information.
+     *
+     * @param commandMatcher contains the Command and the user's input
      * @return a statement indicating the operation and its level of success
      */
-    String executeCommand(Command command, String initialInput) {
+    String executeInput(Matcher commandMatcher) {
         // check that initial input matches command regex
-        // TODO?: could have iterated over the loop Command.regex instead
-        Matcher matcher = getMatcher(command.getRegex(), initialInput);
-        String matcherError = getMatcherError(matcher);
-        if (!matcherError.equals("")) {
-            return "Error: " + matcherError;
+        String commandAsString = commandMatcher.group(1);
+        Command command = Command.getCommand(commandAsString);
+        if (command == null) {
+            String errorMessage = "Please enter a valid command. " + "Enter ' " +
+                    Command.HELP.getName() + "' for a list of them.";
+            return errorMessage;
         }
-
         String consoleOutput;
         switch (command) {
-            case CREATE -> consoleOutput = createItem(matcher);
-            case READ -> consoleOutput = read(matcher);
-            case UPDATE -> consoleOutput = updateItem(matcher);
-            case DELETE -> consoleOutput = delete(matcher);
+            case CREATE -> consoleOutput = createItem(commandMatcher);
+            case READ -> consoleOutput = read(commandMatcher);
+            case UPDATE -> consoleOutput = updateItem(commandMatcher);
+            case DELETE -> consoleOutput = delete(commandMatcher);
             case HELP -> consoleOutput = help();
             case QUIT -> consoleOutput = quit();
-            default -> consoleOutput = "ERROR: unhandled command.";
+            default -> consoleOutput = "ERROR: unhandled command."; // shouldn't be seen in normal program execution
         }
         return consoleOutput;
     }
 
     /**
-     * Creates an Item and returns a String indicating the level of success.
+     * Creates an Item and returns a String containing information about that item.
      *
      * @param matcher the matcher containing the user's command
-     * @return a String indicating the completion success
+     * @return a String containing information about the completed item
      */
     public String createItem(Matcher matcher) {
         Item item;
@@ -187,7 +182,7 @@ public class DatabaseCLI {
         stringBuilder.append("UPDATE - update a row in").append(itemsEnding);
         stringBuilder.append("DELETE - delete a row in").append(itemsEnding);
         stringBuilder.append("HELP - view the list of valid commands\n");
-        stringBuilder.append("QUIT - exit the command-line interface\n");
+        stringBuilder.append("QUIT - exit the command-line interface");
         return stringBuilder.toString();
     }
 
@@ -199,7 +194,35 @@ public class DatabaseCLI {
      */
     public String quit() {
         userWantsToQuit = true;
+        databasePresenter.closeModel();
         return "Exiting program.";
+    }
+
+    /**
+     * Returns a list of the tables in the Database.
+     *
+     * @return a list of the tables in the Database as a String
+     */
+    public String tables() {
+        return Database.ITEMS;
+    }
+
+    /**
+     * Matches an input to one of the Command's Regexes.
+     *
+     * @param userInput the user's input
+     * @return a matcher matching the user's input, null otherwise
+     */
+    public Matcher matchInput(String userInput) {
+        Matcher matcher = null;
+        for (Command command : Command.values()) {
+            matcher = getMatcher(command.getRegex(), userInput);
+            if (matcher.matches()) {
+                matcher.reset();
+                return matcher;
+            }
+        }
+        return matcher;
     }
 
     /**
@@ -221,7 +244,7 @@ public class DatabaseCLI {
      * @param matcher the matcher being examined
      * @return a String with an error statement if there is an error, "" otherwise
      */
-    public String getMatcherError(Matcher matcher) {
+    public String validateMatcher(Matcher matcher) {
         if (!matcher.matches()) {
             return "Bad input formatting. Enter '" + Command.HELP.getName() +
                     "' for options.";

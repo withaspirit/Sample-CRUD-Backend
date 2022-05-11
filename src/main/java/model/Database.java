@@ -54,6 +54,7 @@ public class Database {
             if (connection != null) {
                 connection.close();
             }
+            statement.close();
         } catch (SQLException e) {
             // connection close failed.
             throw new RuntimeException(e);
@@ -95,7 +96,6 @@ public class Database {
         }
         return items;
     }
-
 
     /**
      * Deletes items matching the provided ids from the selected table.

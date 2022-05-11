@@ -71,4 +71,11 @@ public class DatabasePresenter {
     public void deleteItem(String itemId) {
         database.deleteFromTable(Database.ITEMS, itemId);
     }
+
+    /**
+     * Shuts down the Database.
+     */
+    public void closeModel() {
+        database.closeDatabase();
+    }
 }
