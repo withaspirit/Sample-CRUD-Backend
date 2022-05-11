@@ -41,18 +41,6 @@ public class DatabaseCLITest {
         inputs = (JSONObject) jsonObject.get("inputs");
     }
 
-    /**
-     * Returns a JSONObject containing the values used to test each Command's
-     * Regular Expression.
-     *
-     * @param commandName the name of the Command being tested
-     * @param validity the validity of the command (either valid or invalid)
-     * @return a jsonObject containing the valid/invalid tests
-     */
-    public JSONObject getCommandTest(String commandName, String validity) {
-        return (JSONObject) ((JSONObject) inputs.get(commandName)).get(validity);
-    }
-
     @Test
     void matcherTest() {
         // TODO: remove?
