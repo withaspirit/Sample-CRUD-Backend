@@ -136,9 +136,9 @@ public class DatabaseCLI {
         StringBuilder consoleOutput = new StringBuilder();
         consoleOutput.append(attributeNamesBarSeparated).append("\n");
         for (Item item : items) {
-            String[] itemValues = item.getValuesAsArray();
-            String itemValuesBarSeparated = String.join(bar, itemValues);
-            consoleOutput.append(itemValuesBarSeparated).append("\n");
+            String[] values = item.getValuesAsArray();
+            String valuesBarSeparated = String.join(bar, values);
+            consoleOutput.append(valuesBarSeparated).append("\n");
         }
         return consoleOutput.toString();
     }

@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import presenter.DatabasePresenter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -83,6 +84,24 @@ public class DatabaseCLITest {
         Command command = Command.CREATE;
         databaseCLI.executeCommand(command, userInput);
         assertEquals(1, database.getSizeOfTable(Database.ITEMS));
+    }
+
+    @Test
+    void testReadFromEmptyTable() {
+        String userInput = "READ " + Database.ITEMS;
+        String consoleOutput = databaseCLI.executeCommand(Command.READ, userInput);
+        assertEquals(Database.ITEMS + " is empty.", consoleOutput);
+    }
+
+    @Test
+    void testReadFromTableWithItems() {
+        String createStatement = "CREATE WalterWhite 1.99 1".toLowerCase();
+        databaseCLI.executeCommand(Command.CREATE, createStatement);
+
+        String userInput = "READ " + Database.ITEMS;
+        String consoleOutput = databaseCLI.executeCommand(Command.READ, userInput);
+        assertNotEquals(Database.ITEMS + " is empty.", consoleOutput);
+        System.out.println(consoleOutput);
     }
 
     @Test
