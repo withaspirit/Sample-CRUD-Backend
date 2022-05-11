@@ -53,61 +53,49 @@ public class DatabaseCLI {
         do {
             System.out.print("Enter command: ");
             String initialInput = scanner.nextLine().toLowerCase();
-
-            String consoleOutput = validateInput(initialInput);
+            String consoleOutput = processInput(initialInput);
             System.out.println(consoleOutput);
             System.out.println();
         } while (userWantsToQuit == false);
     }
 
-    public String validateInput(String initialInput) {
-        Matcher matcher = null;
-        String matcherError = "";
-        for (Command command : Command.values()) {
-            matcher = getMatcher(command.getRegex(), initialInput);
-            matcherError = getMatcherError(matcher);
-            if (matcherError.equals("")) {
-                break;
-            }
-        }
+    /**
+     * Processes an input, matching and executing it.
+     *
+     * @param userInput the user's input
+     * @return output message if input is valid, error message otherwise
+     */
+    public String processInput(String userInput) {
+        Matcher matcher = matchInput(userInput);
+        String matcherError = getMatcherError(matcher);
         if (!matcherError.equals("")) {
             return matcherError;
         }
-        // check if input matches the regex of its command
-        // check command is valid
-        String commandAsString = matcher.group(1);
+        String consoleOutput = executeCommand(matcher);
+        return consoleOutput;
+    }
+
+    /**
+     * Executes a Command given its associated SQL information.
+     *
+     * @param commandMatcher contains the Command and the user's input
+     * @return a statement indicating the operation and its level of success
+     */
+    String executeCommand(Matcher commandMatcher) {
+        // check that initial input matches command regex
+        String commandAsString = commandMatcher.group(1);
         Command command = Command.getCommand(commandAsString);
         if (command == null) {
             String errorMessage = "Please enter a valid command. " + "Enter ' " +
                     Command.HELP.getName() + "' for a list of them.";
             return errorMessage;
         }
-        return executeCommand(command, initialInput);
-    }
-
-    /**
-     * Given a command, execute that command's corresponding SQL statement
-     * with the given inputs.
-     *
-     * @param command the command to be executed
-     * @param initialInput the user's input containing the SQL information
-     * @return a statement indicating the operation and its level of success
-     */
-    String executeCommand(Command command, String initialInput) {
-        // check that initial input matches command regex
-        // TODO?: could have iterated over the loop Command.regex instead
-        Matcher matcher = getMatcher(command.getRegex(), initialInput);
-        String matcherError = getMatcherError(matcher);
-        if (!matcherError.equals("")) {
-            return "Error: " + matcherError;
-        }
-
         String consoleOutput;
         switch (command) {
-            case CREATE -> consoleOutput = createItem(matcher);
-            case READ -> consoleOutput = read(matcher);
-            case UPDATE -> consoleOutput = updateItem(matcher);
-            case DELETE -> consoleOutput = delete(matcher);
+            case CREATE -> consoleOutput = createItem(commandMatcher);
+            case READ -> consoleOutput = read(commandMatcher);
+            case UPDATE -> consoleOutput = updateItem(commandMatcher);
+            case DELETE -> consoleOutput = delete(commandMatcher);
             case HELP -> consoleOutput = help();
             case QUIT -> consoleOutput = quit();
             default -> consoleOutput = "ERROR: unhandled command.";
