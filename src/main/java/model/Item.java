@@ -109,17 +109,21 @@ public class Item {
 
     public static String[] getAttributeNamesAsArray() {
         Field[] attributes = Item.class.getDeclaredFields();
-        Field[] attributesExceptId = Arrays.copyOfRange(attributes, 1, attributes.length);
-        String[] attributeNames = new String[attributesExceptId.length];
+        String[] attributeNames = new String[attributes.length];
 
-        for (int i = 0; i < attributesExceptId.length; i++) {
-            attributeNames[i] = attributesExceptId[i].getName();
+        for (int i = 0; i < attributes.length; i++) {
+            attributeNames[i] = attributes[i].getName();
         }
         return attributeNames;
     }
 
     public String[] getValuesAsArray() {
-        return new String[] { name, price.toString(), String.valueOf(stock) };
+        return new String[] {
+                String.valueOf(id),
+                name,
+                price.toString(),
+                String.valueOf(stock)
+        };
     }
 
     public String getAttributeNameValueListExceptId() {
