@@ -70,7 +70,7 @@ public class CommandTest {
         for (Object object : validStatements) {
             String validStatement = (String) object;
             Matcher matcher = databaseCLI.getMatcher(command.getRegex(), validStatement);
-            assertEquals("", databaseCLI.getMatcherError(matcher));
+            assertEquals("", databaseCLI.validateMatcher(matcher));
             assertNotEquals("", matcher.group(0));
             assertEquals(validStatement, matcher.group(0));
         }
@@ -86,7 +86,7 @@ public class CommandTest {
         for (Object object : InvalidStatements) {
             String invalidStatements = (String) object;
             Matcher matcher = databaseCLI.getMatcher(command.getRegex(), invalidStatements);
-            String error = databaseCLI.getMatcherError(matcher);
+            String error = databaseCLI.validateMatcher(matcher);
             assertNotEquals("", error);
         }
     }

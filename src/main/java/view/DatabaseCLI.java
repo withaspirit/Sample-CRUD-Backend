@@ -67,7 +67,7 @@ public class DatabaseCLI {
      */
     public String processInput(String userInput) {
         Matcher matcher = matchInput(userInput);
-        String matcherError = getMatcherError(matcher);
+        String matcherError = validateMatcher(matcher);
         if (!matcherError.equals("")) {
             return matcherError;
         }
@@ -244,7 +244,7 @@ public class DatabaseCLI {
      * @param matcher the matcher being examined
      * @return a String with an error statement if there is an error, "" otherwise
      */
-    public String getMatcherError(Matcher matcher) {
+    public String validateMatcher(Matcher matcher) {
         if (!matcher.matches()) {
             return "Bad input formatting. Enter '" + Command.HELP.getName() +
                     "' for options.";

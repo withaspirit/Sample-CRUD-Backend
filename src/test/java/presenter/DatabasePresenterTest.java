@@ -67,7 +67,7 @@ public class DatabasePresenterTest {
         // we need databaseCLI for its matcher methods
         DatabaseCLI databaseCLI = new DatabaseCLI();
         Matcher matcher = databaseCLI.getMatcher(UPDATE_REGEX, updatePhrase);
-        String matcherError = databaseCLI.getMatcherError(matcher);
+        String matcherError = databaseCLI.validateMatcher(matcher);
         assertEquals("", matcherError);
 
         databasePresenter.updateItem(matcher);
