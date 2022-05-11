@@ -26,7 +26,6 @@ public class DatabaseCLITest {
     private Database database;
     private DatabasePresenter databasePresenter;
     private DatabaseCLI databaseCLI;
-    private JSONObject inputs;
 
     @BeforeEach
     void setup() {
@@ -38,31 +37,29 @@ public class DatabaseCLITest {
         databaseCLI.addPresenter(databasePresenter);
         InputFileReader inputFileReader = new InputFileReader("inputs", "json");
         JSONObject jsonObject = inputFileReader.getJSONFileAsObject();
-        inputs = (JSONObject) jsonObject.get("inputs");
     }
 
     @Test
     void testCreateOneItem() {
         String userInput = "CREATE testName 1.99 1".toLowerCase();
-        Command command = Command.CREATE;
-        databaseCLI.executeCommand(command, userInput);
+        databaseCLI.processInput(userInput);
         assertEquals(1, database.getSizeOfTable(Database.ITEMS));
     }
 
     @Test
     void testReadFromEmptyTable() {
         String userInput = "READ " + Database.ITEMS;
-        String consoleOutput = databaseCLI.executeCommand(Command.READ, userInput);
+        String consoleOutput = databaseCLI.processInput(userInput);
         assertEquals(Database.ITEMS + " is empty.", consoleOutput);
     }
 
     @Test
     void testReadFromTableWithItems() {
         String createStatement = "CREATE WalterWhite 1.99 1".toLowerCase();
-        databaseCLI.executeCommand(Command.CREATE, createStatement);
+        databaseCLI.processInput(createStatement);
 
-        String userInput = "READ " + Database.ITEMS;
-        String consoleOutput = databaseCLI.executeCommand(Command.READ, userInput);
+        String readStatement = "READ " + Database.ITEMS;
+        String consoleOutput = databaseCLI.processInput(readStatement);
         assertNotEquals(Database.ITEMS + " is empty.", consoleOutput);
         System.out.println(consoleOutput);
     }
@@ -70,13 +67,13 @@ public class DatabaseCLITest {
     @Test
     void testUpdateOneItemOneAttribute() {
         String createStatement = "CREATE WalterWhite 1.99 1".toLowerCase();
-        databaseCLI.executeCommand(Command.CREATE, createStatement);
+        databaseCLI.processInput(createStatement);
         ArrayList<Item> items = database.selectFromTable(Database.ITEMS, "*");
         Item originalItem = items.get(0);
 
         String newName = "Heisenberg";
         String updateStatement = "UPDATE 1 name = '" + newName + "'";
-        databaseCLI.executeCommand(Command.UPDATE, updateStatement);
+        databaseCLI.processInput(updateStatement);
         originalItem.setName(newName);
 
         items = database.selectFromTable(Database.ITEMS, "*");
@@ -87,11 +84,9 @@ public class DatabaseCLITest {
     @Test
     void testDeleteOneItem() {
         testCreateOneItem();
-
-        Command command = Command.DELETE;
         int itemId = 1;
-        String userInput = "DELETE " + itemId;
-        databaseCLI.executeCommand(command, userInput);
+        String deleteStatement = "DELETE " + itemId;
+        databaseCLI.processInput(deleteStatement);
         assertEquals(0, database.getSizeOfTable(Database.ITEMS));
     }
 }
