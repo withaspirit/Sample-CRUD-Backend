@@ -104,7 +104,7 @@ public class Database {
      * @param itemId the provided item ids
      */
     public void deleteFromTable(String tableName, String itemId) {
-        String statementToExecute = "DELETE FROM " + tableName + " WHERE id =" + itemId;
+        String statementToExecute = "DELETE FROM " + tableName + " WHERE id = " + itemId;
         executeStatement(statementToExecute);
     }
 
@@ -112,6 +112,16 @@ public class Database {
         String statementToExecute = "UPDATE " + ITEMS + " SET " +
                 columnValuePairs + " WHERE id = " + itemId;
         executeStatement(statementToExecute);
+    }
+
+    /**
+     * Returns the number of rows in a table.
+     *
+     * @param tableName the name of the table
+     * @return the number of rows in the table
+     */
+    public int getSizeOfTable(String tableName) {
+        return selectFromTable(tableName, "*").size();
     }
 
     /**
