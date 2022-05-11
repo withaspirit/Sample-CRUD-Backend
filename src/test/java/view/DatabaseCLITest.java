@@ -79,8 +79,7 @@ public class DatabaseCLITest {
         String sqlInput = "CREATE testName 1.99 1".toLowerCase();
         Command command = Command.CREATE;
         databaseCLI.executeCommand(command, sqlInput);
-        ArrayList<Item> items = database.selectFromTable(Database.ITEMS, "*");
-        assertEquals(1, items.size());
+        assertEquals(1, database.getSizeOfTable(Database.ITEMS));
     }
 
     @Test

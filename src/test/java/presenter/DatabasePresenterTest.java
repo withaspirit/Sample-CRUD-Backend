@@ -36,8 +36,9 @@ public class DatabasePresenterTest {
     @Test
     void testInsertOneItem() {
         databasePresenter.createItem(testItem);
+        assertEquals(1, database.getSizeOfTable(Database.ITEMS));
+
         ArrayList<Item> items = database.selectFromTable(Database.ITEMS, "*");
-        assertEquals(1, items.size());
         assertEquals(testItem, items.get(0));
     }
 
@@ -59,13 +60,13 @@ public class DatabasePresenterTest {
         databasePresenter.updateItem(matcher);
         testItem.setName(updatedName);
 
+        assertEquals(1, database.getSizeOfTable(Database.ITEMS));
         ArrayList<Item> items = databasePresenter.readFromTable(Database.ITEMS);
-        assertEquals(1, items.size());
         assertEquals(testItem, items.get(0));
     }
 
     @Test
     void testDeleteMultipleItems() {
-
+        // TODO?
     }
 }
