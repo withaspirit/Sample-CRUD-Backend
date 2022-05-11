@@ -71,7 +71,7 @@ public class DatabaseCLI {
         if (!matcherError.equals("")) {
             return matcherError;
         }
-        String consoleOutput = executeCommand(matcher);
+        String consoleOutput = executeInput(matcher);
         return consoleOutput;
     }
 
@@ -81,7 +81,7 @@ public class DatabaseCLI {
      * @param commandMatcher contains the Command and the user's input
      * @return a statement indicating the operation and its level of success
      */
-    String executeCommand(Matcher commandMatcher) {
+    String executeInput(Matcher commandMatcher) {
         // check that initial input matches command regex
         String commandAsString = commandMatcher.group(1);
         Command command = Command.getCommand(commandAsString);
