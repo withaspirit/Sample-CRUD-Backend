@@ -44,7 +44,7 @@ public class DeletedItem extends Item {
     }
 
     /**
-     * Modifies the item's deletion comment
+     * Modifies the item's deletion comment.
      *
      * @param comment the new value for the Item's comment.
      */
