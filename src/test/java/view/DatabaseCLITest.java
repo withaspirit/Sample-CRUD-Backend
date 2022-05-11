@@ -76,9 +76,9 @@ public class DatabaseCLITest {
 
     @Test
     void testCreateOneItem() {
-        String sqlInput = "CREATE testName 1.99 1".toLowerCase();
+        String userInput = "CREATE testName 1.99 1".toLowerCase();
         Command command = Command.CREATE;
-        databaseCLI.executeCommand(command, sqlInput);
+        databaseCLI.executeCommand(command, userInput);
         assertEquals(1, database.getSizeOfTable(Database.ITEMS));
     }
 

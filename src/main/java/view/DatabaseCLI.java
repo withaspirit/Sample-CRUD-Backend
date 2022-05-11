@@ -125,8 +125,22 @@ public class DatabaseCLI {
         // matcher.group(1) is "READ", group(2) is tableName
         String tableName = matcher.group(2);
         ArrayList<Item> items = databasePresenter.readFromTable(tableName);
-        String readStatement = "FIXME: Items: " + items;
-        return readStatement;
+
+        if (items.isEmpty()) {
+            return tableName + " is empty.";
+        }
+        String[] attributeNames = Item.getAttributeNamesAsArray();
+        String bar = " | ";
+        String attributeNamesBarSeparated = String.join(bar, attributeNames);
+
+        StringBuilder consoleOutput = new StringBuilder();
+        consoleOutput.append(attributeNamesBarSeparated).append("\n");
+        for (Item item : items) {
+            String[] itemValues = item.getValuesAsArray();
+            String itemValuesBarSeparated = String.join(bar, itemValues);
+            consoleOutput.append(itemValuesBarSeparated).append("\n");
+        }
+        return consoleOutput.toString();
     }
 
     /**
