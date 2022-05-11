@@ -39,9 +39,11 @@ public class DatabaseCLI {
     }
 
     public void start() {
-        String introduction = "Welcome to Liam Tripp's Backend CRUD Sample.\n";
+        String introduction = "Welcome to Liam Tripp's Backend CRUD Sample.\n\n";
         introduction += "Here is a list of commands you may choose from:\n\n";
-        System.out.println(introduction + help());
+        System.out.println(introduction + help() + "\n");
+        System.out.println("The following tables are part of the program:");
+        System.out.println(tables() + "\n");
     }
 
     public void loop() {
@@ -206,6 +208,15 @@ public class DatabaseCLI {
         userWantsToQuit = true;
         databasePresenter.closeModel();
         return "Exiting program.";
+    }
+
+    /**
+     * Returns a list of the tables in the Database.
+     *
+     * @return a list of the tables in the Database as a String
+     */
+    public String tables() {
+        return Database.ITEMS;
     }
 
     /**
