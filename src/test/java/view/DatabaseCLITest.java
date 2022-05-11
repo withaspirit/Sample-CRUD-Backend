@@ -42,31 +42,6 @@ public class DatabaseCLITest {
     }
 
     @Test
-    void matcherTest() {
-        // TODO: remove?
-        // demonstrate matcher use
-        Item testItem = new Item(1, "testName", "10.30", 0);
-        String createRegex = "(\\w+) (\\d+\\.\\d+) (\\d+)";
-        String[] itemValuesArray = testItem.getValuesAsArray();
-        String[] itemValuesArrayExceptId =
-                Arrays.copyOfRange(itemValuesArray, 1, itemValuesArray.length);
-        String testItemValues = String.join(" ", itemValuesArrayExceptId);
-
-        Matcher matcher = databaseCLI.getMatcher(createRegex, testItemValues);
-        assertTrue(matcher.matches());
-        matcher.reset();
-
-        if (matcher.find()) {
-            assertEquals(testItemValues, matcher.group(0));
-            for (int i = 1; i < itemValuesArrayExceptId.length; i++) {
-                assertEquals(itemValuesArrayExceptId[i - 1], matcher.group(i));
-            }
-        } else {
-            fail();
-        }
-    }
-
-    @Test
     void testCreateOneItem() {
         String userInput = "CREATE testName 1.99 1".toLowerCase();
         Command command = Command.CREATE;

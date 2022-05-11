@@ -65,13 +65,14 @@ public class CommandTest {
     @SuppressWarnings("unchecked")
     void testValidInputsForEachCommand(Command command) {
         JSONObject validTests = getCommandTest(command.getName(), "valid");
-        Collection<Object> listOfValidStatements = (Collection<Object>) validTests.values();
+        Collection<Object> validStatements = (Collection<Object>) validTests.values();
 
-        for (Object object : listOfValidStatements) {
-            String validStatements = (String) object;
-            Matcher matcher = databaseCLI.getMatcher(command.getRegex(), validStatements);
+        for (Object object : validStatements) {
+            String validStatement = (String) object;
+            Matcher matcher = databaseCLI.getMatcher(command.getRegex(), validStatement);
             assertEquals("", databaseCLI.getMatcherError(matcher));
             assertNotEquals("", matcher.group(0));
+            assertEquals(validStatement, matcher.group(0));
         }
     }
 
@@ -80,9 +81,9 @@ public class CommandTest {
     @SuppressWarnings("unchecked")
     void testInvalidInputs(Command command) {
         JSONObject invalidTests = getCommandTest(command.getName(), "invalid");
-        Collection<Object> listOfInvalidStatements = (Collection<Object>) invalidTests.values();
+        Collection<Object> InvalidStatements = (Collection<Object>) invalidTests.values();
 
-        for (Object object : listOfInvalidStatements) {
+        for (Object object : InvalidStatements) {
             String invalidStatements = (String) object;
             Matcher matcher = databaseCLI.getMatcher(command.getRegex(), invalidStatements);
             String error = databaseCLI.getMatcherError(matcher);
