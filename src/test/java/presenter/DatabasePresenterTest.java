@@ -60,4 +60,9 @@ public class DatabasePresenterTest {
         assertEquals(1, items.size());
         assertEquals(testItem, items.get(0));
     }
+
+    @Test
+    void testDeleteMultipleItems() {
+
+    }
 }
