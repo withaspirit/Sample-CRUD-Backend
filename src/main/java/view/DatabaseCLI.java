@@ -121,6 +121,12 @@ public class DatabaseCLI {
         return "FIXME: Successfully created item: " + item.getAttributeValuesExceptId();
     }
 
+    /**
+     * Returns the contents of the specified table as a String.
+     *
+     * @param matcher contains the READ command and tableName to be read
+     * @return a String containing the contents of the table
+     */
     public String read(Matcher matcher) {
         // matcher.group(1) is "READ", group(2) is tableName
         String tableName = matcher.group(2);
@@ -154,6 +160,12 @@ public class DatabaseCLI {
         return "FIXME: update";
     }
 
+    /**
+     * Deletes an Item from a specified table.
+     *
+     * @param matcher contains the user's command and table to be deleted
+     * @return a String indicating the deletion of the Item
+     */
     public String delete(Matcher matcher) {
         // matcher.group(1) is "create"
         String itemId = matcher.group(2);
