@@ -29,7 +29,7 @@ public class DatabaseBackend {
     }
 
     /**
-     * Execute DatabaseBackend program.
+     * Executes DatabaseBackend program.
      */
     public void execute() {
         database.initializeDatabase();
