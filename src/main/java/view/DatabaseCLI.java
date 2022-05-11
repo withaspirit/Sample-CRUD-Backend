@@ -51,38 +51,38 @@ public class DatabaseCLI {
         scanner.useLocale(Locale.US);
 
         do {
-            String consoleOutput;
             System.out.print("Enter command: ");
             String initialInput = scanner.nextLine().toLowerCase();
 
-            Matcher matcher = null;
-            String matcherError = "";
-            for (Command command : Command.values()) {
-                matcher = getMatcher(command.getRegex(), initialInput);
-                matcherError = getMatcherError(matcher);
-                if (matcherError.equals("")) {
-                    break;
-                }
-            }
-            if (!matcherError.equals("")) {
-                System.out.println(matcherError);
-                continue;
-            }
-            // check if input matches the regex of its command
-            // check command is valid
-            String commandAsString = matcher.group(1);
-            Command command = Command.getCommand(commandAsString);
-            if (command == null) {
-                String errorMessage = "Please enter a valid command. " + "Enter ' " +
-                        Command.HELP.getName() + "' for a list of them.";
-                System.out.println(errorMessage);
-                continue;
-            }
-
-            consoleOutput = executeCommand(command, initialInput);
+            String consoleOutput = validateInput(initialInput);
             System.out.println(consoleOutput);
             System.out.println();
         } while (userWantsToQuit == false);
+    }
+
+    public String validateInput(String initialInput) {
+        Matcher matcher = null;
+        String matcherError = "";
+        for (Command command : Command.values()) {
+            matcher = getMatcher(command.getRegex(), initialInput);
+            matcherError = getMatcherError(matcher);
+            if (matcherError.equals("")) {
+                break;
+            }
+        }
+        if (!matcherError.equals("")) {
+            return matcherError;
+        }
+        // check if input matches the regex of its command
+        // check command is valid
+        String commandAsString = matcher.group(1);
+        Command command = Command.getCommand(commandAsString);
+        if (command == null) {
+            String errorMessage = "Please enter a valid command. " + "Enter ' " +
+                    Command.HELP.getName() + "' for a list of them.";
+            return errorMessage;
+        }
+        return executeCommand(command, initialInput);
     }
 
     /**
