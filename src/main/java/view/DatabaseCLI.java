@@ -40,7 +40,7 @@ public class DatabaseCLI {
 
     public void start() {
         String introduction = "Welcome to Liam Tripp's Backend CRUD Sample.\n";
-        introduction += "Here is a list of commands you may choose from:\n";
+        introduction += "Here is a list of commands you may choose from:\n\n";
         System.out.println(introduction + help());
     }
 
@@ -149,7 +149,7 @@ public class DatabaseCLI {
         for (Item item : items) {
             String[] values = item.getValuesAsArray();
             String valuesBarSeparated = String.join(bar, values);
-            consoleOutput.append(valuesBarSeparated).append("\n");
+            consoleOutput.append(valuesBarSeparated);
         }
         return consoleOutput.toString();
     }
@@ -192,7 +192,7 @@ public class DatabaseCLI {
         stringBuilder.append("UPDATE - update a row in").append(itemsEnding);
         stringBuilder.append("DELETE - delete a row in").append(itemsEnding);
         stringBuilder.append("HELP - view the list of valid commands\n");
-        stringBuilder.append("QUIT - exit the command-line interface\n");
+        stringBuilder.append("QUIT - exit the command-line interface");
         return stringBuilder.toString();
     }
 
