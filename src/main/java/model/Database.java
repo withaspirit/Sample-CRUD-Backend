@@ -54,6 +54,7 @@ public class Database {
             if (connection != null) {
                 connection.close();
             }
+            statement.close();
         } catch (SQLException e) {
             // connection close failed.
             throw new RuntimeException(e);

@@ -34,7 +34,7 @@ public class DatabaseCLI {
      *
      * @param databasePresenter the database presenter through which the
      */
-    void addPresenter(DatabasePresenter databasePresenter) {
+    public void addPresenter(DatabasePresenter databasePresenter) {
         this.databasePresenter = databasePresenter;
     }
 
@@ -199,6 +199,7 @@ public class DatabaseCLI {
      */
     public String quit() {
         userWantsToQuit = true;
+        databasePresenter.closeModel();
         return "Exiting program.";
     }
 
