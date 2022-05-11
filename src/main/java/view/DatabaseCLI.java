@@ -98,16 +98,16 @@ public class DatabaseCLI {
             case DELETE -> consoleOutput = delete(commandMatcher);
             case HELP -> consoleOutput = help();
             case QUIT -> consoleOutput = quit();
-            default -> consoleOutput = "ERROR: unhandled command.";
+            default -> consoleOutput = "ERROR: unhandled command."; // shouldn't be seen in normal program execution
         }
         return consoleOutput;
     }
 
     /**
-     * Creates an Item and returns a String indicating the level of success.
+     * Creates an Item and returns a String containing information about that item.
      *
      * @param matcher the matcher containing the user's command
-     * @return a String indicating the completion success
+     * @return a String containing information about the completed item
      */
     public String createItem(Matcher matcher) {
         Item item;
