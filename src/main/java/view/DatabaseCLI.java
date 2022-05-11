@@ -139,7 +139,7 @@ public class DatabaseCLI {
         for (Item item : items) {
             String[] values = item.getValuesAsArray();
             String valuesBarSeparated = String.join(bar, values);
-            consoleOutput.append(valuesBarSeparated);
+            consoleOutput.append(valuesBarSeparated).append("\n");
         }
         return consoleOutput.toString();
     }
