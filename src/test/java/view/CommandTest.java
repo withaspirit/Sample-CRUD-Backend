@@ -35,10 +35,10 @@ public class CommandTest {
     @ParameterizedTest
     @EnumSource(Command.class)
     void testGetCommandValidInputs(Command command) {
-            String commandName = command.getName();
-            Command foundCommand = Command.getCommand(commandName);
-            Assertions.assertNotNull(foundCommand);
-            assertEquals(commandName, foundCommand.getName());
+        String commandName = command.getName();
+        Command foundCommand = Command.getCommand(commandName);
+        Assertions.assertNotNull(foundCommand);
+        assertEquals(commandName, foundCommand.getName());
     }
 
     @Test
@@ -67,7 +67,7 @@ public class CommandTest {
         JSONObject validTests = getCommandTest(command.getName(), "valid");
         Collection<Object> listOfValidStatements = (Collection<Object>) validTests.values();
 
-        for (Object object: listOfValidStatements) {
+        for (Object object : listOfValidStatements) {
             String validStatements = (String) object;
             Matcher matcher = databaseCLI.getMatcher(command.getRegex(), validStatements);
             assertEquals("", databaseCLI.getMatcherError(matcher));
@@ -78,11 +78,11 @@ public class CommandTest {
     @ParameterizedTest
     @EnumSource(Command.class)
     @SuppressWarnings("unchecked")
-    void testInvalidInputs(Command command){
+    void testInvalidInputs(Command command) {
         JSONObject invalidTests = getCommandTest(command.getName(), "invalid");
         Collection<Object> listOfInvalidStatements = (Collection<Object>) invalidTests.values();
 
-        for (Object object: listOfInvalidStatements) {
+        for (Object object : listOfInvalidStatements) {
             String invalidStatements = (String) object;
             Matcher matcher = databaseCLI.getMatcher(command.getRegex(), invalidStatements);
             String error = databaseCLI.getMatcherError(matcher);
