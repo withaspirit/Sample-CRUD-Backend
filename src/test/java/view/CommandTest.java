@@ -1,10 +1,18 @@
 package view;
 
+import model.InputFileReader;
+import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import java.util.Collection;
+import java.util.regex.Matcher;
+
+import static org.junit.jupiter.api.Assertions.*;
+
 
 /**
  * CommandTest ensures that Command's search method functions correctly.
@@ -13,14 +21,24 @@ import static org.junit.jupiter.api.Assertions.assertNull;
  */
 public class CommandTest {
 
-    @Test
-    void testGetCommandValidInputs() {
-        for (Command command : Command.values()) {
-            String commandName = command.getName();
-            Command foundCommand = Command.getCommand(commandName);
-            Assertions.assertNotNull(foundCommand);
-            assertEquals(commandName, foundCommand.getName());
-        }
+    private DatabaseCLI databaseCLI;
+    private JSONObject inputs;
+
+    @BeforeEach
+    void setup() {
+        InputFileReader inputFileReader = new InputFileReader("inputs", "json");
+        JSONObject jsonObject = inputFileReader.getJSONFileAsObject();
+        inputs = (JSONObject) jsonObject.get("inputs");
+        databaseCLI = new DatabaseCLI();
+    }
+
+    @ParameterizedTest
+    @EnumSource(Command.class)
+    void testGetCommandValidInputs(Command command) {
+        String commandName = command.getName();
+        Command foundCommand = Command.getCommand(commandName);
+        Assertions.assertNotNull(foundCommand);
+        assertEquals(commandName, foundCommand.getName());
     }
 
     @Test
@@ -28,5 +46,48 @@ public class CommandTest {
         String invalidCommandName = "invalidCommandName";
         Command invalidCommand = Command.getCommand(invalidCommandName);
         assertNull(invalidCommand);
+    }
+
+    /**
+     * Returns a JSONObject containing the values used to test each Command's
+     * Regular Expression.
+     *
+     * @param commandName the name of the Command being tested
+     * @param validity the validity of the command (either valid or invalid)
+     * @return a jsonObject containing the valid/invalid tests
+     */
+    public JSONObject getCommandTest(String commandName, String validity) {
+        return (JSONObject) ((JSONObject) inputs.get(commandName)).get(validity);
+    }
+
+    @ParameterizedTest
+    @EnumSource(Command.class)
+    @SuppressWarnings("unchecked")
+    void testValidInputsForEachCommand(Command command) {
+        JSONObject validTests = getCommandTest(command.getName(), "valid");
+        Collection<Object> validStatements = (Collection<Object>) validTests.values();
+
+        for (Object object : validStatements) {
+            String validStatement = (String) object;
+            Matcher matcher = databaseCLI.getMatcher(command.getRegex(), validStatement);
+            assertEquals("", databaseCLI.getMatcherError(matcher));
+            assertNotEquals("", matcher.group(0));
+            assertEquals(validStatement, matcher.group(0));
+        }
+    }
+
+    @ParameterizedTest
+    @EnumSource(Command.class)
+    @SuppressWarnings("unchecked")
+    void testInvalidInputs(Command command) {
+        JSONObject invalidTests = getCommandTest(command.getName(), "invalid");
+        Collection<Object> InvalidStatements = (Collection<Object>) invalidTests.values();
+
+        for (Object object : InvalidStatements) {
+            String invalidStatements = (String) object;
+            Matcher matcher = databaseCLI.getMatcher(command.getRegex(), invalidStatements);
+            String error = databaseCLI.getMatcherError(matcher);
+            assertNotEquals("", error);
+        }
     }
 }

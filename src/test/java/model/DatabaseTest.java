@@ -38,8 +38,9 @@ public class DatabaseTest {
     void testDatabaseInsertionForOneItem() {
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
                 testItem.getAttributeValuesExceptId());
+        assertEquals(1, database.getSizeOfTable(Database.ITEMS));
+
         itemsList = database.selectFromTable(Database.ITEMS, "*");
-        assertEquals(1, itemsList.size());
         Item itemFromDatabase = itemsList.get(0);
         assertEquals(testItem, itemFromDatabase);
     }
@@ -49,8 +50,9 @@ public class DatabaseTest {
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
                 testItem.getAttributeValuesExceptId());
 
+        assertEquals(1, database.getSizeOfTable(Database.ITEMS));
+
         itemsList = database.selectFromTable(Database.ITEMS, "*");
-        assertEquals(1, itemsList.size());
         Item itemFromDatabase = itemsList.get(0);
         assertEquals(testItem, itemFromDatabase);
     }
@@ -58,8 +60,7 @@ public class DatabaseTest {
     @Test
     void testDatabasePopulatedWithCorrectNumberOfItems() {
         database.populateDatabase();
-        itemsList = database.selectFromTable(Database.ITEMS, "*");
-        assertEquals(itemsJSONArray.size(), itemsList.size());
+        assertEquals(itemsJSONArray.size(), database.getSizeOfTable(Database.ITEMS));
     }
 
     @Test
@@ -76,8 +77,7 @@ public class DatabaseTest {
                 testItem.getAttributeValuesExceptId());
         database.deleteFromTable(Database.ITEMS, String.valueOf(testItem.getId()));
 
-        itemsList = database.selectFromTable(Database.ITEMS, "*");
-        assertEquals(0, itemsList.size());
+        assertEquals(0, database.getSizeOfTable(Database.ITEMS));
     }
 
     @Test
@@ -99,8 +99,7 @@ public class DatabaseTest {
         int invalidId = 2;
         database.deleteFromTable(Database.ITEMS, String.valueOf(invalidId));
 
-        itemsList = database.selectFromTable(Database.ITEMS, "*");
-        assertEquals(1, itemsList.size());
+        assertEquals(1, database.getSizeOfTable(Database.ITEMS));
     }
 
     @Test

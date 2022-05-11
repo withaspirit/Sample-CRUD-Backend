@@ -10,8 +10,7 @@ import view.DatabaseCLI;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * DatabasePresenterTest ensures the DatabasePresenter's methods work
@@ -37,9 +36,23 @@ public class DatabasePresenterTest {
     @Test
     void testInsertOneItem() {
         databasePresenter.createItem(testItem);
+        assertEquals(1, database.getSizeOfTable(Database.ITEMS));
+
         ArrayList<Item> items = database.selectFromTable(Database.ITEMS, "*");
-        assertEquals(1, items.size());
         assertEquals(testItem, items.get(0));
+    }
+
+    @Test
+    void testReadValidTableName() {
+        ArrayList<Item> items = databasePresenter.readFromTable(Database.ITEMS);
+        assertNotNull(items);
+    }
+
+    @Test
+    void testReadInvalidTableName() {
+        String testName = "InvalidName";
+        ArrayList<Item> items = databasePresenter.readFromTable(testName);
+        assertNull(items);
     }
 
     @Test
@@ -50,14 +63,23 @@ public class DatabasePresenterTest {
 
         String UPDATE_REGEX = Command.UPDATE.getRegex();
         String updatePhrase = "UPDATE 1 name = '" + updatedName + "'";
-        Matcher matcher = (new DatabaseCLI()).getMatcher(UPDATE_REGEX, updatePhrase);
-        assertNotNull(matcher);
+
+        // we need databaseCLI for its matcher methods
+        DatabaseCLI databaseCLI = new DatabaseCLI();
+        Matcher matcher = databaseCLI.getMatcher(UPDATE_REGEX, updatePhrase);
+        String matcherError = databaseCLI.getMatcherError(matcher);
+        assertEquals("", matcherError);
 
         databasePresenter.updateItem(matcher);
         testItem.setName(updatedName);
 
+        assertEquals(1, database.getSizeOfTable(Database.ITEMS));
         ArrayList<Item> items = databasePresenter.readFromTable(Database.ITEMS);
-        assertEquals(1, items.size());
         assertEquals(testItem, items.get(0));
+    }
+
+    @Test
+    void testDeleteMultipleItems() {
+        // TODO?
     }
 }

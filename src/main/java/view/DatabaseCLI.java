@@ -2,7 +2,9 @@ package view;
 
 import model.Database;
 import model.Item;
+import presenter.DatabasePresenter;
 
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -16,6 +18,8 @@ import java.util.regex.Pattern;
  */
 public class DatabaseCLI {
 
+    /** DatabaseCLI interacts with the model through databasePresenter */
+    private DatabasePresenter databasePresenter;
     private boolean userWantsToQuit;
 
     /**
@@ -23,6 +27,15 @@ public class DatabaseCLI {
      */
     public DatabaseCLI() {
         userWantsToQuit = false;
+    }
+
+    /**
+     * Adds a databasePresenter to the DatabaseCLI (View).
+     *
+     * @param databasePresenter the database presenter through which the
+     */
+    void addPresenter(DatabasePresenter databasePresenter) {
+        this.databasePresenter = databasePresenter;
     }
 
     public void start() {
@@ -104,13 +117,36 @@ public class DatabaseCLI {
     public String createItem(Matcher matcher) {
         Item item;
         item = new Item(matcher);
-        System.out.println(item.getAttributeValuesExceptId());
+        databasePresenter.createItem(item);
         return "FIXME: Successfully created item: " + item.getAttributeValuesExceptId();
     }
 
+    /**
+     * Returns the contents of the specified table as a String.
+     *
+     * @param matcher contains the READ command and tableName to be read
+     * @return a String containing the contents of the table
+     */
     public String read(Matcher matcher) {
-        String readStatement = "";
-        return "";
+        // matcher.group(1) is "READ", group(2) is tableName
+        String tableName = matcher.group(2);
+        ArrayList<Item> items = databasePresenter.readFromTable(tableName);
+
+        if (items.isEmpty()) {
+            return tableName + " is empty.";
+        }
+        String[] attributeNames = Item.getAttributeNamesAsArray();
+        String bar = " | ";
+        String attributeNamesBarSeparated = String.join(bar, attributeNames);
+
+        StringBuilder consoleOutput = new StringBuilder();
+        consoleOutput.append(attributeNamesBarSeparated).append("\n");
+        for (Item item : items) {
+            String[] values = item.getValuesAsArray();
+            String valuesBarSeparated = String.join(bar, values);
+            consoleOutput.append(valuesBarSeparated).append("\n");
+        }
+        return consoleOutput.toString();
     }
 
     /**
@@ -120,11 +156,21 @@ public class DatabaseCLI {
      * @return a String indicating the completion success
      */
     public String updateItem(Matcher matcher) {
-        return "";
+        databasePresenter.updateItem(matcher);
+        return "FIXME: update";
     }
 
+    /**
+     * Deletes an Item from a specified table.
+     *
+     * @param matcher contains the user's command and table to be deleted
+     * @return a String indicating the deletion of the Item
+     */
     public String delete(Matcher matcher) {
-        return "";
+        // matcher.group(1) is "create"
+        String itemId = matcher.group(2);
+        databasePresenter.deleteItem(itemId);
+        return "FIXME: delete";
     }
 
     /**
