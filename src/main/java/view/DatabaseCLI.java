@@ -208,6 +208,24 @@ public class DatabaseCLI {
     }
 
     /**
+     * Matches an input to one of the Command's Regexes.
+     *
+     * @param userInput the user's input
+     * @return a matcher matching the user's input, null otherwise
+     */
+    public Matcher matchInput(String userInput) {
+        Matcher matcher = null;
+        for (Command command : Command.values()) {
+            matcher = getMatcher(command.getRegex(), userInput);
+            if (matcher.matches()) {
+                matcher.reset();
+                return matcher;
+            }
+        }
+        return matcher;
+    }
+
+    /**
      * Returns a Matcher matching input to a given Regular Expression.
      *
      * @param regex a Regular Expression to capture
