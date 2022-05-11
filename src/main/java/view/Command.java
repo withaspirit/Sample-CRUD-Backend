@@ -12,8 +12,8 @@ public enum Command {
     READ("(READ) (" + Database.ITEMS + ")"),
     UPDATE("(UPDATE) (\\d+) (name = '\\w+'|price = \\d+\\.\\d+|stock = \\d+)"),
     DELETE("(DELETE) (\\d+)"),
-    HELP("help"),
-    QUIT("quit");
+    HELP("(help)"),
+    QUIT("(quit)");
 
     private String regex;
 

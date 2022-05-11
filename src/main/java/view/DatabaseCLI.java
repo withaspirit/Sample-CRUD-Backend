@@ -53,15 +53,20 @@ public class DatabaseCLI {
             System.out.print("Enter command: ");
             String initialInput = scanner.nextLine().toLowerCase();
 
-            // check command is in a valid format
-            String wordSpaceAnythingRegex = "(\\w+) (.+)";
-            Matcher matcher = getMatcher(wordSpaceAnythingRegex, initialInput);
-            String matcherError = getMatcherError(matcher);
+            Matcher matcher = null;
+            String matcherError = "";
+            for (Command command : Command.values()) {
+                matcher = getMatcher(command.getRegex(), initialInput);
+                matcherError = getMatcherError(matcher);
+                if (matcherError.equals("")) {
+                    break;
+                }
+            }
             if (!matcherError.equals("")) {
                 System.out.println(matcherError);
                 continue;
             }
-
+            // check if input matches the regex of its command
             // check command is valid
             String commandAsString = matcher.group(1);
             Command command = Command.getCommand(commandAsString);
@@ -71,7 +76,7 @@ public class DatabaseCLI {
                 System.out.println(errorMessage);
                 continue;
             }
-            // check if input matches the regex of its command
+
             consoleOutput = executeCommand(command, initialInput);
             System.out.println(consoleOutput);
             System.out.println();
