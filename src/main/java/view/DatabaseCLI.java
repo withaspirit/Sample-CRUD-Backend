@@ -222,7 +222,7 @@ public class DatabaseCLI {
      * @return a list of the tables in the Database as a String
      */
     public String tables() {
-        return Database.ITEMS;
+        return String.join(",", Database.ITEMS, Database.DELETED_ITEMS);
     }
 
     /**

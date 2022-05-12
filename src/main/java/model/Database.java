@@ -89,10 +89,8 @@ public class Database {
         try {
             while (resultSet.next()) {
                 if (tableName.equals(Database.DELETED_ITEMS)) {
-                    System.out.println(resultSet.getString(5));
                     DeletedItem item = new DeletedItem(resultSet);
                     items.add(item);
-                    System.out.println(item);
                 } else {
                     Item item = new Item(resultSet);
                     items.add(item);
