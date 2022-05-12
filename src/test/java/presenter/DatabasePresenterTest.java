@@ -33,7 +33,7 @@ public class DatabasePresenterTest {
         databasePresenter.addModel(database);
         database.initializeDatabase();
         testItem = new Item(1, "testName", "0.0", 1);
-        deletedItemWithComment = new DeletedItem(testItem);
+        deletedItemWithComment = new DeletedItem(testItem, "comment comment comment");
     }
 
     @Test

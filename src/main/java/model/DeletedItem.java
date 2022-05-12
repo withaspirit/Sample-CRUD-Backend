@@ -55,12 +55,6 @@ public class DeletedItem extends Item {
         }
     }
 
-    // TODO: constructor from Matcher
-    public DeletedItem(int id, String name, String price, int stock, String comment) {
-        super(id, name, price, stock);
-        this.comment = comment;
-    }
-
     /**
      * Returns the item's deletion comment.
      *
