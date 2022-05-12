@@ -70,7 +70,11 @@ public class DatabasePresenter {
      * @param itemId the id of the table being deleted from
      */
     public void deleteItem(String itemId) {
+        Item item = database.selectFromTable(Database.ITEMS, "*", itemId);
+        String values = item.getAttributeValues();
+        String columns = String.join(", ", Item.getAttributeNamesAsArray());
         database.deleteFromTable(Database.ITEMS, itemId);
+        database.insert(Database.DELETED_ITEMS, columns, values);
     }
 
     /**

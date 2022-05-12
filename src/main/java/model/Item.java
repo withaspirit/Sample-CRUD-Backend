@@ -107,6 +107,12 @@ public class Item {
         return "'" + name + "'," + price.scaleByPowerOfTen(2).intValue() + ", " + stock;
     }
 
+    // FIXME: used for database insertion
+    //  probably should use string array instead
+    public String getAttributeValues() {
+        return id + ", '" + name + "'," + price.scaleByPowerOfTen(2).intValue() + ", " + stock;
+    }
+
     public static String[] getAttributeNamesAsArray() {
         Field[] attributes = Item.class.getDeclaredFields();
         String[] attributeNames = new String[attributes.length];

@@ -82,4 +82,22 @@ public class DatabasePresenterTest {
     void testDeleteMultipleItems() {
         // TODO?
     }
+
+    @Test
+    void testDatabaseDeletionInsertsIntoDeletedItemsTable() {
+        databasePresenter.createItem(testItem);
+        databasePresenter.deleteItem(String.valueOf(testItem.getId()));
+        assertEquals(1, database.getSizeOfTable(Database.DELETED_ITEMS));
+    }
+
+    @Test
+    void testRestoreItem() {
+        testDatabaseDeletionInsertsIntoDeletedItemsTable();
+        String itemId = String.valueOf(testItem.getId());
+        Item retrievedItem = database.selectFromTable(Database.DELETED_ITEMS, "*", itemId);
+        Item restoredItem = databasePresenter.restore(itemId);
+        assertEquals(testItem, retrievedItem);
+        assertEquals(testItem, restoredItem);
+        assertEquals(restoredItem, restoredItem);
+    }
 }
