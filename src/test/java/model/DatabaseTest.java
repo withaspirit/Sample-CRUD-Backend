@@ -79,7 +79,7 @@ public class DatabaseTest {
     }
 
     @Test
-    void testValidIdWithDatabaseDeletion() {
+    void testDeleteItemWithValidId() {
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
                 testItem.getAttributeValuesExceptId());
         database.deleteFromTable(Database.ITEMS, String.valueOf(testItem.getId()));
@@ -89,14 +89,12 @@ public class DatabaseTest {
 
     @Test
     void testSelectingFromDatabaseItemWithDecimalPrice() {
-        String testName = "name";
-        String price = "10.99";
-        Item itemWithDecimalPrice = new Item(1, testName, price, 0);
+
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
-                itemWithDecimalPrice.getAttributeValuesExceptId());
+                testItem.getAttributeValuesExceptId());
 
         itemsList = database.selectFromTable(Database.ITEMS, "*");
-        assertEquals(itemWithDecimalPrice, itemsList.get(0));
+        assertEquals(testItem, itemsList.get(0));
     }
 
     @Test
@@ -115,12 +113,12 @@ public class DatabaseTest {
     }
 
     @Test
-    void testInvalidIdWithDatabaseDeletion() {
+    void testDeleteItemWithInvalidId() {
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
                 testItem.getAttributeValuesExceptId());
+
         int invalidId = 2;
         database.deleteFromTable(Database.ITEMS, String.valueOf(invalidId));
-
         assertEquals(1, database.getSizeOfTable(Database.ITEMS));
     }
 
@@ -128,6 +126,7 @@ public class DatabaseTest {
     void testUpdatingOneValueOneItem() {
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
                 testItem.getAttributeValuesExceptId());
+
         String newName = "NewName";
         String updateStatement = "name = '" + newName + "'";
         database.updateItems(String.valueOf(testItem.getId()), updateStatement);
@@ -154,10 +153,5 @@ public class DatabaseTest {
 
         itemsList = database.selectFromTable(Database.ITEMS, "*");
         assertEquals(testItem, itemsList.get(0));
-    }
-
-    @Test
-    void testDeletingOneItem() {
-
     }
 }
