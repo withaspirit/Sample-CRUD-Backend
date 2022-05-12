@@ -88,8 +88,15 @@ public class Database {
 
         try {
             while (resultSet.next()) {
-                Item item = new Item(resultSet);
-                items.add(item);
+                if (tableName.equals(Database.DELETED_ITEMS)) {
+                    System.out.println(resultSet.getString(5));
+                    DeletedItem item = new DeletedItem(resultSet);
+                    items.add(item);
+                    System.out.println(item);
+                } else {
+                    Item item = new Item(resultSet);
+                    items.add(item);
+                }
             }
             resultSet.close();
         } catch (SQLException e) {
@@ -123,6 +130,7 @@ public class Database {
             }
             resultSet.close();
         } catch (SQLException e) {
+
             throw new RuntimeException(e);
         }
         return items.get(0);
