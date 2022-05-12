@@ -13,7 +13,6 @@ import java.util.regex.Matcher;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
 /**
  * CommandTest ensures that Command's search method functions correctly.
  *
