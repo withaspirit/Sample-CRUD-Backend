@@ -92,4 +92,24 @@ public class DatabaseCLITest {
         databaseCLI.processInput(deleteStatement);
         assertEquals(0, database.getSizeOfTable(Database.ITEMS));
     }
+
+    @Test
+    void testRestoreOneItemReturnsCorrectItem() {
+        testDeleteOneItem();
+        String restoreStatement = "RESTORE " + testItem.getId();
+        String restoredItemMessage = databaseCLI.processInput(restoreStatement);
+        String[] itemValues = testItem.getValuesAsArray();
+        itemValues[1] = "'" + itemValues[1] + "'"; // put apostrophes around name
+        String values = String.join(", ", itemValues);
+        System.out.println(values);
+        System.out.println(restoredItemMessage);
+        assertTrue(restoredItemMessage.contains(values));
+    }
+
+    @Test
+    void testRestoreOneItemPlacesItemInCorrectTable() {
+        testRestoreOneItemReturnsCorrectItem();
+        assertEquals(0, database.getSizeOfTable(Database.DELETED_ITEMS));
+        assertEquals(1, database.getSizeOfTable(Database.ITEMS));
+    }
 }
