@@ -72,6 +72,13 @@ public class DatabaseTest {
     }
 
     @Test
+    void testInsertIntoDeletedItems() {
+        database.insert(Database.DELETED_ITEMS, Item.getAttributeNamesExceptId(),
+                testItem.getAttributeValuesExceptId());
+        assertEquals(1, database.getSizeOfTable(Database.DELETED_ITEMS));
+    }
+
+    @Test
     void testValidIdWithDatabaseDeletion() {
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
                 testItem.getAttributeValuesExceptId());
