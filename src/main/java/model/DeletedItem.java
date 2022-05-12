@@ -25,6 +25,7 @@ public class DeletedItem extends Item {
     public DeletedItem(Item item) {
         super(item.getId(), item.getName(), item.getPrice().toString(),
                 item.getStock());
+        comment = "";
     }
 
     /**
@@ -79,13 +80,14 @@ public class DeletedItem extends Item {
     }
 
     public static String[] getAttributeNamesAsArray() {
-        Field[] attributes = DeletedItem.class.getFields();
+        Field[] attributes = DeletedItem.class.getDeclaredFields();
         String[] attributeNames = new String[attributes.length];
 
         for (int i = 0; i < attributes.length; i++) {
             attributeNames[i] = attributes[i].getName();
         }
-        return attributeNames;
+        String[] itemAttributeNames = Item.getAttributeNamesAsArray();
+        return ArrayUtils.addAll(itemAttributeNames, attributeNames);
     }
 
     @Override
@@ -95,6 +97,15 @@ public class DeletedItem extends Item {
         } else {
             return super.getValuesAsArray();
         }
+    }
+
+    @Override
+    public String getAttributeValues() {
+        String valuesAsList = super.getAttributeValues();
+        if (!comment.isBlank()) {
+            valuesAsList = String.join(", ", valuesAsList, "'" + comment + "'");
+        }
+        return valuesAsList;
     }
 
     @Override
