@@ -93,6 +93,22 @@ public class DatabaseTest {
     }
 
     @Test
+    void testSelectOneItem() {
+        database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
+                testItem.getAttributeValuesExceptId());
+
+        Item testItem2 = new Item(2, "testItem2", "2.22", 2);
+        database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
+                testItem2.getAttributeValuesExceptId());
+        assertEquals(2, database.getSizeOfTable(Database.ITEMS));
+
+        String itemId2 = String.valueOf(testItem2.getId());
+        Item retrievedItem = database.selectFromTable(Database.ITEMS, "*",
+                itemId2);
+        assertEquals(testItem2, retrievedItem);
+    }
+
+    @Test
     void testInvalidIdWithDatabaseDeletion() {
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
                 testItem.getAttributeValuesExceptId());
