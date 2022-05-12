@@ -107,10 +107,17 @@ public class Item {
         return "'" + name + "'," + price.scaleByPowerOfTen(2).intValue() + ", " + stock;
     }
 
-    // FIXME: used for database insertion
-    //  probably should use string array instead
+    /**
+     * Returns the values of all attributes as an SQL-formatted String.
+     *
+     * @return the SQL-formatted, comma-separated Item values
+     */
     public String getAttributeValues() {
-        return id + ", '" + name + "'," + price.scaleByPowerOfTen(2).intValue() + ", " + stock;
+        return String.join(", ",
+                String.valueOf(id),
+                "'" + name + "'",
+                price.scaleByPowerOfTen(2).toString(),
+                String.valueOf(stock));
     }
 
     public static String[] getAttributeNamesAsArray() {
