@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS items (
     price >= 0 AND
     stock >= 0));
 
-CREATE TABLE IF NOT EXISTS deleted_items {
+CREATE TABLE IF NOT EXISTS deleted_items (
   id INTEGER UNIQUE,
   name VARCHAR(50) NOT NULL,
   price NUMERIC(15,2),
@@ -19,4 +19,3 @@ CREATE TABLE IF NOT EXISTS deleted_items {
   CHECK (length(name) > 0 AND
     price >= 0 AND
     stock >= 0));
-}
