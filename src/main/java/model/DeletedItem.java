@@ -1,8 +1,11 @@
 package model;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
 
 /**
  * DeletedItem is an Item that has been deleted.
@@ -38,15 +41,16 @@ public class DeletedItem extends Item {
 
     public DeletedItem(ResultSet resultSet) {
         super(resultSet);
-        final Field[] attributes = DeletedItem.class.getFields();
-        // if deletedItem has comment
-        int commentIndex = 5;
-        if (attributes.length == commentIndex) {
-            try {
-                this.comment =   resultSet.getString(commentIndex);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+        int numberOfItemAttributes = Item.class.getDeclaredFields().length;
+        int numberOfDeletedItemAttributes = DeletedItem.class.getDeclaredFields().length;
+        int totalNumberOfAttributes = numberOfItemAttributes + numberOfDeletedItemAttributes;
+
+        try {
+            String comment = resultSet.getString(totalNumberOfAttributes);
+            // prevent DeletedItem from initializing null value
+            this.comment = Objects.requireNonNullElse(comment, "");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -86,13 +90,11 @@ public class DeletedItem extends Item {
 
     @Override
     public String[] getValuesAsArray() {
-        return new String[] {
-                String.valueOf(getId()),
-                getName(),
-                getPrice().toString(),
-                String.valueOf(getStock()),
-                getComment()
-        };
+        if (!comment.isBlank()) {
+            return ArrayUtils.addAll(super.getValuesAsArray(), comment);
+        } else {
+            return super.getValuesAsArray();
+        }
     }
 
     @Override
@@ -114,6 +116,10 @@ public class DeletedItem extends Item {
 
     @Override
     public String toString() {
-        return String.join(", ", super.toString(), getComment());
+        String deletedItemValues = super.toString();
+        if (comment != null && !comment.isBlank()) {
+            deletedItemValues = String.join(", ", deletedItemValues, comment);
+        }
+        return deletedItemValues;
     }
 }
