@@ -3,7 +3,7 @@ package model;
 import java.lang.reflect.Field;
 
 /**
- * DeletedItem is an item that has been deleted.
+ * DeletedItem is an Item that has been deleted.
  *
  * @author Liam Tripp
  */
@@ -97,11 +97,6 @@ public class DeletedItem extends Item {
 
     @Override
     public String toString() {
-        return String.join(", ",
-                String.valueOf(getId()),
-                getName(),
-                getPrice().toString(),
-                String.valueOf(getStock()),
-                getComment());
+        return String.join(", ", super.toString(), getComment());
     }
 }
