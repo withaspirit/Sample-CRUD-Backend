@@ -77,9 +77,11 @@ public class DatabasePresenter {
             return;
         }
         String columns;
+        String values = item.getValuesInSQLFormat();
         if (!comment.isBlank()) {
             item = new DeletedItem(item, comment);
             columns = String.join(", ", DeletedItem.getAttributeNamesAsArray());
+            values = item.getValuesInSQLFormat();
         } else {
             columns = String.join(", ", Item.getAttributeNamesAsArray());
         }

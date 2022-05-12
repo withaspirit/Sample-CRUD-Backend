@@ -55,6 +55,15 @@ public class DeletedItem extends Item {
         }
     }
 
+    @Override
+    public String getValuesInSQLFormat() {
+        String deletedItemValues = super.getValuesInSQLFormat();
+        if (comment != null && !comment.isBlank()) {
+            deletedItemValues = String.join(", ", deletedItemValues, "'" + comment + "'");
+        }
+        return deletedItemValues;
+    }
+
     /**
      * Returns the item's deletion comment.
      *
