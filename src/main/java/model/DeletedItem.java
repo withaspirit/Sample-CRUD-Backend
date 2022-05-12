@@ -55,8 +55,13 @@ public class DeletedItem extends Item {
         }
     }
 
-    @Override
-    public String getValuesInSQLFormat() {
+    /**
+     * Returns the DeletedItem's properties in SQL format. Identical to
+     * Item.getValuesInSQLFormat except it includes the field for comments.
+     *
+     * @return the DeletedItem's values a format made suitable for SQL
+     */
+    public String getDeletedItemValuesInSQLFormat() {
         String deletedItemValues = super.getValuesInSQLFormat();
         if (comment != null && !comment.isBlank()) {
             deletedItemValues = String.join(", ", deletedItemValues, "'" + comment + "'");
