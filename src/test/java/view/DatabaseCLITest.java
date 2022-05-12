@@ -101,8 +101,6 @@ public class DatabaseCLITest {
         String[] itemValues = testItem.getValuesAsArray();
         itemValues[1] = "'" + itemValues[1] + "'"; // put apostrophes around name
         String values = String.join(", ", itemValues);
-        System.out.println(values);
-        System.out.println(restoredItemMessage);
         assertTrue(restoredItemMessage.contains(values));
     }
 
