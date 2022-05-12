@@ -1,6 +1,7 @@
 package presenter;
 
 import model.Database;
+import model.DeletedItem;
 import model.Item;
 
 import java.util.ArrayList;
@@ -70,6 +71,21 @@ public class DatabasePresenter {
      */
     public void deleteItem(String itemId) {
         database.deleteFromTable(Database.ITEMS, itemId);
+    }
+
+    /**
+     * Restores an item from the table of deleted_items.
+     *
+     * @param itemId the id of the item being restored
+     * @return the item that was restored
+     */
+    public Item restore(String itemId) {
+        DeletedItem item = (DeletedItem) database.selectFromTable(Database.DELETED_ITEMS, "*", itemId);
+        database.deleteFromTable(Database.DELETED_ITEMS, itemId);
+        String values = String.join(", ", ((Item) item).getValuesAsArray()); // exclude comment
+        String columns = String.join(", ", Item.getAttributeNamesAsArray());
+        database.insert(Database.ITEMS, columns, values);
+        return item;
     }
 
     /**
