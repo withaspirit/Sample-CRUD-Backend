@@ -139,7 +139,7 @@ public class DatabasePresenterTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"", "words words words"})
-    void testRestoreItemInsertsIntoItemsTable(String comment) {
+    void testRestoreItemInsertsIntoCorrectTable(String comment) {
         DeletedItem deletedItem = deleteItemWithComment(comment);
         String itemId = String.valueOf(deletedItem.getId());
 
