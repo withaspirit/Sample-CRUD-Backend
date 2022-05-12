@@ -43,7 +43,16 @@
       },
       "invalid": {
         "commandOnly": "DELETE",
-        "badIdNegative": "DELETE -1",
+        "badIdNegative": "DELETE -1"
+      }
+    },
+    "restore" : {
+      "valid": {
+        "goodItemRestore": "RESTORE 1"
+      },
+      "invalid": {
+        "missingId": "RESTORE",
+        "badId": "RESTORE -1"
       }
     },
     "help": {

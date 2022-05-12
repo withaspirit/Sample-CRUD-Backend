@@ -12,6 +12,7 @@ public enum Command {
     READ("(READ) (" + Database.ITEMS + ")"),
     UPDATE("(UPDATE) (\\d+) (name = '\\w+'|price = \\d+\\.\\d+|stock = \\d+)"),
     DELETE("(DELETE) (\\d+)"),
+    RESTORE("(RESTORE) (\\d+)"),
     HELP("(help)"),
     QUIT("(quit)");
 
