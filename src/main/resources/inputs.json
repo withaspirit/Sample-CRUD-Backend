@@ -30,7 +30,8 @@
     },
     "read": {
       "valid": {
-        "readItems": "READ items"
+        "readItems": "READ items",
+        "readDeleteItems": "READ deleted_items"
       },
       "invalid": {
         "commandOnly": "READ",

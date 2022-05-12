@@ -9,10 +9,10 @@ import model.Database;
  */
 public enum Command {
     CREATE("(CREATE) (\\w+) (\\d+\\.\\d+) (\\d+)"),
-    READ("(READ) (" + Database.ITEMS + ")"),
+    READ("(READ) (" + String.join("|", Database.ITEMS, Database.DELETED_ITEMS) + ")"), // READ [tableName]
     UPDATE("(UPDATE) (\\d+) (name = '\\w+'|price = \\d+\\.\\d+|stock = \\d+)"),
-    DELETE("(DELETE) (\\d+) ?((?:\\w+)\\W*)*"), // DELETE [id] [(optional) comment]
-    RESTORE("(RESTORE) (\\d+)"), // RESTORE [id]
+    DELETE("(DELETE) (\\d+) ?((?:\\w+)\\W*)*"), // DELETE [itemId] [(optional) comment]
+    RESTORE("(RESTORE) (\\d+)"), // RESTORE [itemId]
     HELP("(help)"),
     QUIT("(quit)");
 
