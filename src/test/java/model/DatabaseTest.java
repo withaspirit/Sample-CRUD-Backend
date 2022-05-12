@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * DatabaseTest ensures the Database methods function properly.
@@ -98,7 +98,7 @@ public class DatabaseTest {
     }
 
     @Test
-    void testSelectOneItem() {
+    void testSelectOneItemWithValidId() {
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
                 testItem.getAttributeValuesExceptId());
 
@@ -110,6 +110,24 @@ public class DatabaseTest {
         Item retrievedItem = database.selectFromTable(Database.ITEMS, "*",
                 itemId2);
         assertEquals(testItem, retrievedItem);
+    }
+
+    @Test
+    void testSelectingFromEmptyTableProducesNull() {
+        Item item = database.selectFromTable(Database.DELETED_ITEMS, "*", "1");
+        assertNull(item);
+    }
+
+    @Test
+    void testSelectingWithInvalidIdProducesNull() {
+        Item item = database.selectFromTable(Database.ITEMS, "*", "-1");
+        assertNull(item);
+    }
+
+    @Test
+    void testSelectingFromEmptyTableIsEmpty() {
+        ArrayList<Item> items = database.selectFromTable(Database.DELETED_ITEMS, "*");
+        assertTrue(items.isEmpty());
     }
 
     @Test

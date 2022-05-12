@@ -131,6 +131,9 @@ public class Database {
 
             throw new RuntimeException(e);
         }
+        if (items.isEmpty()) {
+            return null;
+        }
         return items.get(0);
     }
 
