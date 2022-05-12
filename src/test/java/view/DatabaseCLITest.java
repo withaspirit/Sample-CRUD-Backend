@@ -1,16 +1,13 @@
 package view;
 
 import model.Database;
-import model.InputFileReader;
 import model.Item;
-import org.json.simple.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import presenter.DatabasePresenter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.regex.Matcher;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,6 +23,7 @@ public class DatabaseCLITest {
     private Database database;
     private DatabasePresenter databasePresenter;
     private DatabaseCLI databaseCLI;
+    private Item testItem;
 
     @BeforeEach
     void setup() {
@@ -35,14 +33,24 @@ public class DatabaseCLITest {
         databasePresenter.addModel(database);
         databaseCLI = new DatabaseCLI();
         databaseCLI.addPresenter(databasePresenter);
-        InputFileReader inputFileReader = new InputFileReader("inputs", "json");
-        JSONObject jsonObject = inputFileReader.getJSONFileAsObject();
+        testItem = new Item(1, "testName", "1.99", 1);
+    }
+
+    /**
+     * Creates the testItem.
+     */
+    void createItem() {
+        String[] itemValues = testItem.getValuesAsArray();
+        String[] itemValuesExceptId = Arrays.copyOfRange(itemValues, 1, itemValues.length);
+        String values = String.join(" ", itemValuesExceptId);
+
+        String userInput = "CREATE " + values;
+        databaseCLI.processInput(userInput);
     }
 
     @Test
     void testCreateOneItem() {
-        String userInput = "CREATE testName 1.99 1".toLowerCase();
-        databaseCLI.processInput(userInput);
+        createItem();
         assertEquals(1, database.getSizeOfTable(Database.ITEMS));
     }
 
@@ -55,23 +63,19 @@ public class DatabaseCLITest {
 
     @Test
     void testReadFromTableWithItems() {
-        String createStatement = "CREATE WalterWhite 1.99 1".toLowerCase();
-        databaseCLI.processInput(createStatement);
-
+        createItem();
         String readStatement = "READ " + Database.ITEMS;
         String consoleOutput = databaseCLI.processInput(readStatement);
         assertNotEquals(Database.ITEMS + " is empty.", consoleOutput);
-        System.out.println(consoleOutput);
     }
 
     @Test
     void testUpdateOneItemOneAttribute() {
-        String createStatement = "CREATE WalterWhite 1.99 1".toLowerCase();
-        databaseCLI.processInput(createStatement);
+        createItem();
         ArrayList<Item> items = database.selectFromTable(Database.ITEMS, "*");
         Item originalItem = items.get(0);
 
-        String newName = "Heisenberg";
+        String newName = "newTestName";
         String updateStatement = "UPDATE 1 name = '" + newName + "'";
         databaseCLI.processInput(updateStatement);
         originalItem.setName(newName);
@@ -83,9 +87,8 @@ public class DatabaseCLITest {
 
     @Test
     void testDeleteOneItem() {
-        testCreateOneItem();
-        int itemId = 1;
-        String deleteStatement = "DELETE " + itemId;
+        createItem();
+        String deleteStatement = "DELETE " + testItem.getId();
         databaseCLI.processInput(deleteStatement);
         assertEquals(0, database.getSizeOfTable(Database.ITEMS));
     }
