@@ -1,6 +1,7 @@
 package presenter;
 
 import model.Database;
+import model.DeletedItem;
 import model.Item;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,7 @@ public class DatabasePresenterTest {
     private Database database;
     private DatabasePresenter databasePresenter;
     private Item testItem;
+    private DeletedItem deletedItemWithComment;
 
     @BeforeEach
     void setup() {
@@ -31,6 +33,7 @@ public class DatabasePresenterTest {
         databasePresenter.addModel(database);
         database.initializeDatabase();
         testItem = new Item(1, "testName", "0.0", 1);
+        deletedItemWithComment = new DeletedItem(testItem);
     }
 
     @Test
@@ -84,16 +87,42 @@ public class DatabasePresenterTest {
     }
 
     @Test
-    void testDatabaseDeletionInsertsIntoDeletedItemsTable() {
+    void testDeletionWithoutCommentInsertsIntoDeletedItemsTable() {
         databasePresenter.createItem(testItem);
-        databasePresenter.deleteItem(String.valueOf(testItem.getId()));
+        String itemId = String.valueOf(testItem.getId());
+        String comment = "";
+
+        databasePresenter.deleteItem(itemId, comment);
         assertEquals(1, database.getSizeOfTable(Database.DELETED_ITEMS));
+        assertEquals(0, database.getSizeOfTable(Database.ITEMS));
+    }
+
+    @Test
+    void testDeletionWithCommentInsertsIntoDeletedItemsTable() {
+        databasePresenter.createItem(testItem);
+        String itemId = String.valueOf(testItem.getId());
+        databasePresenter.deleteItem(itemId, deletedItemWithComment.getComment());
+        assertEquals(1, database.getSizeOfTable(Database.DELETED_ITEMS));
+        assertEquals(0, database.getSizeOfTable(Database.ITEMS));
+    }
+
+    @Test
+    void testDeletedItemEquality() {
+        databasePresenter.createItem(testItem);
+        String itemId = String.valueOf(testItem.getId());
+        databasePresenter.deleteItem(itemId, deletedItemWithComment.getComment());
+
+        ArrayList<Item> items = databasePresenter.readFromTable(Database.DELETED_ITEMS);
+        DeletedItem deletedItemFromTable = (DeletedItem) items.get(0);
+
+        assertEquals(deletedItemWithComment, deletedItemFromTable);
     }
 
     @Test
     void testRestoreItemEquality() {
-        testDatabaseDeletionInsertsIntoDeletedItemsTable();
+        testDeletionWithCommentInsertsIntoDeletedItemsTable();
         String itemId = String.valueOf(testItem.getId());
+
         Item retrievedItem = database.selectFromTable(Database.DELETED_ITEMS, "*", itemId);
         Item restoredItem = databasePresenter.restoreItem(itemId);
         assertEquals(testItem, retrievedItem);
@@ -102,10 +131,11 @@ public class DatabasePresenterTest {
     }
 
     @Test
-    void testRestoreMakesItemsTableReceiveItem() {
-        testDatabaseDeletionInsertsIntoDeletedItemsTable();
+    void testRestoreItemInsertsIntoItemsTable() {
+        testDeletionWithoutCommentInsertsIntoDeletedItemsTable();
         String itemId = String.valueOf(testItem.getId());
         databasePresenter.restoreItem(itemId);
         assertEquals(1, database.getSizeOfTable(Database.ITEMS));
+        assertEquals(0, database.getSizeOfTable(Database.DELETED_ITEMS));
     }
 }
