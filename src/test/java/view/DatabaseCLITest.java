@@ -33,7 +33,7 @@ public class DatabaseCLITest {
         databasePresenter.addModel(database);
         databaseCLI = new DatabaseCLI();
         databaseCLI.addPresenter(databasePresenter);
-        testItem = new Item(1, "testName", "1.99", 1);
+        testItem = new Item(1, "testName", "100.99", 1);
     }
 
     /**
@@ -106,7 +106,9 @@ public class DatabaseCLITest {
 
     @Test
     void testRestoreOneItemPlacesItemInCorrectTable() {
-        testRestoreOneItemReturnsCorrectItem();
+        testDeleteOneItem();
+        String restoreStatement = "RESTORE " + testItem.getId();
+        databaseCLI.processInput(restoreStatement);
         assertEquals(0, database.getSizeOfTable(Database.DELETED_ITEMS));
         assertEquals(1, database.getSizeOfTable(Database.ITEMS));
     }

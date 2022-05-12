@@ -21,7 +21,7 @@ public class DatabaseTest {
     private Database database;
     private ArrayList<Item> itemsList;
     private JSONArray itemsJSONArray;
-    private final Item testItem = new Item(1, "testItem", "0.00", 0);
+    private final Item testItem = new Item(1, "testItem", "100.99", 0);
 
     @BeforeEach
     void setup() {
