@@ -65,8 +65,8 @@ public class DatabasePresenter {
     }
 
     /**
-     * Deletes an item from the items table and inserts it into the
-     * deleted_items table.
+     * Deletes an item from the Items table and inserts it into the
+     * Deleted_Items table.
      *
      * @param itemId the id of the item to be deleted
      * @param comment (optional) the user's comment for the item's deletion
@@ -80,7 +80,7 @@ public class DatabasePresenter {
         } else {
             columns = String.join(", ", Item.getAttributeNamesAsArray());
         }
-        String values = item.getAttributeValues();
+        String values = item.getValuesInSQLFormat();
         database.deleteFromTable(Database.ITEMS, itemId);
         database.insert(Database.DELETED_ITEMS, columns, values);
     }
@@ -95,7 +95,7 @@ public class DatabasePresenter {
         DeletedItem item = (DeletedItem) database.selectFromTable(Database.DELETED_ITEMS, "*", itemId);
         database.deleteFromTable(Database.DELETED_ITEMS, itemId);
 
-        String values = ((Item) item).getAttributeValues(); // exclude comment
+        String values = ((Item) item).getValuesInSQLFormat(); // exclude comment
         String columns = String.join(", ", Item.getAttributeNamesAsArray());
         database.insert(Database.ITEMS, columns, values);
         return item;

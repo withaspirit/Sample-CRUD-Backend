@@ -100,8 +100,8 @@ public class DeletedItem extends Item {
     }
 
     @Override
-    public String getAttributeValues() {
-        String valuesAsList = super.getAttributeValues();
+    public String getValuesInSQLFormat() {
+        String valuesAsList = super.getValuesInSQLFormat();
         if (!comment.isBlank()) {
             valuesAsList = String.join(", ", valuesAsList, "'" + comment + "'");
         }

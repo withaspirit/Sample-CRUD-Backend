@@ -112,7 +112,7 @@ public class Item {
      *
      * @return the SQL-formatted, comma-separated Item values
      */
-    public String getAttributeValues() {
+    public String getValuesInSQLFormat() {
         return String.join(", ",
                 String.valueOf(id),
                 "'" + name + "'",
