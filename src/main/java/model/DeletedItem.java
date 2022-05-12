@@ -1,7 +1,12 @@
 package model;
 
-import java.math.BigDecimal;
+import java.lang.reflect.Field;
 
+/**
+ * DeletedItem is an item that has been deleted.
+ *
+ * @author Liam Tripp
+ */
 public class DeletedItem extends Item {
 
     /** the deletion comment for the item (optional) */
@@ -50,5 +55,53 @@ public class DeletedItem extends Item {
      */
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public static String[] getAttributeNamesAsArray() {
+        Field[] attributes = DeletedItem.class.getFields();
+        String[] attributeNames = new String[attributes.length];
+
+        for (int i = 0; i < attributes.length; i++) {
+            attributeNames[i] = attributes[i].getName();
+        }
+        return attributeNames;
+    }
+
+    @Override
+    public String[] getValuesAsArray() {
+        return new String[] {
+                String.valueOf(getId()),
+                getName(),
+                getPrice().toString(),
+                String.valueOf(getStock()),
+                getComment()
+        };
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (object == this) {
+            return true;
+        }
+
+        if (!(object instanceof DeletedItem item)) {
+            return false;
+        }
+
+        return getId() == item.getId() &&
+                getName().equals(item.getName()) &&
+                getPrice().compareTo(item.getPrice()) == 0 &&
+                getStock() == item.getStock() &&
+                getComment().equals(item.getComment());
+    }
+
+    @Override
+    public String toString() {
+        return String.join(", ",
+                String.valueOf(getId()),
+                getName(),
+                getPrice().toString(),
+                String.valueOf(getStock()),
+                getComment());
     }
 }
