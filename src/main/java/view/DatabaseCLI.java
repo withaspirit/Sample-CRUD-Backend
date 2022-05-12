@@ -6,6 +6,7 @@ import presenter.DatabasePresenter;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -69,7 +70,7 @@ public class DatabaseCLI {
         Matcher matcher = matchInput(userInput);
         String matcherError = validateMatcher(matcher);
         if (!matcherError.equals("")) {
-            return matcherError;
+            return matcherError + "\n Error text: " + userInput;
         }
         String consoleOutput = executeInput(matcher);
         return consoleOutput;
@@ -165,7 +166,11 @@ public class DatabaseCLI {
     public String delete(Matcher matcher) {
         // matcher.group(1) is "delete"
         String itemId = matcher.group(2);
-        databasePresenter.deleteItem(itemId);
+        String comment = "";
+        if (matcher.groupCount() > 2) {
+            comment = Objects.requireNonNullElse(matcher.group(3), "");
+        }
+        databasePresenter.deleteItem(itemId, comment);
         return "FIXME: delete";
     }
 
