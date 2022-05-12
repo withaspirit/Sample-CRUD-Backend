@@ -104,15 +104,14 @@ public class DatabaseTest {
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
                 testItem.getAttributeValuesExceptId());
 
-        Item testItem2 = new Item(2, "testItem2", "2.22", 2);
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
-                testItem2.getAttributeValuesExceptId());
+                testItem.getAttributeValuesExceptId());
         assertEquals(2, database.getSizeOfTable(Database.ITEMS));
 
-        String itemId2 = String.valueOf(testItem2.getId());
+        String itemId2 = String.valueOf(testItem.getId());
         Item retrievedItem = database.selectFromTable(Database.ITEMS, "*",
                 itemId2);
-        assertEquals(testItem2, retrievedItem);
+        assertEquals(testItem, retrievedItem);
     }
 
     @Test
@@ -155,5 +154,10 @@ public class DatabaseTest {
 
         itemsList = database.selectFromTable(Database.ITEMS, "*");
         assertEquals(testItem, itemsList.get(0));
+    }
+
+    @Test
+    void testDeletingOneItem() {
+
     }
 }
