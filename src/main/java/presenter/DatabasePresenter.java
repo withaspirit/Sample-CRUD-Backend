@@ -81,11 +81,10 @@ public class DatabasePresenter {
         if (!comment.isBlank()) {
             item = new DeletedItem(item, comment);
             columns = String.join(", ", DeletedItem.getAttributeNamesAsArray());
-            values = item.getValuesInSQLFormat();
+            values = ((DeletedItem) item).getDeletedValuesInSQLFormat();
         } else {
             columns = String.join(", ", Item.getAttributeNamesAsArray());
         }
-        String values = item.toString();
         database.deleteFromTable(Database.ITEMS, itemId);
         database.insert(Database.DELETED_ITEMS, columns, values);
     }
@@ -97,15 +96,14 @@ public class DatabasePresenter {
      * @return the item that was restored
      */
     public Item restoreItem(String itemId) {
-        DeletedItem item = (DeletedItem) database.selectFromTable(Database.DELETED_ITEMS, "*", itemId);
+        Item item = database.selectFromTable(Database.DELETED_ITEMS, "*", itemId);
         if (item == null) {
             return null;
         }
 
         database.deleteFromTable(Database.DELETED_ITEMS, itemId);
-        String values = ((Item) item).getValuesInSQLFormat(); // exclude comment
+        String values = item.getValuesInSQLFormat(); // exclude comment
         String columns = String.join(", ", Item.getAttributeNamesAsArray());
-        System.out.println("Restoring: " + values + ", "  + columns);
         database.insert(Database.ITEMS, columns, values);
         return item;
     }
