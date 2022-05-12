@@ -4,6 +4,8 @@ import org.json.simple.JSONArray;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.ArrayList;
 
@@ -89,7 +91,6 @@ public class DatabaseTest {
 
     @Test
     void testSelectingFromDatabaseItemWithDecimalPrice() {
-
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
                 testItem.getAttributeValuesExceptId());
 
@@ -97,30 +98,10 @@ public class DatabaseTest {
         assertEquals(testItem, itemsList.get(0));
     }
 
-    @Test
-    void testSelectOneItemWithValidId() {
-        database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
-                testItem.getAttributeValuesExceptId());
-
-        database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
-                testItem.getAttributeValuesExceptId());
-        assertEquals(2, database.getSizeOfTable(Database.ITEMS));
-
-        String itemId2 = String.valueOf(testItem.getId());
-        Item retrievedItem = database.selectFromTable(Database.ITEMS, "*",
-                itemId2);
-        assertEquals(testItem, retrievedItem);
-    }
-
-    @Test
-    void testSelectingFromEmptyTableProducesNull() {
-        Item item = database.selectFromTable(Database.DELETED_ITEMS, "*", "1");
-        assertNull(item);
-    }
-
-    @Test
-    void testSelectingWithInvalidIdProducesNull() {
-        Item item = database.selectFromTable(Database.ITEMS, "*", "-1");
+    @ParameterizedTest
+    @ValueSource(strings = {"1", "-1"}) // empty table, invalid id
+    void testSelectingFromTableProducesNull(String itemId) {
+        Item item = database.selectFromTable(Database.DELETED_ITEMS, "*", itemId);
         assertNull(item);
     }
 
