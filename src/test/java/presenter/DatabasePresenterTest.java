@@ -91,7 +91,7 @@ public class DatabasePresenterTest {
     }
 
     @Test
-    void testRestoreItem() {
+    void testRestoreItemEquality() {
         testDatabaseDeletionInsertsIntoDeletedItemsTable();
         String itemId = String.valueOf(testItem.getId());
         Item retrievedItem = database.selectFromTable(Database.DELETED_ITEMS, "*", itemId);
@@ -99,5 +99,13 @@ public class DatabasePresenterTest {
         assertEquals(testItem, retrievedItem);
         assertEquals(testItem, restoredItem);
         assertEquals(restoredItem, restoredItem);
+    }
+
+    @Test
+    void testRestoreMakesItemsTableReceiveItem() {
+        testDatabaseDeletionInsertsIntoDeletedItemsTable();
+        String itemId = String.valueOf(testItem.getId());
+        databasePresenter.restore(itemId);
+        assertEquals(1, database.getSizeOfTable(Database.ITEMS));
     }
 }
