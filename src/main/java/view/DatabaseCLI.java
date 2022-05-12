@@ -96,6 +96,7 @@ public class DatabaseCLI {
             case READ -> consoleOutput = read(commandMatcher);
             case UPDATE -> consoleOutput = updateItem(commandMatcher);
             case DELETE -> consoleOutput = delete(commandMatcher);
+            case RESTORE -> consoleOutput = restore(commandMatcher);
             case HELP -> consoleOutput = help();
             case QUIT -> consoleOutput = quit();
             default -> consoleOutput = "ERROR: unhandled command."; // shouldn't be seen in normal program execution
@@ -162,10 +163,22 @@ public class DatabaseCLI {
      * @return a String indicating the deletion of the Item
      */
     public String delete(Matcher matcher) {
-        // matcher.group(1) is "create"
+        // matcher.group(1) is "delete"
         String itemId = matcher.group(2);
         databasePresenter.deleteItem(itemId);
         return "FIXME: delete";
+    }
+
+    /**
+     * Restores a DeletedItem to its corresponding table.
+     *
+     * @param matcher contains the user's command and itemId of the item to restore
+     * @return a string indicating the completion of restoring the item
+     */
+    public String restore(Matcher matcher) {
+        String itemId = matcher.group(2);
+        Item restoredItem = databasePresenter.restoreItem(itemId);
+        return "Restored item: " + restoredItem.toString();
     }
 
     /**

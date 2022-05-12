@@ -95,7 +95,7 @@ public class DatabasePresenterTest {
         testDatabaseDeletionInsertsIntoDeletedItemsTable();
         String itemId = String.valueOf(testItem.getId());
         Item retrievedItem = database.selectFromTable(Database.DELETED_ITEMS, "*", itemId);
-        Item restoredItem = databasePresenter.restore(itemId);
+        Item restoredItem = databasePresenter.restoreItem(itemId);
         assertEquals(testItem, retrievedItem);
         assertEquals(testItem, restoredItem);
         assertEquals(restoredItem, restoredItem);
@@ -105,7 +105,7 @@ public class DatabasePresenterTest {
     void testRestoreMakesItemsTableReceiveItem() {
         testDatabaseDeletionInsertsIntoDeletedItemsTable();
         String itemId = String.valueOf(testItem.getId());
-        databasePresenter.restore(itemId);
+        databasePresenter.restoreItem(itemId);
         assertEquals(1, database.getSizeOfTable(Database.ITEMS));
     }
 }

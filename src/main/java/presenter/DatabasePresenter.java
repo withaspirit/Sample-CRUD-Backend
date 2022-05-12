@@ -83,7 +83,7 @@ public class DatabasePresenter {
      * @param itemId the id of the item being restored
      * @return the item that was restored
      */
-    public Item restore(String itemId) {
+    public Item restoreItem(String itemId) {
         DeletedItem item = (DeletedItem) database.selectFromTable(Database.DELETED_ITEMS, "*", itemId);
         database.deleteFromTable(Database.DELETED_ITEMS, itemId);
 
