@@ -112,8 +112,14 @@ public class Database {
 
         try {
             while (resultSet.next()) {
-                Item item = new Item(resultSet);
-                items.add(item);
+                if (tableName.equals(Database.DELETED_ITEMS)) {
+                    DeletedItem item = new DeletedItem(resultSet);
+                    items.add(item);
+                } else {
+                    Item item = new Item(resultSet);
+                    items.add(item);
+                }
+
             }
             resultSet.close();
         } catch (SQLException e) {

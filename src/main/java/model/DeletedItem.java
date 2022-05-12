@@ -1,6 +1,8 @@
 package model;
 
 import java.lang.reflect.Field;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * DeletedItem is an Item that has been deleted.
@@ -34,6 +36,21 @@ public class DeletedItem extends Item {
         this.comment = comment;
     }
 
+    public DeletedItem(ResultSet resultSet) {
+        super(resultSet);
+        final Field[] attributes = DeletedItem.class.getFields();
+        // if deletedItem has comment
+        int commentIndex = 5;
+        if (attributes.length == commentIndex) {
+            try {
+                this.comment =   resultSet.getString(commentIndex);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    // TODO: constructor from Matcher
     public DeletedItem(int id, String name, String price, int stock, String comment) {
         super(id, name, price, stock);
         this.comment = comment;

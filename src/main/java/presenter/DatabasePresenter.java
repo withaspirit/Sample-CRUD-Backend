@@ -86,7 +86,8 @@ public class DatabasePresenter {
     public Item restore(String itemId) {
         DeletedItem item = (DeletedItem) database.selectFromTable(Database.DELETED_ITEMS, "*", itemId);
         database.deleteFromTable(Database.DELETED_ITEMS, itemId);
-        String values = String.join(", ", ((Item) item).getValuesAsArray()); // exclude comment
+
+        String values = ((Item) item).getAttributeValues(); // exclude comment
         String columns = String.join(", ", Item.getAttributeNamesAsArray());
         database.insert(Database.ITEMS, columns, values);
         return item;
