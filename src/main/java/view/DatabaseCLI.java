@@ -189,7 +189,11 @@ public class DatabaseCLI {
     public String restore(Matcher matcher) {
         String itemId = matcher.group(2);
         Item restoredItem = databasePresenter.restoreItem(itemId);
-        return "Restored item: " + restoredItem.toString();
+
+        if (restoredItem == null) {
+            return "Item does not exist.";
+        }
+        return "Restored item: " + restoredItem;
     }
 
     /**
