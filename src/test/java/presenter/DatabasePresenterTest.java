@@ -1,9 +1,12 @@
 package presenter;
 
 import model.Database;
+import model.DeletedItem;
 import model.Item;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import view.Command;
 import view.DatabaseCLI;
 
@@ -31,6 +34,15 @@ public class DatabasePresenterTest {
         databasePresenter.addModel(database);
         database.initializeDatabase();
         testItem = new Item(1, "testName", "0.0", 1);
+    }
+
+    public DeletedItem deleteItemWithComment(String comment) {
+        databasePresenter.createItem(testItem);
+        String itemId = String.valueOf(testItem.getId());
+        DeletedItem deletedItem = new DeletedItem(testItem, comment);
+
+        databasePresenter.deleteItem(itemId, deletedItem.getComment());
+        return deletedItem;
     }
 
     @Test
@@ -81,5 +93,58 @@ public class DatabasePresenterTest {
     @Test
     void testDeleteMultipleItems() {
         // TODO?
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", "words words words"})
+    void testDeletionInsertsIntoCorrectTable(String comment) {
+        DeletedItem deletedItem = deleteItemWithComment(comment);
+        String itemId = String.valueOf(deletedItem.getId());
+
+        databasePresenter.deleteItem(itemId, deletedItem.getComment());
+        assertEquals(1, database.getSizeOfTable(Database.DELETED_ITEMS));
+        assertEquals(0, database.getSizeOfTable(Database.ITEMS));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", "words words words"})
+    void testDeletedItemEquality(String comment) {
+        DeletedItem deletedItem = deleteItemWithComment(comment);
+        String itemId = String.valueOf(deletedItem.getId());
+
+        Item item = database.selectFromTable(Database.DELETED_ITEMS, "*", itemId);
+        DeletedItem deletedItemFromTable = (DeletedItem) item;
+        assertEquals(deletedItem, deletedItemFromTable);
+    }
+
+    @Test
+    void testRestoreFromEmptyTableProducesNull() {
+        // should be the same for invalid id
+        String itemId = String.valueOf(testItem.getId());
+        Item restoredItem = databasePresenter.restoreItem(itemId);
+        assertNull(restoredItem);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", "words words words"})
+    void testRestoreItemEquality(String comment) {
+        DeletedItem deletedItem = deleteItemWithComment(comment);
+        String itemId = String.valueOf(deletedItem.getId());
+
+        Item retrievedItem = database.selectFromTable(Database.DELETED_ITEMS, "*", itemId);
+        Item restoredItem = databasePresenter.restoreItem(itemId);
+        assertEquals(testItem, retrievedItem);
+        assertEquals(testItem, restoredItem);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", "words words words"})
+    void testRestoreItemInsertsIntoCorrectTable(String comment) {
+        DeletedItem deletedItem = deleteItemWithComment(comment);
+        String itemId = String.valueOf(deletedItem.getId());
+
+        databasePresenter.restoreItem(itemId);
+        assertEquals(1, database.getSizeOfTable(Database.ITEMS));
+        assertEquals(0, database.getSizeOfTable(Database.DELETED_ITEMS));
     }
 }

@@ -14,6 +14,7 @@ public class Database {
     private Connection connection;
     private Statement statement;
     public final static String ITEMS = "items";
+    public final static String DELETED_ITEMS = "deleted_items";
     private final static String CLASS_LOADER_NAME = "org.sqlite.JDBC";
     private final static String DATABASE_NAME = "jdbc:sqlite:items.db";
 
@@ -87,14 +88,53 @@ public class Database {
 
         try {
             while (resultSet.next()) {
-                Item item = new Item(resultSet);
-                items.add(item);
+                if (tableName.equals(Database.DELETED_ITEMS)) {
+                    DeletedItem item = new DeletedItem(resultSet);
+                    items.add(item);
+                } else {
+                    Item item = new Item(resultSet);
+                    items.add(item);
+                }
             }
             resultSet.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return items;
+    }
+
+    /**
+     * Selects and returns an Item from the selected table.
+     *
+     * @param tableName the name of the table being selected from
+     * @param selectedColumns the columns to be selected
+     * @param itemId the provided item id
+     * @return arrayList of selected items in the selected table
+     */
+    public Item selectFromTable(String tableName, String selectedColumns, String itemId) {
+        ResultSet resultSet = getResultSet(tableName, selectedColumns, itemId);
+        ArrayList<Item> items = new ArrayList<>();
+
+        try {
+            while (resultSet.next()) {
+                if (tableName.equals(Database.DELETED_ITEMS)) {
+                    DeletedItem item = new DeletedItem(resultSet);
+                    items.add(item);
+                } else {
+                    Item item = new Item(resultSet);
+                    items.add(item);
+                }
+
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+
+            throw new RuntimeException(e);
+        }
+        if (items.isEmpty()) {
+            return null;
+        }
+        return items.get(0);
     }
 
     /**
@@ -134,6 +174,25 @@ public class Database {
     public ResultSet getResultSet(String tableName, String selectedRows) {
         // TODO?: add "where"
         String statementToExecute = "SELECT " + selectedRows + " FROM " + tableName;
+        try {
+            return statement.executeQuery(statementToExecute);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Selects and returns a ResultSet of selected rows from a selected table.
+     *
+     * @param tableName the name of the table
+     * @param selectedRows the rows to be selected
+     * @param itemId the itd of the item being retrieved
+     * @return resultSet containing row of a table
+     */
+    public ResultSet getResultSet(String tableName, String selectedRows, String itemId) {
+        // TODO?: add "where"
+        String statementToExecute = "SELECT " + selectedRows + " FROM " + tableName +
+                " WHERE id = " + itemId;
         try {
             return statement.executeQuery(statementToExecute);
         } catch (SQLException e) {

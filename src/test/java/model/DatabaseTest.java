@@ -4,10 +4,12 @@ import org.json.simple.JSONArray;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * DatabaseTest ensures the Database methods function properly.
@@ -72,7 +74,14 @@ public class DatabaseTest {
     }
 
     @Test
-    void testValidIdWithDatabaseDeletion() {
+    void testInsertIntoDeletedItems() {
+        database.insert(Database.DELETED_ITEMS, Item.getAttributeNamesExceptId(),
+                testItem.getAttributeValuesExceptId());
+        assertEquals(1, database.getSizeOfTable(Database.DELETED_ITEMS));
+    }
+
+    @Test
+    void testDeleteItemWithValidId() {
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
                 testItem.getAttributeValuesExceptId());
         database.deleteFromTable(Database.ITEMS, String.valueOf(testItem.getId()));
@@ -82,23 +91,33 @@ public class DatabaseTest {
 
     @Test
     void testSelectingFromDatabaseItemWithDecimalPrice() {
-        String testName = "name";
-        String price = "10.99";
-        Item itemWithDecimalPrice = new Item(1, testName, price, 0);
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
-                itemWithDecimalPrice.getAttributeValuesExceptId());
+                testItem.getAttributeValuesExceptId());
 
         itemsList = database.selectFromTable(Database.ITEMS, "*");
-        assertEquals(itemWithDecimalPrice, itemsList.get(0));
+        assertEquals(testItem, itemsList.get(0));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"1", "-1"}) // empty table, invalid id
+    void testSelectingFromTableProducesNull(String itemId) {
+        Item item = database.selectFromTable(Database.DELETED_ITEMS, "*", itemId);
+        assertNull(item);
     }
 
     @Test
-    void testInvalidIdWithDatabaseDeletion() {
+    void testSelectingFromEmptyTableIsEmpty() {
+        ArrayList<Item> items = database.selectFromTable(Database.DELETED_ITEMS, "*");
+        assertTrue(items.isEmpty());
+    }
+
+    @Test
+    void testDeleteItemWithInvalidId() {
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
                 testItem.getAttributeValuesExceptId());
+
         int invalidId = 2;
         database.deleteFromTable(Database.ITEMS, String.valueOf(invalidId));
-
         assertEquals(1, database.getSizeOfTable(Database.ITEMS));
     }
 
@@ -106,6 +125,7 @@ public class DatabaseTest {
     void testUpdatingOneValueOneItem() {
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
                 testItem.getAttributeValuesExceptId());
+
         String newName = "NewName";
         String updateStatement = "name = '" + newName + "'";
         database.updateItems(String.valueOf(testItem.getId()), updateStatement);

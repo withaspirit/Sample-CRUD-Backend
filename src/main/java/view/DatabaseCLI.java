@@ -1,11 +1,13 @@
 package view;
 
 import model.Database;
+import model.DeletedItem;
 import model.Item;
 import presenter.DatabasePresenter;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -69,7 +71,7 @@ public class DatabaseCLI {
         Matcher matcher = matchInput(userInput);
         String matcherError = validateMatcher(matcher);
         if (!matcherError.equals("")) {
-            return matcherError;
+            return matcherError + "\nError text: " + userInput;
         }
         String consoleOutput = executeInput(matcher);
         return consoleOutput;
@@ -96,6 +98,7 @@ public class DatabaseCLI {
             case READ -> consoleOutput = read(commandMatcher);
             case UPDATE -> consoleOutput = updateItem(commandMatcher);
             case DELETE -> consoleOutput = delete(commandMatcher);
+            case RESTORE -> consoleOutput = restore(commandMatcher);
             case HELP -> consoleOutput = help();
             case QUIT -> consoleOutput = quit();
             default -> consoleOutput = "ERROR: unhandled command."; // shouldn't be seen in normal program execution
@@ -130,7 +133,12 @@ public class DatabaseCLI {
         if (items.isEmpty()) {
             return tableName + " is empty.";
         }
-        String[] attributeNames = Item.getAttributeNamesAsArray();
+        String[] attributeNames;
+        if (tableName.equals(Database.ITEMS)) {
+            attributeNames = Item.getAttributeNamesAsArray();
+        } else {
+            attributeNames = DeletedItem.getAttributeNamesAsArray();
+        }
         String bar = " | ";
         String attributeNamesBarSeparated = String.join(bar, attributeNames);
 
@@ -162,10 +170,30 @@ public class DatabaseCLI {
      * @return a String indicating the deletion of the Item
      */
     public String delete(Matcher matcher) {
-        // matcher.group(1) is "create"
+        // matcher.group(1) is "delete"
         String itemId = matcher.group(2);
-        databasePresenter.deleteItem(itemId);
+        String comment = "";
+        if (matcher.groupCount() > 2) {
+            comment = Objects.requireNonNullElse(matcher.group(3), "");
+        }
+        databasePresenter.deleteItem(itemId, comment);
         return "FIXME: delete";
+    }
+
+    /**
+     * Restores a DeletedItem to its corresponding table.
+     *
+     * @param matcher contains the user's command and itemId of the item to restore
+     * @return a string indicating the completion of restoring the item
+     */
+    public String restore(Matcher matcher) {
+        String itemId = matcher.group(2);
+        Item restoredItem = databasePresenter.restoreItem(itemId);
+
+        if (restoredItem == null) {
+            return "Item does not exist.";
+        }
+        return "Restored item: " + restoredItem;
     }
 
     /**
@@ -178,9 +206,11 @@ public class DatabaseCLI {
         String itemsEnding = " the table '" + Database.ITEMS + "'\n";
 
         stringBuilder.append("CREATE - insert a row into").append(itemsEnding);
-        stringBuilder.append("READ - view all the rows in a selected table\n");
+        stringBuilder.append("READ - view the entries from one of the following tables: ")
+                .append(tables()).append("\n");
         stringBuilder.append("UPDATE - update a row in").append(itemsEnding);
         stringBuilder.append("DELETE - delete a row in").append(itemsEnding);
+        stringBuilder.append("`RESTORE [id]` - restores an item with the provided id to its corresponding table.\n");
         stringBuilder.append("HELP - view the list of valid commands\n");
         stringBuilder.append("QUIT - exit the command-line interface");
         return stringBuilder.toString();
@@ -204,7 +234,7 @@ public class DatabaseCLI {
      * @return a list of the tables in the Database as a String
      */
     public String tables() {
-        return Database.ITEMS;
+        return String.join(", ", Database.ITEMS, Database.DELETED_ITEMS);
     }
 
     /**

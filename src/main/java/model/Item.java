@@ -107,6 +107,19 @@ public class Item {
         return "'" + name + "'," + price.scaleByPowerOfTen(2).intValue() + ", " + stock;
     }
 
+    /**
+     * Returns the values of all attributes as an SQL-formatted String.
+     *
+     * @return the SQL-formatted, comma-separated Item values
+     */
+    public String getValuesInSQLFormat() {
+        return String.join(", ",
+                String.valueOf(id),
+                "'" + name + "'",
+                price.scaleByPowerOfTen(2).toString(),
+                String.valueOf(stock));
+    }
+
     public static String[] getAttributeNamesAsArray() {
         Field[] attributes = Item.class.getDeclaredFields();
         String[] attributeNames = new String[attributes.length];

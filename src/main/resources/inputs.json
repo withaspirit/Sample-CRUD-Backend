@@ -30,7 +30,8 @@
     },
     "read": {
       "valid": {
-        "readItems": "READ items"
+        "readItems": "READ items",
+        "readDeleteItems": "READ deleted_items"
       },
       "invalid": {
         "commandOnly": "READ",
@@ -39,11 +40,22 @@
     },
     "delete": {
       "valid": {
-        "deleteId": "DELETE 1"
+        "deleteId": "DELETE 1",
+        "deleteIdWithOneWordComment": "DELETE 1 comment",
+        "deleteIdWithMultiWordComment": "DELETE 1 comment topic discussion"
       },
       "invalid": {
         "commandOnly": "DELETE",
-        "badIdNegative": "DELETE -1",
+        "badIdNegative": "DELETE -1"
+      }
+    },
+    "restore" : {
+      "valid": {
+        "goodItemRestore": "RESTORE 1"
+      },
+      "invalid": {
+        "missingId": "RESTORE",
+        "badId": "RESTORE -1"
       }
     },
     "help": {

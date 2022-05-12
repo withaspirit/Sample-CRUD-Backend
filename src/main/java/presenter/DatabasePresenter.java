@@ -1,6 +1,7 @@
 package presenter;
 
 import model.Database;
+import model.DeletedItem;
 import model.Item;
 
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ public class DatabasePresenter {
      * Returns a list of all items from the selected table.
      */
     public ArrayList<Item> readFromTable(String tableName) {
-        if (!tableName.equals(Database.ITEMS)) {
+        if (!tableName.equals(Database.ITEMS) && !(tableName.equals(Database.DELETED_ITEMS))) {
             return null;
         }
         return database.selectFromTable(tableName, "*");
@@ -64,12 +65,47 @@ public class DatabasePresenter {
     }
 
     /**
-     * Deletes an item from the items table.
+     * Deletes an item from the Items table and inserts it into the
+     * Deleted_Items table.
      *
-     * @param itemId the id of the table being deleted from
+     * @param itemId the id of the item to be deleted
+     * @param comment (optional) the user's comment for the item's deletion
      */
-    public void deleteItem(String itemId) {
+    public void deleteItem(String itemId, String comment) {
+        Item item = database.selectFromTable(Database.ITEMS, "*", itemId);
+        if (item == null) {
+            return;
+        }
+        String columns;
+        if (!comment.isBlank()) {
+            item = new DeletedItem(item, comment);
+            columns = String.join(", ", DeletedItem.getAttributeNamesAsArray());
+        } else {
+            columns = String.join(", ", Item.getAttributeNamesAsArray());
+        }
+        String values = item.toString();
         database.deleteFromTable(Database.ITEMS, itemId);
+        database.insert(Database.DELETED_ITEMS, columns, values);
+    }
+
+    /**
+     * Restores an item from the table of deleted_items.
+     *
+     * @param itemId the id of the item being restored
+     * @return the item that was restored
+     */
+    public Item restoreItem(String itemId) {
+        DeletedItem item = (DeletedItem) database.selectFromTable(Database.DELETED_ITEMS, "*", itemId);
+        if (item == null) {
+            return null;
+        }
+
+        database.deleteFromTable(Database.DELETED_ITEMS, itemId);
+        String values = ((Item) item).getValuesInSQLFormat(); // exclude comment
+        String columns = String.join(", ", Item.getAttributeNamesAsArray());
+        System.out.println("Restoring: " + values + ", "  + columns);
+        database.insert(Database.ITEMS, columns, values);
+        return item;
     }
 
     /**
