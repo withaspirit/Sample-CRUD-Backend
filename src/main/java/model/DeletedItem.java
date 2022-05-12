@@ -100,15 +100,6 @@ public class DeletedItem extends Item {
     }
 
     @Override
-    public String getValuesInSQLFormat() {
-        String valuesAsList = super.getValuesInSQLFormat();
-        if (!comment.isBlank()) {
-            valuesAsList = String.join(", ", valuesAsList, "'" + comment + "'");
-        }
-        return valuesAsList;
-    }
-
-    @Override
     public boolean equals(Object object) {
         if (object == this) {
             return true;
@@ -129,7 +120,7 @@ public class DeletedItem extends Item {
     public String toString() {
         String deletedItemValues = super.toString();
         if (comment != null && !comment.isBlank()) {
-            deletedItemValues = String.join(", ", deletedItemValues, comment);
+            deletedItemValues = String.join(", ", deletedItemValues, "'" + comment + "'");
         }
         return deletedItemValues;
     }
