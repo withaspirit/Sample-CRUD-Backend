@@ -119,6 +119,14 @@ public class DatabasePresenterTest {
     }
 
     @Test
+    void testRestoreFromEmptyTableProducesNull() {
+        // should be the same for invalid id
+        String itemId = String.valueOf(testItem.getId());
+        Item restoredItem = databasePresenter.restoreItem(itemId);
+        assertNull(restoredItem);
+    }
+
+    @Test
     void testRestoreItemEquality() {
         testDeletionWithCommentInsertsIntoDeletedItemsTable();
         String itemId = String.valueOf(testItem.getId());

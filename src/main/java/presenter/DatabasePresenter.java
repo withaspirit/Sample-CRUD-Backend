@@ -73,6 +73,9 @@ public class DatabasePresenter {
      */
     public void deleteItem(String itemId, String comment) {
         Item item = database.selectFromTable(Database.ITEMS, "*", itemId);
+        if (item == null) {
+            return;
+        }
         String columns;
         if (!comment.isBlank()) {
             item = new DeletedItem(item, comment);
@@ -93,8 +96,11 @@ public class DatabasePresenter {
      */
     public Item restoreItem(String itemId) {
         DeletedItem item = (DeletedItem) database.selectFromTable(Database.DELETED_ITEMS, "*", itemId);
-        database.deleteFromTable(Database.DELETED_ITEMS, itemId);
+        if (item == null) {
+            return null;
+        }
 
+        database.deleteFromTable(Database.DELETED_ITEMS, itemId);
         String values = ((Item) item).getValuesInSQLFormat(); // exclude comment
         String columns = String.join(", ", Item.getAttributeNamesAsArray());
         database.insert(Database.ITEMS, columns, values);
