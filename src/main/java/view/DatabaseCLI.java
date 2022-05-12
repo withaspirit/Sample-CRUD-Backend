@@ -1,6 +1,7 @@
 package view;
 
 import model.Database;
+import model.DeletedItem;
 import model.Item;
 import presenter.DatabasePresenter;
 
@@ -70,7 +71,7 @@ public class DatabaseCLI {
         Matcher matcher = matchInput(userInput);
         String matcherError = validateMatcher(matcher);
         if (!matcherError.equals("")) {
-            return matcherError + "\n Error text: " + userInput;
+            return matcherError + "\nError text: " + userInput;
         }
         String consoleOutput = executeInput(matcher);
         return consoleOutput;
@@ -132,7 +133,12 @@ public class DatabaseCLI {
         if (items.isEmpty()) {
             return tableName + " is empty.";
         }
-        String[] attributeNames = Item.getAttributeNamesAsArray();
+        String[] attributeNames;
+        if (tableName.equals(Database.ITEMS)) {
+            attributeNames = Item.getAttributeNamesAsArray();
+        } else {
+            attributeNames = DeletedItem.getAttributeNamesAsArray();
+        }
         String bar = " | ";
         String attributeNamesBarSeparated = String.join(bar, attributeNames);
 
@@ -196,9 +202,11 @@ public class DatabaseCLI {
         String itemsEnding = " the table '" + Database.ITEMS + "'\n";
 
         stringBuilder.append("CREATE - insert a row into").append(itemsEnding);
-        stringBuilder.append("READ - view all the rows in a selected table\n");
+        stringBuilder.append("READ - view the entries from one of the following tables: ")
+                .append(tables()).append("\n");
         stringBuilder.append("UPDATE - update a row in").append(itemsEnding);
         stringBuilder.append("DELETE - delete a row in").append(itemsEnding);
+        stringBuilder.append("`RESTORE [id]` - restores an item with the provided id to its corresponding table.\n");
         stringBuilder.append("HELP - view the list of valid commands\n");
         stringBuilder.append("QUIT - exit the command-line interface");
         return stringBuilder.toString();
@@ -222,7 +230,7 @@ public class DatabaseCLI {
      * @return a list of the tables in the Database as a String
      */
     public String tables() {
-        return String.join(",", Database.ITEMS, Database.DELETED_ITEMS);
+        return String.join(", ", Database.ITEMS, Database.DELETED_ITEMS);
     }
 
     /**
