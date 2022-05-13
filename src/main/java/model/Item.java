@@ -149,7 +149,7 @@ public class Item {
      *
      * @return the SQL-formatted, comma-separated Item values
      */
-    public String getValuesInSQLFormat() {
+    public final String getValuesInSQLFormat() {
         return String.join(", ",
                 String.valueOf(id),
                 getValuesInSQLFormatExceptId());
