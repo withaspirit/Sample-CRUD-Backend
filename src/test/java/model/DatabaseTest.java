@@ -100,15 +100,9 @@ public class DatabaseTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"1", "-1"}) // empty table, invalid id
-    void testSelectingFromTableProducesNull(String itemId) {
-        Item item = database.selectFromTable(Database.DELETED_ITEMS,
-                "*", itemId).get(0);
-        assertNull(item);
-    }
-
-    @Test
-    void testSelectingFromEmptyTableIsEmpty() {
-        ArrayList<Item> items = database.selectFromTable(Database.DELETED_ITEMS, "*");
+    void testSelectingFromTableWithInvalidInputProducesNull(String itemId) {
+        ArrayList<Item> items = database.selectFromTable(Database.DELETED_ITEMS,
+                "*", itemId);
         assertTrue(items.isEmpty());
     }
 

@@ -71,7 +71,7 @@ public class Database {
      * @param tableName the name of the table being selected from
      * @param selectedColumns the columns to be selected
      * @param itemId the provided itemId
-     * @return arrayList of selected row in the selected table
+     * @return arrayList of selected rows in the selected table
      */
     public ArrayList<Item> selectFromTable(String tableName, String selectedColumns, String itemId) {
         ResultSet resultSet = getResultSet(tableName, selectedColumns, itemId);
@@ -91,9 +91,6 @@ public class Database {
             resultSet.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }
-        if (items.isEmpty()) {
-            return null;
         }
         return items;
     }

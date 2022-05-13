@@ -62,6 +62,7 @@ public class DatabasePresenterTest {
 
     @Test
     void testReadValidTableName() {
+        database.populateDatabase();
         ArrayList<Item> items = databasePresenter.readFromTable(Database.ITEMS);
         assertNotNull(items);
     }
