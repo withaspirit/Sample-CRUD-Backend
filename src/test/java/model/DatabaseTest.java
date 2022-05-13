@@ -107,16 +107,6 @@ public class DatabaseTest {
     }
 
     @Test
-    void testDeleteItemWithInvalidId() {
-        database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
-                testItem.getValuesInSQLFormatExceptId());
-
-        int invalidId = 2;
-        database.deleteFromTable(Database.ITEMS, String.valueOf(invalidId));
-        assertEquals(1, database.getSizeOfTable(Database.ITEMS));
-    }
-
-    @Test
     void testUpdatingOneValueOneItem() {
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
                 testItem.getValuesInSQLFormatExceptId());
@@ -147,5 +137,26 @@ public class DatabaseTest {
 
         itemsList = database.selectFromTable(Database.ITEMS, "*");
         assertEquals(testItem, itemsList.get(0));
+    }
+
+    @Test
+    void testUpdatingItemInvalid() {
+        database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
+                testItem.getValuesInSQLFormatExceptId());
+
+        int invalidId = -3;
+        Item item = database.updateItem(String.valueOf(invalidId),
+                        testItem.getAttributeNameValueListExceptId());
+        assertNull(item);
+    }
+
+    @Test
+    void testDeleteItemWithInvalidId() {
+        database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
+                testItem.getValuesInSQLFormatExceptId());
+
+        int invalidId = 2;
+        database.deleteFromTable(Database.ITEMS, String.valueOf(invalidId));
+        assertEquals(1, database.getSizeOfTable(Database.ITEMS));
     }
 }

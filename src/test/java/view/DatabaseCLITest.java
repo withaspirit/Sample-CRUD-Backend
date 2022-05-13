@@ -2,6 +2,7 @@ package view;
 
 import model.Database;
 import model.Item;
+import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -64,7 +65,7 @@ public class DatabaseCLITest {
     void testReadFromEmptyTable() {
         String userInput = "READ " + Database.ITEMS;
         String consoleOutput = databaseCLI.processInput(userInput);
-        assertEquals(Database.ITEMS + " is empty.", consoleOutput);
+        assertTrue(consoleOutput.contains("ERROR"));
     }
 
     @Test
@@ -72,7 +73,7 @@ public class DatabaseCLITest {
         createItem();
         String readStatement = "READ " + Database.ITEMS;
         String consoleOutput = databaseCLI.processInput(readStatement);
-        assertNotEquals(Database.ITEMS + " is empty.", consoleOutput);
+        assertFalse(consoleOutput.contains("ERROR"));
     }
 
     @Test
@@ -83,12 +84,24 @@ public class DatabaseCLITest {
 
         String newName = "newTestName";
         String updateStatement = "UPDATE 1 name = '" + newName + "'";
-        databaseCLI.processInput(updateStatement);
-        originalItem.setName(newName);
+        String consoleOutput = databaseCLI.processInput(updateStatement);
+        assertFalse(consoleOutput.contains("ERROR"));
 
+        originalItem.setName(newName);
         items = database.selectFromTable(Database.ITEMS, "*");
         Item updatedItem = items.get(0);
         assertEquals(originalItem, updatedItem);
+    }
+
+    @Test
+    void testUpdateItemInvalid() {
+        createItem();
+
+        int errorId = 10000;
+        String newName = "newTestName";
+        String updateStatement = "UPDATE " + errorId + " name = '" + newName + "'";
+        String consoleOutput = databaseCLI.processInput(updateStatement);
+        assertTrue(consoleOutput.contains("ERROR"));
     }
 
     @Test

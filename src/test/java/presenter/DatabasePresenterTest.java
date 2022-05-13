@@ -77,17 +77,31 @@ public class DatabasePresenterTest {
     @Test
     void testUpdateOneItemOneAttribute() {
         databasePresenter.createItem(testItem);
-        String updatedName = "chowder";
 
+        String updatedName = "chowder";
         String itemId = String.valueOf(testItem.getId());
         String nameValuePair = "name = '" + updatedName + "'";
-        databasePresenter.updateItem(itemId, nameValuePair);
-        testItem.setName(updatedName);
+        Item item = databasePresenter.updateItem(itemId, nameValuePair);
 
+        assertNotNull(item);
         assertEquals(1, database.getSizeOfTable(Database.ITEMS));
+
+        testItem.setName(updatedName);
         List<Item> items = databasePresenter.readFromTable(Database.ITEMS);
         Item updatedItem = items.get(0);
         assertEquals(testItem, updatedItem);
+    }
+
+    @Test
+    void testUpdateItemInvalid() {
+        databasePresenter.createItem(testItem);
+
+        String updatedName = "chowder";
+        int errorId = -1;
+        String errorItemId = String.valueOf(errorId);
+        String nameValuePair = "name = '" + updatedName + "'";
+        Item item = databasePresenter.updateItem(errorItemId, nameValuePair);
+        assertNull(item);
     }
 
     @Test

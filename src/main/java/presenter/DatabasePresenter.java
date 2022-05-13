@@ -59,8 +59,9 @@ public class DatabasePresenter {
      * @param itemId the id of the item
      * @param columnValuePair the name-value pair of the attribute to be updated
      */
-    public void updateItem(String itemId, String columnValuePair) {
-        database.updateItem(itemId, columnValuePair);
+    public Item updateItem(String itemId, String columnValuePair) {
+        Item updatedItem = database.updateItem(itemId, columnValuePair);
+        return updatedItem;
     }
 
     /**

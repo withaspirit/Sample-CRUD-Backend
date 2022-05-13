@@ -131,7 +131,7 @@ public class DatabaseCLI {
         Item item;
         item = new Item(matcher);
         databasePresenter.createItem(item);
-        return "FIXME: Successfully created item: " + item.getValuesInSQLFormatExceptId();
+        return "Successfully created item: " + item.getValuesInSQLFormatExceptId();
     }
 
     /**
@@ -144,10 +144,10 @@ public class DatabaseCLI {
         // matcher.group(1) is "read"
         String tableName = matcher.group(2);
         List<Item> items = databasePresenter.readFromTable(tableName);
-
         if (items.isEmpty()) {
-            return tableName + " is empty.";
+            return "ERROR: " + tableName + " is empty.";
         }
+
         String[] attributeNames;
         if (tableName.equals(Database.ITEMS)) {
             attributeNames = Item.getAttributeNamesAsArray();
@@ -177,8 +177,12 @@ public class DatabaseCLI {
         // matcher.group(1) is "update"
         String itemId = matcher.group(2);
         String columnValuePair = matcher.group(3);
-        databasePresenter.updateItem(itemId, columnValuePair);
-        return "FIXME: update";
+        Item item = databasePresenter.updateItem(itemId, columnValuePair);
+        if (item == null) {
+            return "ERROR: Item " + itemId + " was not able to be updated.";
+        }
+        String values = String.join(", ", item.getValuesAsArray());
+        return "Item now has values " + values;
     }
 
     /**
@@ -210,7 +214,7 @@ public class DatabaseCLI {
         Item restoredItem = databasePresenter.restoreItem(itemId);
 
         if (restoredItem == null) {
-            return "Item does not exist.";
+            return "ERROR: Item does not exist.";
         }
         return "Restored item: " + restoredItem;
     }
