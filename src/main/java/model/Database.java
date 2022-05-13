@@ -2,6 +2,7 @@ package model;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Database contains the CRUD functionality for the SQLite database.
@@ -47,12 +48,12 @@ public class Database {
      */
     public void populateDatabase() {
         InputFileReader inputFileReader = new InputFileReader(ITEMS, "json");
-        // FIXME: insertion arguments inconsistent
-        String[] valuesToInsert = inputFileReader.getValuesToInsertFromJSONFile();
-        String columnsToInsert = Item.getAttributeNamesExceptId();
+        List<Item> itemsFromJSONFile = inputFileReader.getItemsFromJSONFile();
 
-        for (String values : valuesToInsert) {
-            insert(ITEMS, columnsToInsert, values);
+        String columnsToInsert = Item.getAttributeNamesExceptId();
+        for (Item item : itemsFromJSONFile) {
+            String valuesToInsert = item.getAttributeValuesExceptId();
+            insert(ITEMS, columnsToInsert, valuesToInsert);
         }
     }
 

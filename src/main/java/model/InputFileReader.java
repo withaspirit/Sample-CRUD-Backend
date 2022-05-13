@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * InputFileReader allows files to be read and returned as usable objects.
@@ -53,23 +55,22 @@ public class InputFileReader {
     }
 
     /**
-     * Returns values for Database to insert into the appropriate table(s).
+     * Returns an ArrayList of items from the items.json file.
      *
-     * @return SQL-formatted values for Database to insert into the appropriate table.
+     * @return an ArrayList of items from the items.json file.
      */
-    public String[] getValuesToInsertFromJSONFile() {
+    public List<Item> getItemsFromJSONFile() {
         if (!fileEnding.equals(JSON)) {
             throw new IllegalArgumentException("File type must be .json");
         }
 
+        List<Item> items = new ArrayList<>();
         JSONArray itemsJSONArray = createJSONArray(fileName);
-        String[] valuesToInsert = new String[itemsJSONArray.size()];
-        for (int i = 0; i < itemsJSONArray.size(); i++) {
-            JSONObject jsonItem = (JSONObject) itemsJSONArray.get(i);
-            Item item = new Item(jsonItem);
-            valuesToInsert[i] = item.getAttributeValuesExceptId();
+        for (Object object : itemsJSONArray) {
+            JSONObject jsonItem = (JSONObject) object;
+            items.add(new Item(jsonItem));
         }
-        return valuesToInsert;
+        return items;
     }
 
     /**
