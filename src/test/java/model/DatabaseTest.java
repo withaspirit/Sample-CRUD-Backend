@@ -39,7 +39,7 @@ public class DatabaseTest {
     @Test
     void testDatabaseInsertionForOneItem() {
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
-                testItem.getAttributeValuesExceptId());
+                testItem.getValuesInSQLFormatExceptId());
         assertEquals(1, database.getSizeOfTable(Database.ITEMS));
 
         itemsList = database.selectFromTable(Database.ITEMS, "*");
@@ -50,7 +50,7 @@ public class DatabaseTest {
     @Test
     void testDatabaseItemEqualityNoDecimal() {
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
-                testItem.getAttributeValuesExceptId());
+                testItem.getValuesInSQLFormatExceptId());
 
         assertEquals(1, database.getSizeOfTable(Database.ITEMS));
 
@@ -76,14 +76,14 @@ public class DatabaseTest {
     @Test
     void testInsertIntoDeletedItems() {
         database.insert(Database.DELETED_ITEMS, Item.getAttributeNamesExceptId(),
-                testItem.getAttributeValuesExceptId());
+                testItem.getValuesInSQLFormatExceptId());
         assertEquals(1, database.getSizeOfTable(Database.DELETED_ITEMS));
     }
 
     @Test
     void testDeleteItemWithValidId() {
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
-                testItem.getAttributeValuesExceptId());
+                testItem.getValuesInSQLFormatExceptId());
         database.deleteFromTable(Database.ITEMS, String.valueOf(testItem.getId()));
 
         assertEquals(0, database.getSizeOfTable(Database.ITEMS));
@@ -92,7 +92,7 @@ public class DatabaseTest {
     @Test
     void testSelectingFromDatabaseItemWithDecimalPrice() {
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
-                testItem.getAttributeValuesExceptId());
+                testItem.getValuesInSQLFormatExceptId());
 
         itemsList = database.selectFromTable(Database.ITEMS, "*");
         assertEquals(testItem, itemsList.get(0));
@@ -109,7 +109,7 @@ public class DatabaseTest {
     @Test
     void testDeleteItemWithInvalidId() {
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
-                testItem.getAttributeValuesExceptId());
+                testItem.getValuesInSQLFormatExceptId());
 
         int invalidId = 2;
         database.deleteFromTable(Database.ITEMS, String.valueOf(invalidId));
@@ -119,7 +119,7 @@ public class DatabaseTest {
     @Test
     void testUpdatingOneValueOneItem() {
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
-                testItem.getAttributeValuesExceptId());
+                testItem.getValuesInSQLFormatExceptId());
 
         String newName = "NewName";
         String updateStatement = "name = '" + newName + "'";
@@ -133,7 +133,7 @@ public class DatabaseTest {
     @Test
     void testUpdatingMultipleValuesOneItem() {
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
-                testItem.getAttributeValuesExceptId());
+                testItem.getValuesInSQLFormatExceptId());
 
         String newName = "NewName";
         String price = String.valueOf(10.99);

@@ -52,7 +52,7 @@ public class Database {
 
         String columnsToInsert = Item.getAttributeNamesExceptId();
         for (Item item : itemsFromJSONFile) {
-            String valuesToInsert = item.getAttributeValuesExceptId();
+            String valuesToInsert = item.getValuesInSQLFormatExceptId();
             insert(ITEMS, columnsToInsert, valuesToInsert);
         }
     }

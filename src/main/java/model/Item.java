@@ -21,6 +21,14 @@ public class Item {
     private BigDecimal price;
     private int stock;
 
+    /**
+     * Constructor for Item.
+     *
+     * @param id the id of the item
+     * @param name the name of the Item
+     * @param price the price of the item (in format XX.XX)
+     * @param stock the amount of an item in stock
+     */
     public Item(int id, String name, String price, int stock) {
         this.id = id;
         this.name = name;
@@ -144,37 +152,28 @@ public class Item {
     public String getValuesInSQLFormat() {
         return String.join(", ",
                 String.valueOf(id),
-                getNameInQuotes(),
-                price.scaleByPowerOfTen(2).toString(),
-                String.valueOf(stock));
+                getValuesInSQLFormatExceptId());
     }
 
-    // TODO?: convert to and from JSONObject
-
-    // https://stackoverflow.com/questions/3333974/how-to-loop-over-a-class-attributes-in-java
-    public static String getAttributeNamesExceptId() {
-        final Field[] attributes = Item.class.getDeclaredFields();
-        final Field[] attributesExceptId = Arrays.copyOfRange(attributes, 1, attributes.length);
-
-        StringBuilder commaSeparatedAttributes = new StringBuilder();
-        for (int i = 0; i < attributesExceptId.length; i++) {
-            commaSeparatedAttributes.append(attributesExceptId[i].getName());
-            if (i != attributesExceptId.length - 1) {
-                commaSeparatedAttributes.append(", ");
-            }
-        }
-        return commaSeparatedAttributes.toString();
-    }
-
-    // FIXME: used for database insertion
-    //  probably should use string array instead
-    public String getAttributeValuesExceptId() {
+    /**
+     * Returns the values of all attributes except id as an SQL-formatted String.
+     *
+     * @return the SQL-formatted, comma-separated Item values except id
+     */
+    public String getValuesInSQLFormatExceptId() {
         return String.join(", ",
                 getNameInQuotes(),
                 price.scaleByPowerOfTen(2).toString(),
                 String.valueOf(stock));
     }
 
+    public static String getAttributeNamesExceptId() {
+        String[] attributeNames = getAttributeNamesAsArray();
+        String[] attributeNamesExceptId = Arrays.copyOfRange(attributeNames, 1, attributeNames.length);
+        return String.join(", ", attributeNamesExceptId);
+    }
+
+    // used for SQL table population
     public String getAttributeNameValueListExceptId() {
         return String.join(", ",
                 "name = " + getNameInQuotes(),

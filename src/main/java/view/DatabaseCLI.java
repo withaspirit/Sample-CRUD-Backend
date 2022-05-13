@@ -131,7 +131,7 @@ public class DatabaseCLI {
         Item item;
         item = new Item(matcher);
         databasePresenter.createItem(item);
-        return "FIXME: Successfully created item: " + item.getAttributeValuesExceptId();
+        return "FIXME: Successfully created item: " + item.getValuesInSQLFormatExceptId();
     }
 
     /**

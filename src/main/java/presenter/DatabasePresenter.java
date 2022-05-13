@@ -40,7 +40,7 @@ public class DatabasePresenter {
      */
     public void createItem(Item item) {
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
-                item.getAttributeValuesExceptId());
+                item.getValuesInSQLFormatExceptId());
     }
 
     /**
