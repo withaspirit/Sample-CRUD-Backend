@@ -89,6 +89,11 @@ public class Item {
         this.stock = stock;
     }
 
+    /**
+     * Returns the attributes of Item as a String array.
+     *
+     * @return the attributes of Item as a String array
+     */
     public static String[] getAttributeNamesAsArray() {
         Field[] attributes = Item.class.getDeclaredFields();
         String[] attributeNames = new String[attributes.length];
@@ -99,6 +104,11 @@ public class Item {
         return attributeNames;
     }
 
+    /**
+     * Returns the values of Item as a String array.
+     *
+     * @return the values of Item as a String array
+     */
     public String[] getValuesAsArray() {
         return new String[] {
                 String.valueOf(id),
@@ -141,12 +151,14 @@ public class Item {
     // FIXME: used for database insertion
     //  probably should use string array instead
     public String getAttributeValuesExceptId() {
-        return "'" + name + "'," + price.scaleByPowerOfTen(2).intValue() + ", " + stock;
+        int idPartOfStringEnd = (id + ", ").length();
+        return toString().substring(idPartOfStringEnd);
     }
 
     public String getAttributeNameValueListExceptId() {
-        return "name = " + "'" + name + "', price = " +
-                price.scaleByPowerOfTen(2).intValue() + ", stock = " + stock;
+        return "name = " + "'" + name + "', " +
+                "price = " + price.scaleByPowerOfTen(2).intValue() + ", " +
+                "stock = " + stock;
     }
 
     @Override
@@ -167,6 +179,11 @@ public class Item {
 
     @Override
     public String toString() {
-        return id + ", '" + name + "', " + price + ", " + stock;
+                 return id + ", '" + name + "', " + price + ", " + stock;
+//        return String.join(", ",
+//                String.valueOf(id),
+//                "'" + name + "'",
+//                price.toString(),
+//                String.valueOf(stock));
     }
 }
