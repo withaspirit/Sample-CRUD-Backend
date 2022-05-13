@@ -66,6 +66,15 @@
         "extraText": "HELP extraText"
       }
     },
+    "tables": {
+      "valid": {
+        "goodFormat": "TABLES"
+      },
+      "invalid": {
+        "appendedText": "TABLESappendedText",
+        "extraText": "TABLES extraText"
+      }
+    },
     "quit": {
       "valid": {
         "goodFormat": "QUIT"

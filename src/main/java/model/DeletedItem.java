@@ -15,7 +15,7 @@ import java.util.Objects;
 public class DeletedItem extends Item {
 
     /** the deletion comment for the item (optional) */
-    private String comment;
+    private final String comment;
 
     /**
      * Constructor for DeletedItem.
@@ -64,7 +64,8 @@ public class DeletedItem extends Item {
     public String getDeletedItemValuesInSQLFormat() {
         String deletedItemValues = super.getValuesInSQLFormat();
         if (comment != null && !comment.isBlank()) {
-            deletedItemValues = String.join(", ", deletedItemValues, "'" + comment + "'");
+            deletedItemValues = String.join(", ",
+                    deletedItemValues, getCommentInQuotes());
         }
         return deletedItemValues;
     }
@@ -78,15 +79,15 @@ public class DeletedItem extends Item {
         return comment;
     }
 
-    /**
-     * Modifies the item's deletion comment.
-     *
-     * @param comment the new value for the Item's comment.
-     */
-    public void setComment(String comment) {
-        this.comment = comment;
+    public String getCommentInQuotes() {
+        return "'" + comment + "'";
     }
 
+    /**
+     * Returns the attributes of DeletedItem as a String array.
+     *
+     * @return the attributes of DeletedItem as a String array
+     */
     public static String[] getAttributeNamesAsArray() {
         Field[] attributes = DeletedItem.class.getDeclaredFields();
         String[] attributeNames = new String[attributes.length];
@@ -98,6 +99,11 @@ public class DeletedItem extends Item {
         return ArrayUtils.addAll(itemAttributeNames, attributeNames);
     }
 
+    /**
+     * Returns the values of DeletedItem as a String array.
+     *
+     * @return the values of DeletedItem as a String array
+     */
     @Override
     public String[] getValuesAsArray() {
         if (!comment.isBlank()) {
@@ -126,10 +132,11 @@ public class DeletedItem extends Item {
 
     @Override
     public String toString() {
-        String deletedItemValues = super.toString();
+        String deletedItemString = super.toString();
         if (comment != null && !comment.isBlank()) {
-            deletedItemValues = String.join(", ", deletedItemValues, "'" + comment + "'");
+            deletedItemString = String.join(", ",
+                    deletedItemString, getCommentInQuotes());
         }
-        return deletedItemValues;
+        return deletedItemString;
     }
 }

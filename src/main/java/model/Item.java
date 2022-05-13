@@ -1,5 +1,7 @@
 package model;
 
+import org.json.simple.JSONObject;
+
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
@@ -7,6 +9,11 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 
+/**
+ * Item is a data class simulating an item in a Store.
+ *
+ * @author Liam Tripp
+ */
 public class Item {
 
     private final int id;
@@ -14,24 +21,30 @@ public class Item {
     private BigDecimal price;
     private int stock;
 
-    public Item(int id, String name) {
+    public Item(int id, String name, String price, int stock) {
         this.id = id;
         this.name = name;
-        price = new BigDecimal(0);
-        stock = 0;
-    }
-
-    public Item(int id, String name, String price) {
-        this(id, name);
         this.price = new BigDecimal(price);
-        this.stock = 0;
-    }
-
-    public Item(int id, String name, String price, int stock) {
-        this(id, name, price);
         this.stock = stock;
     }
 
+    /**
+     * Constructs an Item from a JSONObject from the items.json file.
+     *
+     * @param jsonItem a JSONObject containing a name, price, and stock
+     */
+    public Item(JSONObject jsonItem) {
+        this(-1, // not used
+                (String) jsonItem.get("name"),
+                (String) jsonItem.get("price"),
+                Math.toIntExact((Long) jsonItem.get("stock")));
+    }
+
+    /**
+     * Constructs an Item from a ResultSet.
+     *
+     * @param resultSet the ResultSet from an JDBC SQL query
+     */
     public Item(ResultSet resultSet) {
         final Field[] attributes = Item.class.getDeclaredFields();
 
@@ -46,12 +59,18 @@ public class Item {
         }
     }
 
+    /**
+     * Constructs an Item from a Matcher. Used when adding a new item to a
+     * table.
+     *
+     * @param matcher contains the new Item's name, price, and stock
+     */
     public Item(Matcher matcher) {
-        id = -1; // id is not used
-        // group(1) is the CREATE command
-        name = matcher.group(2);
-        price = new BigDecimal(matcher.group(3));
-        stock = Integer.parseInt(matcher.group(4));
+        // matcher.group(1) is the CREATE command
+        this(-1, // not used
+                matcher.group(2),
+                matcher.group(3),
+               Integer.parseInt((matcher.group(4))));
     }
 
     public int getId() {
@@ -60,6 +79,10 @@ public class Item {
 
     public String getName() {
         return name;
+    }
+
+    public String getNameInQuotes() {
+        return "'" + name + "'";
     }
 
     public void setName(String name) {
@@ -84,6 +107,48 @@ public class Item {
         this.stock = stock;
     }
 
+    /**
+     * Returns the attributes of Item as a String array.
+     *
+     * @return the attributes of Item as a String array
+     */
+    public static String[] getAttributeNamesAsArray() {
+        Field[] attributes = Item.class.getDeclaredFields();
+        String[] attributeNames = new String[attributes.length];
+
+        for (int i = 0; i < attributes.length; i++) {
+            attributeNames[i] = attributes[i].getName();
+        }
+        return attributeNames;
+    }
+
+    /**
+     * Returns the values of Item as a String array.
+     *
+     * @return the values of Item as a String array
+     */
+    public String[] getValuesAsArray() {
+        return new String[] {
+                String.valueOf(id),
+                name,
+                price.toString(),
+                String.valueOf(stock)
+        };
+    }
+
+    /**
+     * Returns the values of all attributes as an SQL-formatted String.
+     *
+     * @return the SQL-formatted, comma-separated Item values
+     */
+    public String getValuesInSQLFormat() {
+        return String.join(", ",
+                String.valueOf(id),
+                getNameInQuotes(),
+                price.scaleByPowerOfTen(2).toString(),
+                String.valueOf(stock));
+    }
+
     // TODO?: convert to and from JSONObject
 
     // https://stackoverflow.com/questions/3333974/how-to-loop-over-a-class-attributes-in-java
@@ -104,44 +169,17 @@ public class Item {
     // FIXME: used for database insertion
     //  probably should use string array instead
     public String getAttributeValuesExceptId() {
-        return "'" + name + "'," + price.scaleByPowerOfTen(2).intValue() + ", " + stock;
-    }
-
-    /**
-     * Returns the values of all attributes as an SQL-formatted String.
-     *
-     * @return the SQL-formatted, comma-separated Item values
-     */
-    public String getValuesInSQLFormat() {
         return String.join(", ",
-                String.valueOf(id),
-                "'" + name + "'",
+                getNameInQuotes(),
                 price.scaleByPowerOfTen(2).toString(),
                 String.valueOf(stock));
     }
 
-    public static String[] getAttributeNamesAsArray() {
-        Field[] attributes = Item.class.getDeclaredFields();
-        String[] attributeNames = new String[attributes.length];
-
-        for (int i = 0; i < attributes.length; i++) {
-            attributeNames[i] = attributes[i].getName();
-        }
-        return attributeNames;
-    }
-
-    public String[] getValuesAsArray() {
-        return new String[] {
-                String.valueOf(id),
-                name,
-                price.toString(),
-                String.valueOf(stock)
-        };
-    }
-
     public String getAttributeNameValueListExceptId() {
-        return "name = " + "'" + name + "', price = " +
-                price.scaleByPowerOfTen(2).intValue() + ", stock = " + stock;
+        return String.join(", ",
+                "name = " + getNameInQuotes(),
+                "price = " + price.scaleByPowerOfTen(2).intValue(),
+                ("stock = " + stock));
     }
 
     @Override
@@ -162,6 +200,10 @@ public class Item {
 
     @Override
     public String toString() {
-        return id + ", '" + name + "', " + price + ", " + stock;
+        return String.join(", ",
+                String.valueOf(id),
+                getNameInQuotes(),
+                price.toString(),
+                String.valueOf(stock));
     }
 }
