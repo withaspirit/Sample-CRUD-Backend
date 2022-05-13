@@ -15,7 +15,7 @@ import java.util.Objects;
 public class DeletedItem extends Item {
 
     /** the deletion comment for the item (optional) */
-    private String comment;
+    private final String comment;
 
     /**
      * Constructor for DeletedItem.
@@ -64,7 +64,8 @@ public class DeletedItem extends Item {
     public String getDeletedItemValuesInSQLFormat() {
         String deletedItemValues = super.getValuesInSQLFormat();
         if (comment != null && !comment.isBlank()) {
-            deletedItemValues = String.join(", ", deletedItemValues, "'" + comment + "'");
+            deletedItemValues = String.join(", ",
+                    deletedItemValues, getCommentInQuotes());
         }
         return deletedItemValues;
     }
@@ -78,13 +79,8 @@ public class DeletedItem extends Item {
         return comment;
     }
 
-    /**
-     * Modifies the item's deletion comment.
-     *
-     * @param comment the new value for the Item's comment.
-     */
-    public void setComment(String comment) {
-        this.comment = comment;
+    public String getCommentInQuotes() {
+        return "'" + comment + "'";
     }
 
     public static String[] getAttributeNamesAsArray() {
@@ -128,7 +124,8 @@ public class DeletedItem extends Item {
     public String toString() {
         String deletedItemValues = super.toString();
         if (comment != null && !comment.isBlank()) {
-            deletedItemValues = String.join(", ", deletedItemValues, "'" + comment + "'");
+            deletedItemValues = String.join(", ",
+                    deletedItemValues, getCommentInQuotes());
         }
         return deletedItemValues;
     }
