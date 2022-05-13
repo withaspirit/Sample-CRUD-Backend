@@ -44,7 +44,7 @@ public class DatabaseCLI {
     /**
      * Produces an introduction messages for the user.
      */
-    public void start() {
+    public void introduction() {
         String introduction = "\nWelcome to Liam Tripp's Backend CRUD Sample.\n\n";
         introduction += "The database for this program emulates an online store manager.\n";
         introduction += "It contains Items which have ids, names, prices, and stock.\n";
@@ -57,7 +57,7 @@ public class DatabaseCLI {
     /**
      * Asks user for input and delegates to methods, returning output statement.
      */
-    public void loopConsole() {
+    public void inputLoop() {
         Scanner scanner = new Scanner(System.in);
         scanner.useLocale(Locale.US);
 
