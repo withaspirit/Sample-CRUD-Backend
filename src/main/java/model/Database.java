@@ -76,39 +76,13 @@ public class Database {
     }
 
     /**
-     * Selects and returns an ArrayList of Items from the selected table.
-     *
-     * @param tableName the name of the table being selected from
-     * @param selectedColumns the range of columns to be selected
-     * @return arrayList of selected items in the selected table
-     */
-    public ArrayList<Item> selectFromTable(String tableName, String selectedColumns) {
-        ResultSet resultSet = getResultSet(tableName, selectedColumns, "");
-        ArrayList<Item> items = new ArrayList<>();
-
-        try {
-            while (resultSet.next()) {
-                if (tableName.equals(Database.DELETED_ITEMS)) {
-                    DeletedItem item = new DeletedItem(resultSet);
-                    items.add(item);
-                } else {
-                    Item item = new Item(resultSet);
-                    items.add(item);
-                }
-            }
-            resultSet.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return items;
-    }
-
-    /**
      * Selects and returns one or more Items from the selected table.
+     * If itemId is left blank, it returns a list of items. Otherwise, it
+     * returns a single item.
      *
      * @param tableName the name of the table being selected from
      * @param selectedColumns the columns to be selected
-     * @param itemId if left blank, returns a list of items. Otherwise, returns a single item
+     * @param itemId the provided itemId
      * @return arrayList of selected row in the selected table
      */
     public ArrayList<Item> selectFromTable(String tableName, String selectedColumns, String itemId) {
@@ -134,6 +108,17 @@ public class Database {
             return null;
         }
         return items;
+    }
+
+    /**
+     * Selects and returns an ArrayList of Items from the selected table.
+     *
+     * @param tableName the name of the table being selected from
+     * @param selectedColumns the range of columns to be selected
+     * @return arrayList of selected items in the selected table
+     */
+    public ArrayList<Item> selectFromTable(String tableName, String selectedColumns) {
+        return selectFromTable(tableName, selectedColumns, "");
     }
 
     public void updateItems(String itemId, String columnValuePairs) {
