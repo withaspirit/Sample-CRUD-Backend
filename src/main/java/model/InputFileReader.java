@@ -61,15 +61,9 @@ public class InputFileReader {
 
         String[] valuesToInsert = new String[itemsJSONArray.size()];
         for (int i = 0; i < itemsJSONArray.size(); i++) {
-            JSONObject item = (JSONObject) itemsJSONArray.get(i);
-
-            // TODO: don't use magic strings
-            String name = "'" + item.get("name") + "'";
-            BigDecimal bigDecimalPrice = new BigDecimal((String) item.get("price"));
-            int price = bigDecimalPrice.scaleByPowerOfTen(2).intValue();
-            String stock = Long.toString((long) item.get("stock"));
-
-            valuesToInsert[i] = String.join(",", name, String.valueOf(price), stock);
+            JSONObject jsonItem = (JSONObject) itemsJSONArray.get(i);
+            Item item = new Item(jsonItem);
+            valuesToInsert[i] = item.getAttributeValuesExceptId();
         }
         return valuesToInsert;
     }

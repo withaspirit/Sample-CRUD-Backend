@@ -1,5 +1,7 @@
 package model;
 
+import org.json.simple.JSONObject;
+
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
@@ -24,6 +26,18 @@ public class Item {
         this.name = name;
         this.price = new BigDecimal(price);
         this.stock = stock;
+    }
+
+    /**
+     * Constructs an Item from a JSONObject from the items.json file.
+     *
+     * @param jsonItem a JSONObject containing a name, price, and stock
+     */
+    public Item(JSONObject jsonItem) {
+        this(-1, // not used
+                (String) jsonItem.get("name"),
+                (String) jsonItem.get("price"),
+                Math.toIntExact((Long) jsonItem.get("stock")));
     }
 
     /**
@@ -52,11 +66,11 @@ public class Item {
      * @param matcher contains the new Item's name, price, and stock
      */
     public Item(Matcher matcher) {
-        id = -1; // id is not used
-        // group(1) is the CREATE command
-        name = matcher.group(2);
-        price = new BigDecimal(matcher.group(3));
-        stock = Integer.parseInt(matcher.group(4));
+        // matcher.group(1) is the CREATE command
+        this(-1, // not used
+                matcher.group(2),
+                matcher.group(3),
+               Integer.parseInt((matcher.group(4))));
     }
 
     public int getId() {
