@@ -67,6 +67,10 @@ public class Item {
         return name;
     }
 
+    public String getNameInQuotes() {
+        return "'" + name + "'";
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -126,7 +130,7 @@ public class Item {
     public String getValuesInSQLFormat() {
         return String.join(", ",
                 String.valueOf(id),
-                "'" + name + "'",
+                getNameInQuotes(),
                 price.scaleByPowerOfTen(2).toString(),
                 String.valueOf(stock));
     }
@@ -151,13 +155,17 @@ public class Item {
     // FIXME: used for database insertion
     //  probably should use string array instead
     public String getAttributeValuesExceptId() {
-        return "'" + name + "'," + price.scaleByPowerOfTen(2).intValue() + ", " + stock;
+        return String.join(", ",
+                getNameInQuotes(),
+                price.scaleByPowerOfTen(2).toString(),
+                String.valueOf(stock));
     }
 
     public String getAttributeNameValueListExceptId() {
-        return "name = " + "'" + name + "', " +
-                "price = " + price.scaleByPowerOfTen(2).intValue() + ", " +
-                "stock = " + stock;
+        return String.join(", ",
+                "name = " + getNameInQuotes(),
+                "price = " + price.scaleByPowerOfTen(2).intValue(),
+                ("stock = " + stock));
     }
 
     @Override
@@ -180,7 +188,7 @@ public class Item {
     public String toString() {
         return String.join(", ",
                 String.valueOf(id),
-                "'" + name + "'",
+                getNameInQuotes(),
                 price.toString(),
                 String.valueOf(stock));
     }
