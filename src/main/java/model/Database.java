@@ -104,14 +104,14 @@ public class Database {
     }
 
     /**
-     * Selects and returns an Item from the selected table.
+     * Selects and returns one or more Items from the selected table.
      *
      * @param tableName the name of the table being selected from
      * @param selectedColumns the columns to be selected
-     * @param itemId the provided item id
-     * @return arrayList of selected items in the selected table
+     * @param itemId if left blank, returns a list of items. Otherwise, returns a single item
+     * @return arrayList of selected row in the selected table
      */
-    public Item selectFromTable(String tableName, String selectedColumns, String itemId) {
+    public ArrayList<Item> selectFromTable(String tableName, String selectedColumns, String itemId) {
         ResultSet resultSet = getResultSet(tableName, selectedColumns, itemId);
         ArrayList<Item> items = new ArrayList<>();
 
@@ -128,13 +128,18 @@ public class Database {
             }
             resultSet.close();
         } catch (SQLException e) {
-
             throw new RuntimeException(e);
         }
         if (items.isEmpty()) {
             return null;
         }
-        return items.get(0);
+        return items;
+    }
+
+    public void updateItems(String itemId, String columnValuePairs) {
+        String statementToExecute = "UPDATE " + ITEMS + " SET " +
+                columnValuePairs + " WHERE id = " + itemId;
+        executeStatement(statementToExecute);
     }
 
     /**
@@ -144,13 +149,8 @@ public class Database {
      * @param itemId the provided item ids
      */
     public void deleteFromTable(String tableName, String itemId) {
-        String statementToExecute = "DELETE FROM " + tableName + " WHERE id = " + itemId;
-        executeStatement(statementToExecute);
-    }
-
-    public void updateItems(String itemId, String columnValuePairs) {
-        String statementToExecute = "UPDATE " + ITEMS + " SET " +
-                columnValuePairs + " WHERE id = " + itemId;
+        String statementToExecute = "DELETE FROM " + tableName +
+                " WHERE id = " + itemId;
         executeStatement(statementToExecute);
     }
 
