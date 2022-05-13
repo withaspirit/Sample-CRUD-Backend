@@ -34,7 +34,7 @@ public class Database {
     }
 
     /**
-     * Creates the databases.
+     * Creates the database.
      */
     public void initializeDatabase() {
         InputFileReader inputFileReader = new InputFileReader("DDL", "sql");
@@ -42,6 +42,9 @@ public class Database {
         executeStatement(sqlTableCreateStatement);
     }
 
+    /**
+     * Adds values from items.json to the ITEMS table.
+     */
     public void populateDatabase() {
         InputFileReader inputFileReader = new InputFileReader(ITEMS, "json");
         // FIXME: insertion arguments inconsistent
