@@ -1,4 +1,5 @@
-items.db
+### Database name
+warehouse.db
 
 target/
 !.mvn/wrapper/maven-wrapper.jar

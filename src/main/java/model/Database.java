@@ -16,7 +16,7 @@ public class Database {
     public final static String ITEMS = "items";
     public final static String DELETED_ITEMS = "deleted_items";
     private final static String CLASS_LOADER_NAME = "org.sqlite.JDBC";
-    private final static String DATABASE_NAME = "jdbc:sqlite:items.db";
+    private final static String DATABASE_NAME = "jdbc:sqlite:warehouse.db";
 
     public Database() {
         // load the sqlite-JDBC driver using the current class loader
@@ -33,6 +33,9 @@ public class Database {
         }
     }
 
+    /**
+     * Creates the databases.
+     */
     public void initializeDatabase() {
         InputFileReader inputFileReader = new InputFileReader("DDL", "sql");
         String sqlTableCreateStatement = inputFileReader.getSQLFileAsString();
@@ -176,7 +179,7 @@ public class Database {
     }
 
     /**
-     *
+     * Terminates the database's connection and statement.
      */
     public void shutdown() {
         try {
