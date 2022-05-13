@@ -3,6 +3,7 @@ package view;
 import model.Database;
 import model.DeletedItem;
 import model.Item;
+import model.Table;
 import presenter.DatabasePresenter;
 
 import java.util.*;
@@ -152,7 +153,7 @@ public class DatabaseCLI {
         consoleOutput.append("Table ").append(tableName).append(" contains:\n");
 
         String[] attributeNames;
-        if (tableName.equals(Database.ITEMS)) {
+        if (tableName.equals(Table.ITEMS.getName())) {
             attributeNames = Item.getAttributeNamesAsArray();
         } else {
             attributeNames = DeletedItem.getAttributeNamesAsArray();
@@ -222,7 +223,7 @@ public class DatabaseCLI {
         Item restoredItem = databasePresenter.restoreItem(itemId);
 
         if (restoredItem == null) {
-            return "ERROR: Item does not exist in the table " + Database.DELETED_ITEMS;
+            return "ERROR: Item does not exist in the table " + Table.DELETED_ITEMS.getName();
         }
         return "Restored item: " + restoredItem;
     }
@@ -235,7 +236,7 @@ public class DatabaseCLI {
     public String help() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Omit the square brackets seen in all of the following commands:\n\n");
-        String itemsEnding = " the table " + Database.ITEMS;
+        String itemsEnding = " the table " + Table.ITEMS.getName();
 
         stringBuilder.append("`CREATE [name] [dollar.cents] [stock]` - insert a row into").append(itemsEnding).append("\n");
         stringBuilder.append("`READ [tableName]` - view the rows from one of the following ").append(tables()).append("\n");
@@ -254,7 +255,7 @@ public class DatabaseCLI {
      * @return a list of the tables in the Database as a String
      */
     public String tables() {
-        return "tables: " + String.join(", ", Database.ITEMS, Database.DELETED_ITEMS);
+        return "tables: " + String.join(", ", Table.ITEMS.getName(), Table.DELETED_ITEMS.getName());
     }
 
     /**

@@ -27,8 +27,8 @@ public class DatabaseTest {
     void setup() {
         database = new Database();
         database.initializeDatabase();
-        InputFileReader inputFileReader = new InputFileReader(Database.ITEMS, "json");
-        itemsJSONArray = inputFileReader.createJSONArray(Database.ITEMS);
+        InputFileReader inputFileReader = new InputFileReader(Table.ITEMS.getName(), "json");
+        itemsJSONArray = inputFileReader.createJSONArray(Table.ITEMS.getName());
     }
 
     @AfterEach
@@ -40,50 +40,50 @@ public class DatabaseTest {
     @ValueSource(strings = {"0", "0.", ".0", "0.0", "100.99", "10000.999"})
     void testItemResultSetConstructorConvertsPricesCorrectly(String price) {
         testItem.setPrice(price);
-        database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
+        database.insert(Table.ITEMS.getName(), Item.getAttributeNamesExceptId(),
                 testItem.getValuesInSQLFormatExceptId());
 
         // Item's ResultSet constructor is used here
-        itemsList = database.selectFromTable(Database.ITEMS, "*");
+        itemsList = database.selectFromTable(Table.ITEMS.getName(), "*");
         Item itemFromDatabase = itemsList.get(0);
         assertEquals(testItem, itemFromDatabase);
     }
 
     @Test
     void testDatabaseInsertionForOneItem() {
-        database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
+        database.insert(Table.ITEMS.getName(), Item.getAttributeNamesExceptId(),
                 testItem.getValuesInSQLFormatExceptId());
-        assertEquals(1, database.getSizeOfTable(Database.ITEMS));
+        assertEquals(1, database.getSizeOfTable(Table.ITEMS.getName()));
 
-        itemsList = database.selectFromTable(Database.ITEMS, "*");
+        itemsList = database.selectFromTable(Table.ITEMS.getName(), "*");
         Item itemFromDatabase = itemsList.get(0);
         assertEquals(testItem, itemFromDatabase);
     }
 
     @Test
     void testInsertIntoDeletedItems() {
-        database.insert(Database.DELETED_ITEMS, Item.getAttributeNamesExceptId(),
+        database.insert(Table.DELETED_ITEMS.getName(), Item.getAttributeNamesExceptId(),
                 testItem.getValuesInSQLFormatExceptId());
-        assertEquals(1, database.getSizeOfTable(Database.DELETED_ITEMS));
+        assertEquals(1, database.getSizeOfTable(Table.DELETED_ITEMS.getName()));
     }
 
     @Test
     void testDatabasePopulatedWithCorrectNumberOfItems() {
         database.populateDatabase();
-        assertEquals(itemsJSONArray.size(), database.getSizeOfTable(Database.ITEMS));
+        assertEquals(itemsJSONArray.size(), database.getSizeOfTable(Table.ITEMS.getName()));
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"1", "-1"}) // empty table, invalid id
     void testSelectingFromTableWithInvalidInputProducesNull(String itemId) {
-        List<Item> items = database.selectFromTable(Database.DELETED_ITEMS,
+        List<Item> items = database.selectFromTable(Table.DELETED_ITEMS.getName(),
                 "*", itemId);
         assertTrue(items.isEmpty());
     }
 
     @Test
     void testUpdatingOneValueOneItem() {
-        database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
+        database.insert(Table.ITEMS.getName(), Item.getAttributeNamesExceptId(),
                 testItem.getValuesInSQLFormatExceptId());
 
         String newName = "NewName";
@@ -91,13 +91,13 @@ public class DatabaseTest {
         database.updateItem(String.valueOf(testItem.getId()), updateStatement);
         testItem.setName(newName);
 
-        itemsList = database.selectFromTable(Database.ITEMS, "*");
+        itemsList = database.selectFromTable(Table.ITEMS.getName(), "*");
         assertEquals(testItem, itemsList.get(0));
     }
 
     @Test
     void testUpdatingMultipleValuesOneItem() {
-        database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
+        database.insert(Table.ITEMS.getName(), Item.getAttributeNamesExceptId(),
                 testItem.getValuesInSQLFormatExceptId());
 
         String newName = "NewName";
@@ -110,13 +110,13 @@ public class DatabaseTest {
         database.updateItem(String.valueOf(testItem.getId()),
                 testItem.getAttributeNameValueListExceptId());
 
-        itemsList = database.selectFromTable(Database.ITEMS, "*");
+        itemsList = database.selectFromTable(Table.ITEMS.getName(), "*");
         assertEquals(testItem, itemsList.get(0));
     }
 
     @Test
     void testUpdatingItemInvalid() {
-        database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
+        database.insert(Table.ITEMS.getName(), Item.getAttributeNamesExceptId(),
                 testItem.getValuesInSQLFormatExceptId());
 
         int invalidId = -3;
@@ -127,20 +127,20 @@ public class DatabaseTest {
 
     @Test
     void testDeleteItemWithValidId() {
-        database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
+        database.insert(Table.ITEMS.getName(), Item.getAttributeNamesExceptId(),
                 testItem.getValuesInSQLFormatExceptId());
-        database.deleteFromTable(Database.ITEMS, String.valueOf(testItem.getId()));
+        database.deleteFromTable(Table.ITEMS.getName(), String.valueOf(testItem.getId()));
 
-        assertEquals(0, database.getSizeOfTable(Database.ITEMS));
+        assertEquals(0, database.getSizeOfTable(Table.ITEMS.getName()));
     }
 
     @Test
     void testDeleteItemWithInvalidId() {
-        database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
+        database.insert(Table.ITEMS.getName(), Item.getAttributeNamesExceptId(),
                 testItem.getValuesInSQLFormatExceptId());
 
         int invalidId = 2;
-        database.deleteFromTable(Database.ITEMS, String.valueOf(invalidId));
-        assertEquals(1, database.getSizeOfTable(Database.ITEMS));
+        database.deleteFromTable(Table.ITEMS.getName(), String.valueOf(invalidId));
+        assertEquals(1, database.getSizeOfTable(Table.ITEMS.getName()));
     }
 }
