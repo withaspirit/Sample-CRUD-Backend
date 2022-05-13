@@ -168,4 +168,14 @@ public class DatabasePresenterTest {
         assertEquals(1, database.getSizeOfTable(Database.ITEMS));
         assertEquals(0, database.getSizeOfTable(Database.DELETED_ITEMS));
     }
+
+    @Test
+    void testRestoreItemInvalid() {
+        deleteItemWithComment("");
+
+        int errorId = 1000;
+        String itemId = String.valueOf(errorId);
+        Item item = databasePresenter.restoreItem(itemId);
+        assertNull(item);
+    }
 }

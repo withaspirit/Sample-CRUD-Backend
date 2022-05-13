@@ -2,7 +2,6 @@ package view;
 
 import model.Database;
 import model.Item;
-import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -127,12 +126,14 @@ public class DatabaseCLITest {
     @Test
     void testRestoreOneItemReturnsCorrectItem() {
         testDeleteOneItem();
+
         String restoreStatement = "RESTORE " + testItem.getId();
         String restoredItemMessage = databaseCLI.processInput(restoreStatement);
         String[] itemValues = testItem.getValuesAsArray();
         itemValues[1] = "'" + itemValues[1] + "'"; // put apostrophes around name
         String values = String.join(", ", itemValues);
         assertTrue(restoredItemMessage.contains(values));
+        assertFalse(restoredItemMessage.contains("ERROR"));
     }
 
     @Test
@@ -142,5 +143,15 @@ public class DatabaseCLITest {
         databaseCLI.processInput(restoreStatement);
         assertEquals(0, database.getSizeOfTable(Database.DELETED_ITEMS));
         assertEquals(1, database.getSizeOfTable(Database.ITEMS));
+    }
+
+    @Test
+    void testRestoreItemInvalid() {
+        testDeleteOneItem();
+        int errorId = 1000;
+
+        String restoreStatement = "RESTORE " + errorId;
+        String consoleOutput = databaseCLI.processInput(restoreStatement);
+        assertTrue(consoleOutput.contains("ERROR"));
     }
 }
