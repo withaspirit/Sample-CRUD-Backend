@@ -174,7 +174,10 @@ public class DatabaseCLI {
      * @return a String indicating the completion success
      */
     public String updateItem(Matcher matcher) {
-        databasePresenter.updateItem(matcher);
+        // matcher.group(1) is "update"
+        String itemId = matcher.group(2);
+        String columnValuePair = matcher.group(3);
+        databasePresenter.updateItem(itemId, columnValuePair);
         return "FIXME: update";
     }
 

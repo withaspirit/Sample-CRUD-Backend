@@ -56,11 +56,10 @@ public class DatabasePresenter {
     /**
      * Updates an Item in the items table.
      *
-     * @param matcher the matcher containing the itemId and column/ValuePairs for the item
+     * @param itemId the id of the item
+     * @param columnValuePair the name-value pair of the attribute to be updated
      */
-    public void updateItem(Matcher matcher) {
-        String itemId = matcher.group(2);
-        String columnValuePair = matcher.group(3);
+    public void updateItem(String itemId, String columnValuePair) {
         database.updateItem(itemId, columnValuePair);
     }
 

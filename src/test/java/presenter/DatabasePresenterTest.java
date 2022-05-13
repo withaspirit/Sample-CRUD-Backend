@@ -76,25 +76,18 @@ public class DatabasePresenterTest {
 
     @Test
     void testUpdateOneItemOneAttribute() {
-        // TODO: move into DatabaseCLI
         databasePresenter.createItem(testItem);
         String updatedName = "chowder";
 
-        String UPDATE_REGEX = Command.UPDATE.getRegex();
-        String updatePhrase = "UPDATE 1 name = '" + updatedName + "'";
-
-        // we need databaseCLI for its matcher methods
-        InputMatcher inputMatcher = new InputMatcher();
-        Matcher matcher = inputMatcher.getMatcher(UPDATE_REGEX, updatePhrase);
-        String matcherError = inputMatcher.validateMatcher(matcher);
-        assertEquals("", matcherError);
-
-        databasePresenter.updateItem(matcher);
+        String itemId = String.valueOf(testItem.getId());
+        String nameValuePair = "name = '" + updatedName + "'";
+        databasePresenter.updateItem(itemId, nameValuePair);
         testItem.setName(updatedName);
 
         assertEquals(1, database.getSizeOfTable(Database.ITEMS));
         List<Item> items = databasePresenter.readFromTable(Database.ITEMS);
-        assertEquals(testItem, items.get(0));
+        Item updatedItem = items.get(0);
+        assertEquals(testItem, updatedItem);
     }
 
     @Test
