@@ -83,6 +83,11 @@ public class DeletedItem extends Item {
         return "'" + comment + "'";
     }
 
+    /**
+     * Returns the attributes of DeletedItem as a String array.
+     *
+     * @return the attributes of DeletedItem as a String array
+     */
     public static String[] getAttributeNamesAsArray() {
         Field[] attributes = DeletedItem.class.getDeclaredFields();
         String[] attributeNames = new String[attributes.length];
@@ -94,6 +99,11 @@ public class DeletedItem extends Item {
         return ArrayUtils.addAll(itemAttributeNames, attributeNames);
     }
 
+    /**
+     * Returns the values of DeletedItem as a String array.
+     *
+     * @return the values of DeletedItem as a String array
+     */
     @Override
     public String[] getValuesAsArray() {
         if (!comment.isBlank()) {
@@ -122,11 +132,11 @@ public class DeletedItem extends Item {
 
     @Override
     public String toString() {
-        String deletedItemValues = super.toString();
+        String deletedItemString = super.toString();
         if (comment != null && !comment.isBlank()) {
-            deletedItemValues = String.join(", ",
-                    deletedItemValues, getCommentInQuotes());
+            deletedItemString = String.join(", ",
+                    deletedItemString, getCommentInQuotes());
         }
-        return deletedItemValues;
+        return deletedItemString;
     }
 }
