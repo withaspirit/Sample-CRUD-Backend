@@ -187,17 +187,6 @@ public class Database {
     }
 
     /**
-     * Selects and returns a ResultSet of selected rows from a selected table.
-     *
-     * @param tableName the name of the table
-     * @param selectedRows the rows to be selected
-     * @return resultSet containing one or more rows of a table
-     */
-    public ResultSet getResultSet(String tableName, String selectedRows) {
-        return getResultSet(tableName, selectedRows, "");
-    }
-
-    /**
      * Executes an SQL statement on a table.
      *
      * @param sqlStatement the SQL statement to execute
