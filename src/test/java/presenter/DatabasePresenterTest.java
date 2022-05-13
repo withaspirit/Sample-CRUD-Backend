@@ -8,11 +8,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import view.Command;
-import view.InputMatcher;
 
 import java.util.List;
-import java.util.regex.Matcher;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -129,6 +126,16 @@ public class DatabasePresenterTest {
         Item item = database.selectFromTable(Database.DELETED_ITEMS, "*", itemId).get(0);
         DeletedItem deletedItemFromTable = (DeletedItem) item;
         assertEquals(deletedItem, deletedItemFromTable);
+    }
+
+    @Test
+    void testDeletedItemWithInvalidIdProducesNull() {
+        databasePresenter.createItem(testItem);
+
+        int errorId = 1000;
+        String itemId = String.valueOf(errorId);
+        Item item = databasePresenter.deleteItem(itemId, "");
+        assertNull(item);
     }
 
     @Test

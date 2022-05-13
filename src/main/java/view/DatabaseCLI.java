@@ -148,16 +148,18 @@ public class DatabaseCLI {
             return "ERROR: " + tableName + " is empty.";
         }
 
+        StringBuilder consoleOutput = new StringBuilder();
+        consoleOutput.append("Table ").append(tableName).append(" contains:\n");
+
         String[] attributeNames;
         if (tableName.equals(Database.ITEMS)) {
             attributeNames = Item.getAttributeNamesAsArray();
         } else {
             attributeNames = DeletedItem.getAttributeNamesAsArray();
         }
+
         String bar = " | ";
         String attributeNamesBarSeparated = String.join(bar, attributeNames);
-
-        StringBuilder consoleOutput = new StringBuilder();
         consoleOutput.append(attributeNamesBarSeparated).append("\n");
         for (Item item : items) {
             String[] values = item.getValuesAsArray();
@@ -182,7 +184,7 @@ public class DatabaseCLI {
             return "ERROR: Item " + itemId + " was not able to be updated.";
         }
         String values = String.join(", ", item.getValuesAsArray());
-        return "Item now has values " + values;
+        return "Update item " + itemId + " to have values: " + values;
     }
 
     /**
@@ -198,8 +200,14 @@ public class DatabaseCLI {
         if (matcher.groupCount() > 2) {
             comment = Objects.requireNonNullElse(matcher.group(3), "");
         }
-        databasePresenter.deleteItem(itemId, comment);
-        return "FIXME: delete";
+
+        Item item = databasePresenter.deleteItem(itemId, comment);
+        if (item == null) {
+            return "ERROR: could not delete item with id " + itemId;
+        }
+
+        String values = String.join(", ", item.getValuesAsArray());
+        return "Deleted item " + itemId + " with values: " + values;
     }
 
     /**
@@ -214,7 +222,7 @@ public class DatabaseCLI {
         Item restoredItem = databasePresenter.restoreItem(itemId);
 
         if (restoredItem == null) {
-            return "ERROR: Item does not exist.";
+            return "ERROR: Item does not exist in the table " + Database.DELETED_ITEMS;
         }
         return "Restored item: " + restoredItem;
     }

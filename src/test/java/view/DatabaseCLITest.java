@@ -108,8 +108,20 @@ public class DatabaseCLITest {
     void testDeleteOneItem() {
         createItem();
         String deleteStatement = "DELETE " + testItem.getId();
-        databaseCLI.processInput(deleteStatement);
+        String consoleOutput = databaseCLI.processInput(deleteStatement);
+        assertFalse(consoleOutput.contains("ERROR"));
         assertEquals(0, database.getSizeOfTable(Database.ITEMS));
+    }
+
+    @Test
+    void testDeleteItemProducesNull() {
+        createItem();
+
+        int errorId = 1000;
+        String deleteStatement = "DELETE " + errorId;
+        String consoleOutput = databaseCLI.processInput(deleteStatement);
+        assertTrue(consoleOutput.contains("ERROR"));
+        assertEquals(1, database.getSizeOfTable(Database.ITEMS));
     }
 
     @Test
