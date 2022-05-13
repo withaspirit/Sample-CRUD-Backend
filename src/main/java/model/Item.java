@@ -89,6 +89,38 @@ public class Item {
         this.stock = stock;
     }
 
+    public static String[] getAttributeNamesAsArray() {
+        Field[] attributes = Item.class.getDeclaredFields();
+        String[] attributeNames = new String[attributes.length];
+
+        for (int i = 0; i < attributes.length; i++) {
+            attributeNames[i] = attributes[i].getName();
+        }
+        return attributeNames;
+    }
+
+    public String[] getValuesAsArray() {
+        return new String[] {
+                String.valueOf(id),
+                name,
+                price.toString(),
+                String.valueOf(stock)
+        };
+    }
+
+    /**
+     * Returns the values of all attributes as an SQL-formatted String.
+     *
+     * @return the SQL-formatted, comma-separated Item values
+     */
+    public String getValuesInSQLFormat() {
+        return String.join(", ",
+                String.valueOf(id),
+                "'" + name + "'",
+                price.scaleByPowerOfTen(2).toString(),
+                String.valueOf(stock));
+    }
+
     // TODO?: convert to and from JSONObject
 
     // https://stackoverflow.com/questions/3333974/how-to-loop-over-a-class-attributes-in-java
@@ -110,38 +142,6 @@ public class Item {
     //  probably should use string array instead
     public String getAttributeValuesExceptId() {
         return "'" + name + "'," + price.scaleByPowerOfTen(2).intValue() + ", " + stock;
-    }
-
-    /**
-     * Returns the values of all attributes as an SQL-formatted String.
-     *
-     * @return the SQL-formatted, comma-separated Item values
-     */
-    public String getValuesInSQLFormat() {
-        return String.join(", ",
-                String.valueOf(id),
-                "'" + name + "'",
-                price.scaleByPowerOfTen(2).toString(),
-                String.valueOf(stock));
-    }
-
-    public static String[] getAttributeNamesAsArray() {
-        Field[] attributes = Item.class.getDeclaredFields();
-        String[] attributeNames = new String[attributes.length];
-
-        for (int i = 0; i < attributes.length; i++) {
-            attributeNames[i] = attributes[i].getName();
-        }
-        return attributeNames;
-    }
-
-    public String[] getValuesAsArray() {
-        return new String[] {
-                String.valueOf(id),
-                name,
-                price.toString(),
-                String.valueOf(stock)
-        };
     }
 
     public String getAttributeNameValueListExceptId() {
