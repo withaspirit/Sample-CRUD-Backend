@@ -41,12 +41,17 @@ public class DatabaseCLI {
         this.databasePresenter = databasePresenter;
     }
 
+    /**
+     * Produces an introduction messages for the user.
+     */
     public void start() {
-        String introduction = "Welcome to Liam Tripp's Backend CRUD Sample.\n\n";
-        introduction += "Here is a list of commands you may choose from:\n\n";
-        System.out.println(introduction + help() + "\n");
-        System.out.println("The following tables are part of the program:");
-        System.out.println(tables() + "\n");
+        String introduction = "\nWelcome to Liam Tripp's Backend CRUD Sample.\n\n";
+        introduction += "The database for this program emulates an online store manager.\n";
+        introduction += "It contains Items which have ids, names, prices, and stock.\n";
+        introduction += "The following are the commands you may choose from:\n";
+        introduction += help() + "\n\n";
+        introduction += "You may interact with any of the following " + tables() + "\n";
+        System.out.println(introduction);
     }
 
     /**
