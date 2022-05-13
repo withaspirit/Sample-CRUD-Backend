@@ -14,7 +14,7 @@ public enum Command {
             Table.ITEMS.getName(),
             Table.DELETED_ITEMS.getName()) + ")"),
     UPDATE("(UPDATE) (\\d+) (name = '\\w+'|price = \\d+\\.\\d+|stock = \\d+)"),
-    DELETE("(DELETE) (\\d+) ?((?:\\w+)\\W*)*"),
+    DELETE("(DELETE) (\\d+) ?`((?:\\w+)\\W*)*`"),
     RESTORE("(RESTORE) (\\d+)"),
     HELP("(help)"),
     TABLES("(tables)"),
