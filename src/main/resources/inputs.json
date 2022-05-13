@@ -74,6 +74,15 @@
         "appendedText": "QUITappendedText",
         "extraText": "QUIT extraText"
       }
+    },
+    "tables": {
+      "valid": {
+        "goodFormat": "TABLES"
+      },
+      "invalid": {
+        "appendedText": "TABLESappendedText",
+        "extraText": "TABLES extraText"
+      }
     }
   }
 }

@@ -11,10 +11,11 @@ public enum Command {
     CREATE("(CREATE) (\\w+) (\\d+\\.\\d+) (\\d+)"),
     READ("(READ) (" + String.join("|", Database.ITEMS, Database.DELETED_ITEMS) + ")"), // READ [tableName]
     UPDATE("(UPDATE) (\\d+) (name = '\\w+'|price = \\d+\\.\\d+|stock = \\d+)"),
-    DELETE("(DELETE) (\\d+) ?((?:\\w+)\\W*)*"), // DELETE [itemId] [(optional) comment]
-    RESTORE("(RESTORE) (\\d+)"), // RESTORE [itemId]
+    DELETE("(DELETE) (\\d+) ?((?:\\w+)\\W*)*"),
+    RESTORE("(RESTORE) (\\d+)"),
     HELP("(help)"),
-    QUIT("(quit)");
+    QUIT("(quit)"),
+    TABLES("(tables)");
 
     private String regex;
 

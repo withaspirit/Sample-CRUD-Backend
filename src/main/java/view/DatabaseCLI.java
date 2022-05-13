@@ -88,7 +88,6 @@ public class DatabaseCLI {
      * @return a statement indicating the operation and its level of success
      */
     String executeInput(Matcher commandMatcher) {
-        // check that initial input matches command regex
         String commandAsString = commandMatcher.group(1);
         Command command = Command.getCommand(commandAsString);
         if (command == null) {
@@ -105,6 +104,7 @@ public class DatabaseCLI {
             case RESTORE -> consoleOutput = restore(commandMatcher);
             case HELP -> consoleOutput = help();
             case QUIT -> consoleOutput = quit();
+            case TABLES -> consoleOutput = tables();
             default -> consoleOutput = "ERROR: unhandled command."; // shouldn't be seen in normal program execution
         }
         return consoleOutput;
@@ -207,16 +207,17 @@ public class DatabaseCLI {
      */
     public String help() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Omit the square brackets seen in all of the following commands:\n");
+        stringBuilder.append("Omit the square brackets seen in all of the following commands:\n\n");
         String itemsEnding = " the table " + Database.ITEMS;
 
         stringBuilder.append("`CREATE [name] [dollar.cents] [stock]` - insert a row into").append(itemsEnding).append("\n");
-        stringBuilder.append("`READ [tableName]` - view the rows from one of the following tables: ").append(tables()).append("\n");
+        stringBuilder.append("`READ [tableName]` - view the rows from one of the following ").append(tables()).append("\n");
         stringBuilder.append("`UPDATE [id] [columnName] = [value]` - update a value corresponding to a column name in").append(itemsEnding).append(". Text values must be surrounded by like 'this'\n");
         stringBuilder.append("`DELETE [id] [optionalComment]` - delete a row in").append(itemsEnding).append(" while providing an optional comment").append(itemsEnding).append("\n");
         stringBuilder.append("`RESTORE [id]` - restores a row with the provided id to its corresponding table.\n");
         stringBuilder.append("`HELP` - view the list of valid commands\n");
         stringBuilder.append("`QUIT` - exit the command-line interface\n");
+        stringBuilder.append("`TABLES` - view the list of tables");
         return stringBuilder.toString();
     }
 
@@ -238,6 +239,6 @@ public class DatabaseCLI {
      * @return a list of the tables in the Database as a String
      */
     public String tables() {
-        return String.join(", ", Database.ITEMS, Database.DELETED_ITEMS);
+        return "tables: " + String.join(", ", Database.ITEMS, Database.DELETED_ITEMS);
     }
 }
