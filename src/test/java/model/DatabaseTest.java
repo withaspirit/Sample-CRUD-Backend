@@ -129,7 +129,7 @@ public class DatabaseTest {
 
         String newName = "NewName";
         String updateStatement = "name = '" + newName + "'";
-        database.updateItems(String.valueOf(testItem.getId()), updateStatement);
+        database.updateItem(String.valueOf(testItem.getId()), updateStatement);
         testItem.setName(newName);
 
         itemsList = database.selectFromTable(Database.ITEMS, "*");
@@ -148,7 +148,7 @@ public class DatabaseTest {
         testItem.setPrice(price);
         testItem.setStock(stock);
 
-        database.updateItems(String.valueOf(testItem.getId()),
+        database.updateItem(String.valueOf(testItem.getId()),
                 testItem.getAttributeNameValueListExceptId());
 
         itemsList = database.selectFromTable(Database.ITEMS, "*");

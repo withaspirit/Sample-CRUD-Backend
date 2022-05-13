@@ -61,7 +61,7 @@ public class DatabasePresenter {
     public void updateItem(Matcher matcher) {
         String itemId = matcher.group(2);
         String columnValuePair = matcher.group(3);
-        database.updateItems(itemId, columnValuePair);
+        database.updateItem(itemId, columnValuePair);
     }
 
     /**

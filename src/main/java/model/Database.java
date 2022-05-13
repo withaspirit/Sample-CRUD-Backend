@@ -127,7 +127,7 @@ public class Database {
      * @param itemId the item being updated
      * @param columnValuePairs the name-value pairs used to update the Item
      */
-    public void updateItems(String itemId, String columnValuePairs) {
+    public void updateItem(String itemId, String columnValuePairs) {
         String statementToExecute = "UPDATE " + ITEMS + " SET " +
                 columnValuePairs + " WHERE id = " + itemId;
         executeStatement(statementToExecute);
