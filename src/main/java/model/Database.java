@@ -50,18 +50,6 @@ public class Database {
         }
     }
 
-    public void closeDatabase() {
-        try {
-            if (connection != null) {
-                connection.close();
-            }
-            statement.close();
-        } catch (SQLException e) {
-            // connection close failed.
-            throw new RuntimeException(e);
-        }
-    }
-
     /**
      * Inserts a set of values into a table.
      *
@@ -186,6 +174,21 @@ public class Database {
         try {
             statement.executeUpdate(sqlStatement);
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     *
+     */
+    public void shutdown() {
+        try {
+            if (connection != null) {
+                connection.close();
+            }
+            statement.close();
+        } catch (SQLException e) {
+            // connection close failed.
             throw new RuntimeException(e);
         }
     }

@@ -33,7 +33,7 @@ public class DatabaseTest {
 
     @AfterEach
     void tearDown() {
-        database.closeDatabase();
+        database.shutdown();
     }
 
     @Test

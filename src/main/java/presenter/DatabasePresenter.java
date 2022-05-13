@@ -112,6 +112,6 @@ public class DatabasePresenter {
      * Shuts down the Database.
      */
     public void closeModel() {
-        database.closeDatabase();
+        database.shutdown();
     }
 }
