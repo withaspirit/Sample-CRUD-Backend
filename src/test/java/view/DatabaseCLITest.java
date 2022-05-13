@@ -31,7 +31,7 @@ public class DatabaseCLITest {
         database = new Database();
         database.initializeDatabase();
         databasePresenter = new DatabasePresenter();
-        databasePresenter.addModel(database);
+        databasePresenter.addDatabase(database);
         databaseCLI = new DatabaseCLI();
         databaseCLI.addPresenter(databasePresenter);
         testItem = new Item(1, "testName", "100.99", 1);

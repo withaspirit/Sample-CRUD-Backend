@@ -32,7 +32,7 @@ public class DatabasePresenterTest {
     void setup() {
         database = new Database();
         databasePresenter = new DatabasePresenter();
-        databasePresenter.addModel(database);
+        databasePresenter.addDatabase(database);
         database.initializeDatabase();
         testItem = new Item(1, "testName", "100.99", 1);
     }

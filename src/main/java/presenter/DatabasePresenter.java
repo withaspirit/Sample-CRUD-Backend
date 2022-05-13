@@ -29,7 +29,7 @@ public class DatabasePresenter {
      *
      * @param database the database to be manipulated
      */
-    public void addModel(Database database) {
+    public void addDatabase(Database database) {
         this.database = database;
     }
 

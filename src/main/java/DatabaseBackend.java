@@ -24,7 +24,7 @@ public class DatabaseBackend {
 
         database.initializeDatabase();
         database.populateDatabase();
-        databasePresenter.addModel(database);
+        databasePresenter.addDatabase(database);
         databaseCLI.addPresenter(databasePresenter);
     }
 
