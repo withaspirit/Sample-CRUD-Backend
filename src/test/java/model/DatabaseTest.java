@@ -47,12 +47,12 @@ public class DatabaseTest {
         assertEquals(testItem, itemFromDatabase);
     }
 
-    @Test
-    void testDatabaseItemEqualityNoDecimal() {
+    @ParameterizedTest
+    @ValueSource(strings = {"0", "0.", ".0", "0.0", "100.99", "10000.999"})
+    void testSelectingFromDatabaseValidWithDifferentPrices(String price) {
+        testItem.setPrice(price);
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
                 testItem.getValuesInSQLFormatExceptId());
-
-        assertEquals(1, database.getSizeOfTable(Database.ITEMS));
 
         itemsList = database.selectFromTable(Database.ITEMS, "*");
         Item itemFromDatabase = itemsList.get(0);
@@ -63,14 +63,6 @@ public class DatabaseTest {
     void testDatabasePopulatedWithCorrectNumberOfItems() {
         database.populateDatabase();
         assertEquals(itemsJSONArray.size(), database.getSizeOfTable(Database.ITEMS));
-    }
-
-    @Test
-    void testPopulatedDatabaseItemEquality() {
-        database.populateDatabase();
-        itemsList = database.selectFromTable(Database.ITEMS, "*");
-        // TODO: compare itemList Items with those from itemsJSONArray
-        //   maybe add constructor for Item from JSONObject
     }
 
     @Test
@@ -87,15 +79,6 @@ public class DatabaseTest {
         database.deleteFromTable(Database.ITEMS, String.valueOf(testItem.getId()));
 
         assertEquals(0, database.getSizeOfTable(Database.ITEMS));
-    }
-
-    @Test
-    void testSelectingFromDatabaseItemWithDecimalPrice() {
-        database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
-                testItem.getValuesInSQLFormatExceptId());
-
-        itemsList = database.selectFromTable(Database.ITEMS, "*");
-        assertEquals(testItem, itemsList.get(0));
     }
 
     @ParameterizedTest
