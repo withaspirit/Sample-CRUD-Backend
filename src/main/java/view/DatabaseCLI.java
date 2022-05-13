@@ -108,8 +108,8 @@ public class DatabaseCLI {
             case DELETE -> consoleOutput = delete(commandMatcher);
             case RESTORE -> consoleOutput = restore(commandMatcher);
             case HELP -> consoleOutput = help();
-            case QUIT -> consoleOutput = quit();
             case TABLES -> consoleOutput = tables();
+            case QUIT -> consoleOutput = quit();
             default -> consoleOutput = "ERROR: unhandled command."; // shouldn't be seen in normal program execution
         }
         return consoleOutput;
@@ -217,13 +217,22 @@ public class DatabaseCLI {
 
         stringBuilder.append("`CREATE [name] [dollar.cents] [stock]` - insert a row into").append(itemsEnding).append("\n");
         stringBuilder.append("`READ [tableName]` - view the rows from one of the following ").append(tables()).append("\n");
-        stringBuilder.append("`UPDATE [id] [columnName] = [value]` - update a value corresponding to a column name in").append(itemsEnding).append(". Text values must be surrounded by like 'this'\n");
+        stringBuilder.append("`UPDATE [id] [columnName] = [value]` - update a value corresponding to a column name in").append(itemsEnding).append(". Text values must be quoted like 'this'\n");
         stringBuilder.append("`DELETE [id] [optionalComment]` - delete a row in").append(itemsEnding).append(" while providing an optional comment").append(itemsEnding).append("\n");
         stringBuilder.append("`RESTORE [id]` - restores a row with the provided id to its corresponding table.\n");
         stringBuilder.append("`HELP` - view the list of valid commands\n");
-        stringBuilder.append("`QUIT` - exit the command-line interface\n");
         stringBuilder.append("`TABLES` - view the list of tables");
+        stringBuilder.append("`QUIT` - exit the command-line interface\n");
         return stringBuilder.toString();
+    }
+
+    /**
+     * Returns a list of the tables in the Database.
+     *
+     * @return a list of the tables in the Database as a String
+     */
+    public String tables() {
+        return "tables: " + String.join(", ", Database.ITEMS, Database.DELETED_ITEMS);
     }
 
     /**
@@ -236,14 +245,5 @@ public class DatabaseCLI {
         userWantsToQuit = true;
         databasePresenter.closeModel();
         return "Exiting program.";
-    }
-
-    /**
-     * Returns a list of the tables in the Database.
-     *
-     * @return a list of the tables in the Database as a String
-     */
-    public String tables() {
-        return "tables: " + String.join(", ", Database.ITEMS, Database.DELETED_ITEMS);
     }
 }

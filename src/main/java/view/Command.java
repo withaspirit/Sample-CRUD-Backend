@@ -14,8 +14,8 @@ public enum Command {
     DELETE("(DELETE) (\\d+) ?((?:\\w+)\\W*)*"),
     RESTORE("(RESTORE) (\\d+)"),
     HELP("(help)"),
-    QUIT("(quit)"),
-    TABLES("(tables)");
+    TABLES("(tables)"),
+    QUIT("(quit)");
 
     private String regex;
 
