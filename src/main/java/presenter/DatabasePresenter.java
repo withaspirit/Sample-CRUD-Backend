@@ -4,7 +4,7 @@ import model.Database;
 import model.DeletedItem;
 import model.Item;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 
 /**
@@ -29,7 +29,7 @@ public class DatabasePresenter {
      *
      * @param database the database to be manipulated
      */
-    public void addModel(Database database) {
+    public void addDatabase(Database database) {
         this.database = database;
     }
 
@@ -40,13 +40,13 @@ public class DatabasePresenter {
      */
     public void createItem(Item item) {
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
-                item.getAttributeValuesExceptId());
+                item.getValuesInSQLFormatExceptId());
     }
 
     /**
      * Returns a list of all items from the selected table.
      */
-    public ArrayList<Item> readFromTable(String tableName) {
+    public List<Item> readFromTable(String tableName) {
         if (!tableName.equals(Database.ITEMS) && !(tableName.equals(Database.DELETED_ITEMS))) {
             return null;
         }
@@ -61,7 +61,7 @@ public class DatabasePresenter {
     public void updateItem(Matcher matcher) {
         String itemId = matcher.group(2);
         String columnValuePair = matcher.group(3);
-        database.updateItems(itemId, columnValuePair);
+        database.updateItem(itemId, columnValuePair);
     }
 
     /**
@@ -72,10 +72,12 @@ public class DatabasePresenter {
      * @param comment (optional) the user's comment for the item's deletion
      */
     public void deleteItem(String itemId, String comment) {
-        Item item = database.selectFromTable(Database.ITEMS, "*", itemId);
-        if (item == null) {
+        List<Item> items = database.selectFromTable(Database.ITEMS, "*", itemId);
+        if (items.isEmpty()) {
             return;
         }
+        Item item = items.get(0);
+
         String columns;
         String values = item.getValuesInSQLFormat();
         if (!comment.isBlank()) {
@@ -96,10 +98,11 @@ public class DatabasePresenter {
      * @return the item that was restored
      */
     public Item restoreItem(String itemId) {
-        Item item = database.selectFromTable(Database.DELETED_ITEMS, "*", itemId);
-        if (item == null) {
+        List<Item> items = database.selectFromTable(Database.DELETED_ITEMS, "*", itemId);
+        if (items.isEmpty()) {
             return null;
         }
+        Item item = items.get(0);
 
         database.deleteFromTable(Database.DELETED_ITEMS, itemId);
         String values = item.getValuesInSQLFormat(); // exclude comment
@@ -111,7 +114,7 @@ public class DatabasePresenter {
     /**
      * Shuts down the Database.
      */
-    public void closeModel() {
-        database.closeDatabase();
+    public void terminateDatabase() {
+        database.shutdown();
     }
 }

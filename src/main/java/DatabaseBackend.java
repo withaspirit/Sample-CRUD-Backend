@@ -24,7 +24,7 @@ public class DatabaseBackend {
 
         database.initializeDatabase();
         database.populateDatabase();
-        databasePresenter.addModel(database);
+        databasePresenter.addDatabase(database);
         databaseCLI.addPresenter(databasePresenter);
     }
 
@@ -34,8 +34,11 @@ public class DatabaseBackend {
     public void execute() {
         database.initializeDatabase();
         database.populateDatabase();
-        databaseCLI.start();
-        databaseCLI.loopConsole();
+
+        databaseCLI.introduction();
+        while (databaseCLI.userWantsToQuit() == false) {
+            databaseCLI.promptUserForInput();
+        }
     }
 
     public static void main(String[] args) {

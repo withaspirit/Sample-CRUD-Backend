@@ -2,12 +2,13 @@ package view;
 
 import model.Database;
 import model.Item;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import presenter.DatabasePresenter;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,10 +31,15 @@ public class DatabaseCLITest {
         database = new Database();
         database.initializeDatabase();
         databasePresenter = new DatabasePresenter();
-        databasePresenter.addModel(database);
+        databasePresenter.addDatabase(database);
         databaseCLI = new DatabaseCLI();
         databaseCLI.addPresenter(databasePresenter);
         testItem = new Item(1, "testName", "100.99", 1);
+    }
+
+    @AfterEach
+    void tearDown() {
+        databaseCLI.quit();
     }
 
     /**
@@ -72,7 +78,7 @@ public class DatabaseCLITest {
     @Test
     void testUpdateOneItemOneAttribute() {
         createItem();
-        ArrayList<Item> items = database.selectFromTable(Database.ITEMS, "*");
+        List<Item> items = database.selectFromTable(Database.ITEMS, "*");
         Item originalItem = items.get(0);
 
         String newName = "newTestName";

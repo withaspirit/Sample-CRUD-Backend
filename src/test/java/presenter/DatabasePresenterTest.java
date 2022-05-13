@@ -3,6 +3,7 @@ package presenter;
 import model.Database;
 import model.DeletedItem;
 import model.Item;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -10,7 +11,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import view.Command;
 import view.InputMatcher;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,9 +32,14 @@ public class DatabasePresenterTest {
     void setup() {
         database = new Database();
         databasePresenter = new DatabasePresenter();
-        databasePresenter.addModel(database);
+        databasePresenter.addDatabase(database);
         database.initializeDatabase();
         testItem = new Item(1, "testName", "100.99", 1);
+    }
+
+    @AfterEach
+    void tearDown() {
+        databasePresenter.terminateDatabase();
     }
 
     public DeletedItem deleteItemWithComment(String comment) {
@@ -50,20 +56,21 @@ public class DatabasePresenterTest {
         databasePresenter.createItem(testItem);
         assertEquals(1, database.getSizeOfTable(Database.ITEMS));
 
-        ArrayList<Item> items = database.selectFromTable(Database.ITEMS, "*");
+        List<Item> items = database.selectFromTable(Database.ITEMS, "*");
         assertEquals(testItem, items.get(0));
     }
 
     @Test
     void testReadValidTableName() {
-        ArrayList<Item> items = databasePresenter.readFromTable(Database.ITEMS);
+        database.populateDatabase();
+        List<Item> items = databasePresenter.readFromTable(Database.ITEMS);
         assertNotNull(items);
     }
 
     @Test
     void testReadInvalidTableName() {
         String testName = "InvalidName";
-        ArrayList<Item> items = databasePresenter.readFromTable(testName);
+        List<Item> items = databasePresenter.readFromTable(testName);
         assertNull(items);
     }
 
@@ -86,7 +93,7 @@ public class DatabasePresenterTest {
         testItem.setName(updatedName);
 
         assertEquals(1, database.getSizeOfTable(Database.ITEMS));
-        ArrayList<Item> items = databasePresenter.readFromTable(Database.ITEMS);
+        List<Item> items = databasePresenter.readFromTable(Database.ITEMS);
         assertEquals(testItem, items.get(0));
     }
 
@@ -112,7 +119,7 @@ public class DatabasePresenterTest {
         DeletedItem deletedItem = deleteItemWithComment(comment);
         String itemId = String.valueOf(deletedItem.getId());
 
-        Item item = database.selectFromTable(Database.DELETED_ITEMS, "*", itemId);
+        Item item = database.selectFromTable(Database.DELETED_ITEMS, "*", itemId).get(0);
         DeletedItem deletedItemFromTable = (DeletedItem) item;
         assertEquals(deletedItem, deletedItemFromTable);
     }
@@ -131,7 +138,7 @@ public class DatabasePresenterTest {
         DeletedItem deletedItem = deleteItemWithComment(comment);
         String itemId = String.valueOf(deletedItem.getId());
 
-        Item retrievedItem = database.selectFromTable(Database.DELETED_ITEMS, "*", itemId);
+        Item retrievedItem = database.selectFromTable(Database.DELETED_ITEMS, "*", itemId).get(0);
         Item restoredItem = databasePresenter.restoreItem(itemId);
         assertEquals(testItem, retrievedItem);
         assertEquals(testItem, restoredItem);

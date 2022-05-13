@@ -8,8 +8,9 @@ import org.json.simple.parser.ParseException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * InputFileReader allows files to be read and returned as usable objects.
@@ -53,19 +54,23 @@ public class InputFileReader {
         return sqlTable;
     }
 
-    public String[] getValuesToInsert() {
+    /**
+     * Returns a list of items from the items.json file.
+     *
+     * @return a list of items from the items.json file.
+     */
+    public List<Item> getItemsFromJSONFile() {
         if (!fileEnding.equals(JSON)) {
-            throw new IllegalArgumentException("File type must be .json.");
+            throw new IllegalArgumentException("File type must be .json");
         }
-        JSONArray itemsJSONArray = createJSONArray(fileName);
 
-        String[] valuesToInsert = new String[itemsJSONArray.size()];
-        for (int i = 0; i < itemsJSONArray.size(); i++) {
-            JSONObject jsonItem = (JSONObject) itemsJSONArray.get(i);
-            Item item = new Item(jsonItem);
-            valuesToInsert[i] = item.getAttributeValuesExceptId();
+        List<Item> items = new ArrayList<>();
+        JSONArray itemsJSONArray = createJSONArray(fileName);
+        for (Object object : itemsJSONArray) {
+            JSONObject jsonItem = (JSONObject) object;
+            items.add(new Item(jsonItem));
         }
-        return valuesToInsert;
+        return items;
     }
 
     /**
@@ -93,7 +98,7 @@ public class InputFileReader {
         InputStream inputStream = createInputStream();
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
         JSONParser parser = new JSONParser();
-        Object obj = null;
+        Object obj;
 
         try {
             obj = parser.parse(inputStreamReader);

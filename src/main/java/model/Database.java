@@ -2,6 +2,7 @@ package model;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Database contains the CRUD functionality for the SQLite database.
@@ -16,7 +17,7 @@ public class Database {
     public final static String ITEMS = "items";
     public final static String DELETED_ITEMS = "deleted_items";
     private final static String CLASS_LOADER_NAME = "org.sqlite.JDBC";
-    private final static String DATABASE_NAME = "jdbc:sqlite:items.db";
+    private final static String DATABASE_NAME = "jdbc:sqlite:warehouse.db";
 
     public Database() {
         // load the sqlite-JDBC driver using the current class loader
@@ -33,32 +34,26 @@ public class Database {
         }
     }
 
+    /**
+     * Creates the database.
+     */
     public void initializeDatabase() {
         InputFileReader inputFileReader = new InputFileReader("DDL", "sql");
         String sqlTableCreateStatement = inputFileReader.getSQLFileAsString();
         executeStatement(sqlTableCreateStatement);
     }
 
+    /**
+     * Adds values from items.json to the ITEMS table.
+     */
     public void populateDatabase() {
         InputFileReader inputFileReader = new InputFileReader(ITEMS, "json");
-        // FIXME: insertion arguments inconsistent
-        String[] valuesToInsert = inputFileReader.getValuesToInsert();
+        List<Item> itemsFromJSONFile = inputFileReader.getItemsFromJSONFile();
+
         String columnsToInsert = Item.getAttributeNamesExceptId();
-
-        for (String values : valuesToInsert) {
-            insert(ITEMS, columnsToInsert, values);
-        }
-    }
-
-    public void closeDatabase() {
-        try {
-            if (connection != null) {
-                connection.close();
-            }
-            statement.close();
-        } catch (SQLException e) {
-            // connection close failed.
-            throw new RuntimeException(e);
+        for (Item item : itemsFromJSONFile) {
+            String valuesToInsert = item.getValuesInSQLFormatExceptId();
+            insert(ITEMS, columnsToInsert, valuesToInsert);
         }
     }
 
@@ -76,15 +71,18 @@ public class Database {
     }
 
     /**
-     * Selects and returns an ArrayList of Items from the selected table.
+     * Selects and returns one or more Items from the selected table.
+     * If itemId is left blank, it returns a list of items. Otherwise, it
+     * returns a single item.
      *
      * @param tableName the name of the table being selected from
-     * @param selectedItems the range of items to be selected
-     * @return arrayList of selected items in the selected table
+     * @param selectedColumns the columns to be selected
+     * @param itemId the provided itemId
+     * @return list of selected rows in the selected table
      */
-    public ArrayList<Item> selectFromTable(String tableName, String selectedItems) {
-        ResultSet resultSet = getResultSet(tableName, selectedItems);
-        ArrayList<Item> items = new ArrayList<>();
+    public List<Item> selectFromTable(String tableName, String selectedColumns, String itemId) {
+        ResultSet resultSet = getResultSet(tableName, selectedColumns, itemId);
+        List<Item> items = new ArrayList<>();
 
         try {
             while (resultSet.next()) {
@@ -95,6 +93,7 @@ public class Database {
                     Item item = new Item(resultSet);
                     items.add(item);
                 }
+
             }
             resultSet.close();
         } catch (SQLException e) {
@@ -104,37 +103,26 @@ public class Database {
     }
 
     /**
-     * Selects and returns an Item from the selected table.
+     * Selects and returns a list of Items from the selected table.
      *
      * @param tableName the name of the table being selected from
-     * @param selectedColumns the columns to be selected
-     * @param itemId the provided item id
-     * @return arrayList of selected items in the selected table
+     * @param selectedColumns the range of columns to be selected
+     * @return list of selected items in the selected table
      */
-    public Item selectFromTable(String tableName, String selectedColumns, String itemId) {
-        ResultSet resultSet = getResultSet(tableName, selectedColumns, itemId);
-        ArrayList<Item> items = new ArrayList<>();
+    public List<Item> selectFromTable(String tableName, String selectedColumns) {
+        return selectFromTable(tableName, selectedColumns, "");
+    }
 
-        try {
-            while (resultSet.next()) {
-                if (tableName.equals(Database.DELETED_ITEMS)) {
-                    DeletedItem item = new DeletedItem(resultSet);
-                    items.add(item);
-                } else {
-                    Item item = new Item(resultSet);
-                    items.add(item);
-                }
-
-            }
-            resultSet.close();
-        } catch (SQLException e) {
-
-            throw new RuntimeException(e);
-        }
-        if (items.isEmpty()) {
-            return null;
-        }
-        return items.get(0);
+    /**
+     * Updates a single attribute of a single item from a table
+     *
+     * @param itemId the item being updated
+     * @param columnValuePairs the name-value pairs used to update the Item
+     */
+    public void updateItem(String itemId, String columnValuePairs) {
+        String statementToExecute = "UPDATE " + ITEMS + " SET " +
+                columnValuePairs + " WHERE id = " + itemId;
+        executeStatement(statementToExecute);
     }
 
     /**
@@ -144,13 +132,8 @@ public class Database {
      * @param itemId the provided item ids
      */
     public void deleteFromTable(String tableName, String itemId) {
-        String statementToExecute = "DELETE FROM " + tableName + " WHERE id = " + itemId;
-        executeStatement(statementToExecute);
-    }
-
-    public void updateItems(String itemId, String columnValuePairs) {
-        String statementToExecute = "UPDATE " + ITEMS + " SET " +
-                columnValuePairs + " WHERE id = " + itemId;
+        String statementToExecute = "DELETE FROM " + tableName +
+                " WHERE id = " + itemId;
         executeStatement(statementToExecute);
     }
 
@@ -166,33 +149,19 @@ public class Database {
 
     /**
      * Selects and returns a ResultSet of selected rows from a selected table.
+     * If itemId is blank, it selects all rows in the table.
      *
      * @param tableName the name of the table
-     * @param selectedRows the rows to be selected
-     * @return resultSet containing rows of a table
+     * @param selectedColumns the columns to be selected
+     * @param itemId if left blank, returns . Otherwise, returns a single item
+     * @return resultSet containing one or more rows of a table
      */
-    public ResultSet getResultSet(String tableName, String selectedRows) {
-        // TODO?: add "where"
-        String statementToExecute = "SELECT " + selectedRows + " FROM " + tableName;
-        try {
-            return statement.executeQuery(statementToExecute);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+    public ResultSet getResultSet(String tableName, String selectedColumns, String itemId) {
+        String statementToExecute = "SELECT " + selectedColumns + " FROM " + tableName;
+        if (!itemId.isBlank()) {
+            statementToExecute += " WHERE id = " + itemId;
         }
-    }
 
-    /**
-     * Selects and returns a ResultSet of selected rows from a selected table.
-     *
-     * @param tableName the name of the table
-     * @param selectedRows the rows to be selected
-     * @param itemId the itd of the item being retrieved
-     * @return resultSet containing row of a table
-     */
-    public ResultSet getResultSet(String tableName, String selectedRows, String itemId) {
-        // TODO?: add "where"
-        String statementToExecute = "SELECT " + selectedRows + " FROM " + tableName +
-                " WHERE id = " + itemId;
         try {
             return statement.executeQuery(statementToExecute);
         } catch (SQLException e) {
@@ -209,6 +178,21 @@ public class Database {
         try {
             statement.executeUpdate(sqlStatement);
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Terminates the database's connection and statement.
+     */
+    public void shutdown() {
+        try {
+            if (connection != null) {
+                connection.close();
+            }
+            statement.close();
+        } catch (SQLException e) {
+            // connection close failed.
             throw new RuntimeException(e);
         }
     }
