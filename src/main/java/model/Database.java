@@ -42,7 +42,7 @@ public class Database {
     public void populateDatabase() {
         InputFileReader inputFileReader = new InputFileReader(ITEMS, "json");
         // FIXME: insertion arguments inconsistent
-        String[] valuesToInsert = inputFileReader.getValuesToInsert();
+        String[] valuesToInsert = inputFileReader.getValuesToInsertFromJSONFile();
         String columnsToInsert = Item.getAttributeNamesExceptId();
 
         for (String values : valuesToInsert) {

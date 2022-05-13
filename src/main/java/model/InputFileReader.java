@@ -8,7 +8,6 @@ import org.json.simple.parser.ParseException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -53,9 +52,9 @@ public class InputFileReader {
         return sqlTable;
     }
 
-    public String[] getValuesToInsert() {
+    public String[] getValuesToInsertFromJSONFile() {
         if (!fileEnding.equals(JSON)) {
-            throw new IllegalArgumentException("File type must be .json.");
+            throw new IllegalArgumentException("File type must be .json");
         }
         JSONArray itemsJSONArray = createJSONArray(fileName);
 
