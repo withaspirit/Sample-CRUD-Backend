@@ -101,6 +101,16 @@ public class Item {
         return price;
     }
 
+    /**
+     * Returns price multiplied by 100 to allow it to be stored as an integer
+     * in an SQL table.
+     *
+     * @return bigDecimal price multiplied by 100
+     */
+    public BigDecimal getPriceTimes100() {
+        return price.scaleByPowerOfTen(2);
+    }
+
     public void setPrice(String priceAsDecimalString) {
         double priceAsDouble = Double.parseDouble(priceAsDecimalString);
         String priceAsDecimal = String.format("%.2f", priceAsDouble);
@@ -163,7 +173,7 @@ public class Item {
     public String getValuesInSQLFormatExceptId() {
         return String.join(", ",
                 getNameInQuotes(),
-                price.scaleByPowerOfTen(2).toString(),
+                getPriceTimes100().toString(),
                 String.valueOf(stock));
     }
 
@@ -177,7 +187,7 @@ public class Item {
     public String getAttributeNameValueListExceptId() {
         return String.join(", ",
                 "name = " + getNameInQuotes(),
-                "price = " + price.scaleByPowerOfTen(2).intValue(),
+                "price = " + getPriceTimes100().intValue(),
                 ("stock = " + stock));
     }
 

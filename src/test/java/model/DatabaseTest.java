@@ -36,6 +36,19 @@ public class DatabaseTest {
         database.shutdown();
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = {"0", "0.", ".0", "0.0", "100.99", "10000.999"})
+    void testItemResultSetConstructorConvertsPricesCorrectly(String price) {
+        testItem.setPrice(price);
+        database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
+                testItem.getValuesInSQLFormatExceptId());
+
+        // Item's ResultSet constructor is used here
+        itemsList = database.selectFromTable(Database.ITEMS, "*");
+        Item itemFromDatabase = itemsList.get(0);
+        assertEquals(testItem, itemFromDatabase);
+    }
+
     @Test
     void testDatabaseInsertionForOneItem() {
         database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
@@ -48,28 +61,16 @@ public class DatabaseTest {
     }
 
     @Test
-    void testDatabasePopulatedWithCorrectNumberOfItems() {
-        database.populateDatabase();
-        assertEquals(itemsJSONArray.size(), database.getSizeOfTable(Database.ITEMS));
-    }
-
-    @Test
     void testInsertIntoDeletedItems() {
         database.insert(Database.DELETED_ITEMS, Item.getAttributeNamesExceptId(),
                 testItem.getValuesInSQLFormatExceptId());
         assertEquals(1, database.getSizeOfTable(Database.DELETED_ITEMS));
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = {"0", "0.", ".0", "0.0", "100.99", "10000.999"})
-    void testSelectingFromDatabaseValidWithDifferentPrices(String price) {
-        testItem.setPrice(price);
-        database.insert(Database.ITEMS, Item.getAttributeNamesExceptId(),
-                testItem.getValuesInSQLFormatExceptId());
-
-        itemsList = database.selectFromTable(Database.ITEMS, "*");
-        Item itemFromDatabase = itemsList.get(0);
-        assertEquals(testItem, itemFromDatabase);
+    @Test
+    void testDatabasePopulatedWithCorrectNumberOfItems() {
+        database.populateDatabase();
+        assertEquals(itemsJSONArray.size(), database.getSizeOfTable(Database.ITEMS));
     }
 
     @ParameterizedTest
