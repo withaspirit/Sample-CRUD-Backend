@@ -54,7 +54,7 @@ public class DatabaseCLI {
 
         do {
             System.out.print("Enter command: ");
-            String initialInput = scanner.nextLine().toLowerCase();
+            String initialInput = scanner.nextLine().toLowerCase().trim();
             String consoleOutput = processInput(initialInput);
             System.out.println(consoleOutput);
             System.out.println();
