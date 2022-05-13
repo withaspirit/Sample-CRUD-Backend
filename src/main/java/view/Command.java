@@ -13,7 +13,7 @@ public enum Command {
             Table.ITEMS.getName(),
             Table.DELETED_ITEMS.getName()) + ")"),
     UPDATE("(UPDATE) (\\d+) (name = '\\w+'|price = \\d+\\.\\d+|stock = \\d+)"),
-    DELETE("(DELETE) (\\d+) ?`((?:\\w+)\\W*)*`"),
+    DELETE("(DELETE) (\\d+) ?(.+)?"),
     RESTORE("(RESTORE) (\\d+)"),
     HELP("(help)"),
     TABLES("(tables)"),
