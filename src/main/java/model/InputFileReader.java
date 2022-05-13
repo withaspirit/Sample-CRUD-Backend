@@ -55,9 +55,9 @@ public class InputFileReader {
     }
 
     /**
-     * Returns an ArrayList of items from the items.json file.
+     * Returns a list of items from the items.json file.
      *
-     * @return an ArrayList of items from the items.json file.
+     * @return a list of items from the items.json file.
      */
     public List<Item> getItemsFromJSONFile() {
         if (!fileEnding.equals(JSON)) {
@@ -98,7 +98,7 @@ public class InputFileReader {
         InputStream inputStream = createInputStream();
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
         JSONParser parser = new JSONParser();
-        Object obj = null;
+        Object obj;
 
         try {
             obj = parser.parse(inputStreamReader);

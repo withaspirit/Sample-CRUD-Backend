@@ -7,8 +7,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import presenter.DatabasePresenter;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -78,7 +78,7 @@ public class DatabaseCLITest {
     @Test
     void testUpdateOneItemOneAttribute() {
         createItem();
-        ArrayList<Item> items = database.selectFromTable(Database.ITEMS, "*");
+        List<Item> items = database.selectFromTable(Database.ITEMS, "*");
         Item originalItem = items.get(0);
 
         String newName = "newTestName";

@@ -5,10 +5,7 @@ import model.DeletedItem;
 import model.Item;
 import presenter.DatabasePresenter;
 
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Matcher;
 
 /**
@@ -137,7 +134,7 @@ public class DatabaseCLI {
     public String read(Matcher matcher) {
         // matcher.group(1) is "READ", group(2) is tableName
         String tableName = matcher.group(2);
-        ArrayList<Item> items = databasePresenter.readFromTable(tableName);
+        List<Item> items = databasePresenter.readFromTable(tableName);
 
         if (items.isEmpty()) {
             return tableName + " is empty.";

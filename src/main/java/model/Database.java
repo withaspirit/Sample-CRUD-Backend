@@ -78,11 +78,11 @@ public class Database {
      * @param tableName the name of the table being selected from
      * @param selectedColumns the columns to be selected
      * @param itemId the provided itemId
-     * @return arrayList of selected rows in the selected table
+     * @return list of selected rows in the selected table
      */
-    public ArrayList<Item> selectFromTable(String tableName, String selectedColumns, String itemId) {
+    public List<Item> selectFromTable(String tableName, String selectedColumns, String itemId) {
         ResultSet resultSet = getResultSet(tableName, selectedColumns, itemId);
-        ArrayList<Item> items = new ArrayList<>();
+        List<Item> items = new ArrayList<>();
 
         try {
             while (resultSet.next()) {
@@ -103,13 +103,13 @@ public class Database {
     }
 
     /**
-     * Selects and returns an ArrayList of Items from the selected table.
+     * Selects and returns a list of Items from the selected table.
      *
      * @param tableName the name of the table being selected from
      * @param selectedColumns the range of columns to be selected
-     * @return arrayList of selected items in the selected table
+     * @return list of selected items in the selected table
      */
-    public ArrayList<Item> selectFromTable(String tableName, String selectedColumns) {
+    public List<Item> selectFromTable(String tableName, String selectedColumns) {
         return selectFromTable(tableName, selectedColumns, "");
     }
 

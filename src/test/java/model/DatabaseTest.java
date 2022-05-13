@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class DatabaseTest {
 
     private Database database;
-    private ArrayList<Item> itemsList;
+    private List<Item> itemsList;
     private JSONArray itemsJSONArray;
     private final Item testItem = new Item(1, "testItem", "100.99", 0);
 
@@ -101,7 +101,7 @@ public class DatabaseTest {
     @ParameterizedTest
     @ValueSource(strings = {"1", "-1"}) // empty table, invalid id
     void testSelectingFromTableWithInvalidInputProducesNull(String itemId) {
-        ArrayList<Item> items = database.selectFromTable(Database.DELETED_ITEMS,
+        List<Item> items = database.selectFromTable(Database.DELETED_ITEMS,
                 "*", itemId);
         assertTrue(items.isEmpty());
     }

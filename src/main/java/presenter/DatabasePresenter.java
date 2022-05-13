@@ -4,7 +4,7 @@ import model.Database;
 import model.DeletedItem;
 import model.Item;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 
 /**
@@ -46,7 +46,7 @@ public class DatabasePresenter {
     /**
      * Returns a list of all items from the selected table.
      */
-    public ArrayList<Item> readFromTable(String tableName) {
+    public List<Item> readFromTable(String tableName) {
         if (!tableName.equals(Database.ITEMS) && !(tableName.equals(Database.DELETED_ITEMS))) {
             return null;
         }
@@ -72,7 +72,7 @@ public class DatabasePresenter {
      * @param comment (optional) the user's comment for the item's deletion
      */
     public void deleteItem(String itemId, String comment) {
-        ArrayList<Item> items = database.selectFromTable(Database.ITEMS, "*", itemId);
+        List<Item> items = database.selectFromTable(Database.ITEMS, "*", itemId);
         if (items.isEmpty()) {
             return;
         }
@@ -98,7 +98,7 @@ public class DatabasePresenter {
      * @return the item that was restored
      */
     public Item restoreItem(String itemId) {
-        ArrayList<Item> items = database.selectFromTable(Database.DELETED_ITEMS, "*", itemId);
+        List<Item> items = database.selectFromTable(Database.DELETED_ITEMS, "*", itemId);
         if (items.isEmpty()) {
             return null;
         }

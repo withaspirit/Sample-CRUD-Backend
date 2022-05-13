@@ -11,7 +11,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import view.Command;
 import view.InputMatcher;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -56,21 +56,21 @@ public class DatabasePresenterTest {
         databasePresenter.createItem(testItem);
         assertEquals(1, database.getSizeOfTable(Database.ITEMS));
 
-        ArrayList<Item> items = database.selectFromTable(Database.ITEMS, "*");
+        List<Item> items = database.selectFromTable(Database.ITEMS, "*");
         assertEquals(testItem, items.get(0));
     }
 
     @Test
     void testReadValidTableName() {
         database.populateDatabase();
-        ArrayList<Item> items = databasePresenter.readFromTable(Database.ITEMS);
+        List<Item> items = databasePresenter.readFromTable(Database.ITEMS);
         assertNotNull(items);
     }
 
     @Test
     void testReadInvalidTableName() {
         String testName = "InvalidName";
-        ArrayList<Item> items = databasePresenter.readFromTable(testName);
+        List<Item> items = databasePresenter.readFromTable(testName);
         assertNull(items);
     }
 
@@ -93,7 +93,7 @@ public class DatabasePresenterTest {
         testItem.setName(updatedName);
 
         assertEquals(1, database.getSizeOfTable(Database.ITEMS));
-        ArrayList<Item> items = databasePresenter.readFromTable(Database.ITEMS);
+        List<Item> items = databasePresenter.readFromTable(Database.ITEMS);
         assertEquals(testItem, items.get(0));
     }
 
