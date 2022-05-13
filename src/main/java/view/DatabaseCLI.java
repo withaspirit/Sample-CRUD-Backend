@@ -207,16 +207,16 @@ public class DatabaseCLI {
      */
     public String help() {
         StringBuilder stringBuilder = new StringBuilder();
-        String itemsEnding = " the table '" + Database.ITEMS + "'\n";
+        stringBuilder.append("Omit the square brackets seen in all of the following commands:\n");
+        String itemsEnding = " the table " + Database.ITEMS;
 
-        stringBuilder.append("CREATE - insert a row into").append(itemsEnding);
-        stringBuilder.append("READ - view the entries from one of the following tables: ")
-                .append(tables()).append("\n");
-        stringBuilder.append("UPDATE - update a row in").append(itemsEnding);
-        stringBuilder.append("DELETE - delete a row in").append(itemsEnding);
-        stringBuilder.append("`RESTORE [id]` - restores an item with the provided id to its corresponding table.\n");
-        stringBuilder.append("HELP - view the list of valid commands\n");
-        stringBuilder.append("QUIT - exit the command-line interface");
+        stringBuilder.append("`CREATE [name] [dollar.cents] [stock]` - insert a row into").append(itemsEnding).append("\n");
+        stringBuilder.append("`READ [tableName]` - view the rows from one of the following tables: ").append(tables()).append("\n");
+        stringBuilder.append("`UPDATE [id] [columnName] = [value]` - update a value corresponding to a column name in").append(itemsEnding).append(". Text values must be surrounded by like 'this'\n");
+        stringBuilder.append("`DELETE [id] [optionalComment]` - delete a row in").append(itemsEnding).append(" while providing an optional comment").append(itemsEnding).append("\n");
+        stringBuilder.append("`RESTORE [id]` - restores a row with the provided id to its corresponding table.\n");
+        stringBuilder.append("`HELP` - view the list of valid commands\n");
+        stringBuilder.append("`QUIT` - exit the command-line interface\n");
         return stringBuilder.toString();
     }
 
