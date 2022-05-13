@@ -166,14 +166,19 @@ public class Database {
 
     /**
      * Selects and returns a ResultSet of selected rows from a selected table.
+     * If itemId is blank, it selects all rows in the table.
      *
      * @param tableName the name of the table
      * @param selectedRows the rows to be selected
-     * @return resultSet containing rows of a table
+     * @param itemId (optional) the id of the item being retrieved
+     * @return resultSet containing one or more rows of a table
      */
-    public ResultSet getResultSet(String tableName, String selectedRows) {
-        // TODO?: add "where"
+    public ResultSet getResultSet(String tableName, String selectedRows, String itemId) {
         String statementToExecute = "SELECT " + selectedRows + " FROM " + tableName;
+        if (!itemId.isBlank()) {
+            statementToExecute += " WHERE id = " + itemId;
+        }
+
         try {
             return statement.executeQuery(statementToExecute);
         } catch (SQLException e) {
@@ -186,18 +191,10 @@ public class Database {
      *
      * @param tableName the name of the table
      * @param selectedRows the rows to be selected
-     * @param itemId the itd of the item being retrieved
-     * @return resultSet containing row of a table
+     * @return resultSet containing one or more rows of a table
      */
-    public ResultSet getResultSet(String tableName, String selectedRows, String itemId) {
-        // TODO?: add "where"
-        String statementToExecute = "SELECT " + selectedRows + " FROM " + tableName +
-                " WHERE id = " + itemId;
-        try {
-            return statement.executeQuery(statementToExecute);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    public ResultSet getResultSet(String tableName, String selectedRows) {
+        return getResultSet(tableName, selectedRows, "");
     }
 
     /**
