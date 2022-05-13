@@ -14,8 +14,6 @@ public class Database {
 
     private Connection connection;
     private Statement statement;
-    public final static String ITEMS = "items";
-    public final static String DELETED_ITEMS = "deleted_items";
     private final static String CLASS_LOADER_NAME = "org.sqlite.JDBC";
     private final static String DATABASE_NAME = "jdbc:sqlite:warehouse.db";
 
@@ -47,13 +45,13 @@ public class Database {
      * Adds values from items.json to the ITEMS table.
      */
     public void populateDatabase() {
-        InputFileReader inputFileReader = new InputFileReader(ITEMS, "json");
+        InputFileReader inputFileReader = new InputFileReader(Table.ITEMS.getName(), "json");
         List<Item> itemsFromJSONFile = inputFileReader.getItemsFromJSONFile();
 
         String columnsToInsert = Item.getAttributeNamesExceptId();
         for (Item item : itemsFromJSONFile) {
             String valuesToInsert = item.getValuesInSQLFormatExceptId();
-            insert(ITEMS, columnsToInsert, valuesToInsert);
+            insert(Table.ITEMS.getName(), columnsToInsert, valuesToInsert);
         }
     }
 
@@ -86,7 +84,7 @@ public class Database {
 
         try {
             while (resultSet.next()) {
-                if (tableName.equals(Database.DELETED_ITEMS)) {
+                if (tableName.equals(Table.DELETED_ITEMS.getName())) {
                     DeletedItem item = new DeletedItem(resultSet);
                     items.add(item);
                 } else {
@@ -120,14 +118,14 @@ public class Database {
      * @param columnValuePairs the name-value pairs used to update the Item
      */
     public Item updateItem(String itemId, String columnValuePairs) {
-        String statementToExecute = "UPDATE " + ITEMS + " SET " +
+        String statementToExecute = "UPDATE " + Table.ITEMS.getName() + " SET " +
                 columnValuePairs + " WHERE id = " + itemId;
         // check that item exists
-        if (selectFromTable(ITEMS, "*", itemId).isEmpty()) {
+        if (selectFromTable(Table.ITEMS.getName(), "*", itemId).isEmpty()) {
             return null;
         }
         executeStatement(statementToExecute);
-        return selectFromTable(ITEMS, "*", itemId).get(0);
+        return selectFromTable(Table.ITEMS.getName(), "*", itemId).get(0);
     }
 
     /**

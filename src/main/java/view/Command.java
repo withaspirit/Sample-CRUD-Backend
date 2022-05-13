@@ -1,6 +1,7 @@
 package view;
 
 import model.Database;
+import model.Table;
 
 /**
  * Command contains the commands used for the DatabaseCLI.
@@ -9,7 +10,9 @@ import model.Database;
  */
 public enum Command {
     CREATE("(CREATE) (\\w+) (\\d+\\.\\d+) (\\d+)"),
-    READ("(READ) (" + String.join("|", Database.ITEMS, Database.DELETED_ITEMS) + ")"), // READ [tableName]
+    READ("(READ) (" + String.join("|",
+            Table.ITEMS.getName(),
+            Table.DELETED_ITEMS.getName()) + ")"),
     UPDATE("(UPDATE) (\\d+) (name = '\\w+'|price = \\d+\\.\\d+|stock = \\d+)"),
     DELETE("(DELETE) (\\d+) ?((?:\\w+)\\W*)*"),
     RESTORE("(RESTORE) (\\d+)"),

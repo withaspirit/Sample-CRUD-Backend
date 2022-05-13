@@ -2,6 +2,7 @@ package view;
 
 import model.Database;
 import model.Item;
+import model.Table;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -57,12 +58,12 @@ public class DatabaseCLITest {
     @Test
     void testCreateOneItem() {
         createItem();
-        assertEquals(1, database.getSizeOfTable(Database.ITEMS));
+        assertEquals(1, database.getSizeOfTable(Table.ITEMS.getName()));
     }
 
     @Test
     void testReadFromEmptyTable() {
-        String userInput = "READ " + Database.ITEMS;
+        String userInput = "READ " + Table.ITEMS.getName();
         String consoleOutput = databaseCLI.processInput(userInput);
         assertTrue(consoleOutput.contains("ERROR"));
     }
@@ -70,7 +71,7 @@ public class DatabaseCLITest {
     @Test
     void testReadFromTableWithItems() {
         createItem();
-        String readStatement = "READ " + Database.ITEMS;
+        String readStatement = "READ " + Table.ITEMS.getName();
         String consoleOutput = databaseCLI.processInput(readStatement);
         assertFalse(consoleOutput.contains("ERROR"));
     }
@@ -78,7 +79,7 @@ public class DatabaseCLITest {
     @Test
     void testUpdateOneItemOneAttribute() {
         createItem();
-        List<Item> items = database.selectFromTable(Database.ITEMS, "*");
+        List<Item> items = database.selectFromTable(Table.ITEMS.getName(), "*");
         Item originalItem = items.get(0);
 
         String newName = "newTestName";
@@ -87,7 +88,7 @@ public class DatabaseCLITest {
         assertFalse(consoleOutput.contains("ERROR"));
 
         originalItem.setName(newName);
-        items = database.selectFromTable(Database.ITEMS, "*");
+        items = database.selectFromTable(Table.ITEMS.getName(), "*");
         Item updatedItem = items.get(0);
         assertEquals(originalItem, updatedItem);
     }
@@ -109,7 +110,7 @@ public class DatabaseCLITest {
         String deleteStatement = "DELETE " + testItem.getId();
         String consoleOutput = databaseCLI.processInput(deleteStatement);
         assertFalse(consoleOutput.contains("ERROR"));
-        assertEquals(0, database.getSizeOfTable(Database.ITEMS));
+        assertEquals(0, database.getSizeOfTable(Table.ITEMS.getName()));
     }
 
     @Test
@@ -120,7 +121,7 @@ public class DatabaseCLITest {
         String deleteStatement = "DELETE " + errorId;
         String consoleOutput = databaseCLI.processInput(deleteStatement);
         assertTrue(consoleOutput.contains("ERROR"));
-        assertEquals(1, database.getSizeOfTable(Database.ITEMS));
+        assertEquals(1, database.getSizeOfTable(Table.ITEMS.getName()));
     }
 
     @Test
@@ -141,8 +142,8 @@ public class DatabaseCLITest {
         testDeleteOneItem();
         String restoreStatement = "RESTORE " + testItem.getId();
         databaseCLI.processInput(restoreStatement);
-        assertEquals(0, database.getSizeOfTable(Database.DELETED_ITEMS));
-        assertEquals(1, database.getSizeOfTable(Database.ITEMS));
+        assertEquals(0, database.getSizeOfTable(Table.DELETED_ITEMS.getName()));
+        assertEquals(1, database.getSizeOfTable(Table.ITEMS.getName()));
     }
 
     @Test

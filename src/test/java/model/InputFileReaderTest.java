@@ -20,14 +20,14 @@ public class InputFileReaderTest {
 
     @BeforeEach
     void setup() {
-        InputFileReader inputFileReader = new InputFileReader(Database.ITEMS, "json");
+        InputFileReader inputFileReader = new InputFileReader(Table.ITEMS.getName(), "json");
         jsonObject = inputFileReader.getJSONFileAsObject();
-        itemsJSONArray = inputFileReader.createJSONArray(Database.ITEMS);
+        itemsJSONArray = inputFileReader.createJSONArray(Table.ITEMS.getName());
     }
 
     @Test
     void testJSONArrayRetrieved() {
-        Object obj = jsonObject.get(Database.ITEMS);
+        Object obj = jsonObject.get(Table.ITEMS.getName());
         JSONArray jsonArray = (JSONArray) obj;
         assertEquals(jsonArray.size(), itemsJSONArray.size());
         assertEquals(jsonArray, itemsJSONArray);
