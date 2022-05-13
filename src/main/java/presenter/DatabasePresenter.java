@@ -72,7 +72,7 @@ public class DatabasePresenter {
      * @param comment (optional) the user's comment for the item's deletion
      */
     public void deleteItem(String itemId, String comment) {
-        Item item = database.selectFromTable(Database.ITEMS, "*", itemId);
+        Item item = database.selectFromTable(Database.ITEMS, "*", itemId).get(0);
         if (item == null) {
             return;
         }
@@ -96,7 +96,7 @@ public class DatabasePresenter {
      * @return the item that was restored
      */
     public Item restoreItem(String itemId) {
-        Item item = database.selectFromTable(Database.DELETED_ITEMS, "*", itemId);
+        Item item = database.selectFromTable(Database.DELETED_ITEMS, "*", itemId).get(0);
         if (item == null) {
             return null;
         }

@@ -112,7 +112,7 @@ public class DatabasePresenterTest {
         DeletedItem deletedItem = deleteItemWithComment(comment);
         String itemId = String.valueOf(deletedItem.getId());
 
-        Item item = database.selectFromTable(Database.DELETED_ITEMS, "*", itemId);
+        Item item = database.selectFromTable(Database.DELETED_ITEMS, "*", itemId).get(0);
         DeletedItem deletedItemFromTable = (DeletedItem) item;
         assertEquals(deletedItem, deletedItemFromTable);
     }
@@ -131,7 +131,7 @@ public class DatabasePresenterTest {
         DeletedItem deletedItem = deleteItemWithComment(comment);
         String itemId = String.valueOf(deletedItem.getId());
 
-        Item retrievedItem = database.selectFromTable(Database.DELETED_ITEMS, "*", itemId);
+        Item retrievedItem = database.selectFromTable(Database.DELETED_ITEMS, "*", itemId).get(0);
         Item restoredItem = databasePresenter.restoreItem(itemId);
         assertEquals(testItem, retrievedItem);
         assertEquals(testItem, restoredItem);
