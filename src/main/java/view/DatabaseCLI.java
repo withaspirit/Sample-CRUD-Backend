@@ -243,7 +243,7 @@ public class DatabaseCLI {
      */
     public String quit() {
         userWantsToQuit = true;
-        databasePresenter.closeModel();
+        databasePresenter.terminateDatabase();
         return "Exiting program.";
     }
 }

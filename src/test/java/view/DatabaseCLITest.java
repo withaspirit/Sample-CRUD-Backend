@@ -2,6 +2,7 @@ package view;
 
 import model.Database;
 import model.Item;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import presenter.DatabasePresenter;
@@ -34,6 +35,11 @@ public class DatabaseCLITest {
         databaseCLI = new DatabaseCLI();
         databaseCLI.addPresenter(databasePresenter);
         testItem = new Item(1, "testName", "100.99", 1);
+    }
+
+    @AfterEach
+    void tearDown() {
+        databaseCLI.quit();
     }
 
     /**

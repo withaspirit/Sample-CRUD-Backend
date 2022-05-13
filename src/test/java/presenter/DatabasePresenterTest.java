@@ -3,6 +3,7 @@ package presenter;
 import model.Database;
 import model.DeletedItem;
 import model.Item;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -34,6 +35,11 @@ public class DatabasePresenterTest {
         databasePresenter.addModel(database);
         database.initializeDatabase();
         testItem = new Item(1, "testName", "100.99", 1);
+    }
+
+    @AfterEach
+    void tearDown() {
+        databasePresenter.terminateDatabase();
     }
 
     public DeletedItem deleteItemWithComment(String comment) {
