@@ -48,17 +48,20 @@ public class DatabaseCLI {
         System.out.println(tables() + "\n");
     }
 
-    public void loop() {
+    /**
+     * Asks user for input and delegates to methods, returning output statement.
+     */
+    public void loopConsole() {
         Scanner scanner = new Scanner(System.in);
         scanner.useLocale(Locale.US);
 
-        do {
+        while (userWantsToQuit == false) {
             System.out.print("Enter command: ");
             String initialInput = scanner.nextLine().toLowerCase().trim();
             String consoleOutput = processInput(initialInput);
             System.out.println(consoleOutput);
             System.out.println();
-        } while (userWantsToQuit == false);
+        }
     }
 
     /**
