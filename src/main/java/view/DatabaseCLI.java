@@ -1,12 +1,14 @@
 package view;
 
-import model.Database;
 import model.DeletedItem;
 import model.Item;
 import model.Table;
 import presenter.DatabasePresenter;
 
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 
 /**

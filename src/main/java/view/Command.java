@@ -1,6 +1,5 @@
 package view;
 
-import model.Database;
 import model.Table;
 
 /**
