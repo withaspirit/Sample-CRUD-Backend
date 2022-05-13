@@ -79,11 +79,11 @@ public class Database {
      * Selects and returns an ArrayList of Items from the selected table.
      *
      * @param tableName the name of the table being selected from
-     * @param selectedItems the range of items to be selected
+     * @param selectedColumns the range of columns to be selected
      * @return arrayList of selected items in the selected table
      */
-    public ArrayList<Item> selectFromTable(String tableName, String selectedItems) {
-        ResultSet resultSet = getResultSet(tableName, selectedItems);
+    public ArrayList<Item> selectFromTable(String tableName, String selectedColumns) {
+        ResultSet resultSet = getResultSet(tableName, selectedColumns, "");
         ArrayList<Item> items = new ArrayList<>();
 
         try {
@@ -169,12 +169,12 @@ public class Database {
      * If itemId is blank, it selects all rows in the table.
      *
      * @param tableName the name of the table
-     * @param selectedRows the rows to be selected
-     * @param itemId (optional) the id of the item being retrieved
+     * @param selectedColumns the columns to be selected
+     * @param itemId if left blank, returns . Otherwise, returns a single item
      * @return resultSet containing one or more rows of a table
      */
-    public ResultSet getResultSet(String tableName, String selectedRows, String itemId) {
-        String statementToExecute = "SELECT " + selectedRows + " FROM " + tableName;
+    public ResultSet getResultSet(String tableName, String selectedColumns, String itemId) {
+        String statementToExecute = "SELECT " + selectedColumns + " FROM " + tableName;
         if (!itemId.isBlank()) {
             statementToExecute += " WHERE id = " + itemId;
         }
