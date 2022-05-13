@@ -20,22 +20,22 @@ public class InputFileReaderTest {
 
     @BeforeEach
     void setup() {
-        final InputFileReader inputFileReader = new InputFileReader(Database.ITEMS, "json");
+        InputFileReader inputFileReader = new InputFileReader(Database.ITEMS, "json");
         jsonObject = inputFileReader.getJSONFileAsObject();
         itemsJSONArray = inputFileReader.createJSONArray(Database.ITEMS);
     }
 
     @Test
     void testJSONArrayRetrieved() {
-        final Object obj = jsonObject.get(Database.ITEMS);
-        final JSONArray jsonArray = (JSONArray) obj;
+        Object obj = jsonObject.get(Database.ITEMS);
+        JSONArray jsonArray = (JSONArray) obj;
         assertEquals(jsonArray.size(), itemsJSONArray.size());
         assertEquals(jsonArray, itemsJSONArray);
     }
 
     @Test
     void testReadingOfSQLFile() {
-        final InputFileReader inputFileReader = new InputFileReader("DDL", "sql");
+        InputFileReader inputFileReader = new InputFileReader("DDL", "sql");
         assertNotNull(inputFileReader.getSQLFileAsString());
     }
 }

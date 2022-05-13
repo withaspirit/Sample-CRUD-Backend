@@ -56,12 +56,12 @@ public class DatabasePresenter {
     /**
      * Updates an Item in the items table.
      *
-     * @param matcher the matcher containing the itemId and column/ValuePairs for the item
+     * @param itemId the id of the item
+     * @param columnValuePair the name-value pair of the attribute to be updated
      */
-    public void updateItem(Matcher matcher) {
-        String itemId = matcher.group(2);
-        String columnValuePair = matcher.group(3);
-        database.updateItem(itemId, columnValuePair);
+    public Item updateItem(String itemId, String columnValuePair) {
+        Item updatedItem = database.updateItem(itemId, columnValuePair);
+        return updatedItem;
     }
 
     /**
@@ -71,13 +71,13 @@ public class DatabasePresenter {
      * @param itemId the id of the item to be deleted
      * @param comment (optional) the user's comment for the item's deletion
      */
-    public void deleteItem(String itemId, String comment) {
+    public Item deleteItem(String itemId, String comment) {
         List<Item> items = database.selectFromTable(Database.ITEMS, "*", itemId);
         if (items.isEmpty()) {
-            return;
+            return null;
         }
-        Item item = items.get(0);
 
+        Item item = items.get(0);
         String columns;
         String values = item.getValuesInSQLFormat();
         if (!comment.isBlank()) {
@@ -87,8 +87,10 @@ public class DatabasePresenter {
         } else {
             columns = String.join(", ", Item.getAttributeNamesAsArray());
         }
+
         database.deleteFromTable(Database.ITEMS, itemId);
         database.insert(Database.DELETED_ITEMS, columns, values);
+        return item;
     }
 
     /**
@@ -102,9 +104,9 @@ public class DatabasePresenter {
         if (items.isEmpty()) {
             return null;
         }
-        Item item = items.get(0);
-
         database.deleteFromTable(Database.DELETED_ITEMS, itemId);
+
+        Item item = items.get(0);
         String values = item.getValuesInSQLFormat(); // exclude comment
         String columns = String.join(", ", Item.getAttributeNamesAsArray());
         database.insert(Database.ITEMS, columns, values);

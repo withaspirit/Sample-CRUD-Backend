@@ -101,7 +101,7 @@ public class DatabaseCLI {
         String commandAsString = commandMatcher.group(1);
         Command command = Command.getCommand(commandAsString);
         if (command == null) {
-            String errorMessage = "Please enter a valid command. " +"Enter ' " +
+            String errorMessage = "ERROR: Please enter a valid command. " +"Enter ' " +
                     Command.HELP.getName() + "' for a list of them.";
             return errorMessage;
         }
@@ -131,7 +131,7 @@ public class DatabaseCLI {
         Item item;
         item = new Item(matcher);
         databasePresenter.createItem(item);
-        return "FIXME: Successfully created item: " + item.getValuesInSQLFormatExceptId();
+        return "Created item: " + item.getValuesInSQLFormatExceptId();
     }
 
     /**
@@ -144,20 +144,22 @@ public class DatabaseCLI {
         // matcher.group(1) is "read"
         String tableName = matcher.group(2);
         List<Item> items = databasePresenter.readFromTable(tableName);
-
         if (items.isEmpty()) {
-            return tableName + " is empty.";
+            return "ERROR: " + tableName + " is empty.";
         }
+
+        StringBuilder consoleOutput = new StringBuilder();
+        consoleOutput.append("Table ").append(tableName).append(" contains:\n");
+
         String[] attributeNames;
         if (tableName.equals(Database.ITEMS)) {
             attributeNames = Item.getAttributeNamesAsArray();
         } else {
             attributeNames = DeletedItem.getAttributeNamesAsArray();
         }
+
         String bar = " | ";
         String attributeNamesBarSeparated = String.join(bar, attributeNames);
-
-        StringBuilder consoleOutput = new StringBuilder();
         consoleOutput.append(attributeNamesBarSeparated).append("\n");
         for (Item item : items) {
             String[] values = item.getValuesAsArray();
@@ -174,8 +176,15 @@ public class DatabaseCLI {
      * @return a String indicating the completion success
      */
     public String updateItem(Matcher matcher) {
-        databasePresenter.updateItem(matcher);
-        return "FIXME: update";
+        // matcher.group(1) is "update"
+        String itemId = matcher.group(2);
+        String columnValuePair = matcher.group(3);
+        Item item = databasePresenter.updateItem(itemId, columnValuePair);
+        if (item == null) {
+            return "ERROR: Item " + itemId + " was not able to be updated.";
+        }
+        String values = String.join(", ", item.getValuesAsArray());
+        return "Update item " + itemId + " to have values: " + values;
     }
 
     /**
@@ -191,8 +200,14 @@ public class DatabaseCLI {
         if (matcher.groupCount() > 2) {
             comment = Objects.requireNonNullElse(matcher.group(3), "");
         }
-        databasePresenter.deleteItem(itemId, comment);
-        return "FIXME: delete";
+
+        Item item = databasePresenter.deleteItem(itemId, comment);
+        if (item == null) {
+            return "ERROR: could not delete item with id " + itemId;
+        }
+
+        String values = String.join(", ", item.getValuesAsArray());
+        return "Deleted item " + itemId + " with values: " + values;
     }
 
     /**
@@ -207,7 +222,7 @@ public class DatabaseCLI {
         Item restoredItem = databasePresenter.restoreItem(itemId);
 
         if (restoredItem == null) {
-            return "Item does not exist.";
+            return "ERROR: Item does not exist in the table " + Database.DELETED_ITEMS;
         }
         return "Restored item: " + restoredItem;
     }

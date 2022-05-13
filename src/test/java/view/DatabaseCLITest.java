@@ -64,7 +64,7 @@ public class DatabaseCLITest {
     void testReadFromEmptyTable() {
         String userInput = "READ " + Database.ITEMS;
         String consoleOutput = databaseCLI.processInput(userInput);
-        assertEquals(Database.ITEMS + " is empty.", consoleOutput);
+        assertTrue(consoleOutput.contains("ERROR"));
     }
 
     @Test
@@ -72,7 +72,7 @@ public class DatabaseCLITest {
         createItem();
         String readStatement = "READ " + Database.ITEMS;
         String consoleOutput = databaseCLI.processInput(readStatement);
-        assertNotEquals(Database.ITEMS + " is empty.", consoleOutput);
+        assertFalse(consoleOutput.contains("ERROR"));
     }
 
     @Test
@@ -83,31 +83,57 @@ public class DatabaseCLITest {
 
         String newName = "newTestName";
         String updateStatement = "UPDATE 1 name = '" + newName + "'";
-        databaseCLI.processInput(updateStatement);
-        originalItem.setName(newName);
+        String consoleOutput = databaseCLI.processInput(updateStatement);
+        assertFalse(consoleOutput.contains("ERROR"));
 
+        originalItem.setName(newName);
         items = database.selectFromTable(Database.ITEMS, "*");
         Item updatedItem = items.get(0);
         assertEquals(originalItem, updatedItem);
     }
 
     @Test
+    void testUpdateItemInvalid() {
+        createItem();
+
+        int errorId = 10000;
+        String newName = "newTestName";
+        String updateStatement = "UPDATE " + errorId + " name = '" + newName + "'";
+        String consoleOutput = databaseCLI.processInput(updateStatement);
+        assertTrue(consoleOutput.contains("ERROR"));
+    }
+
+    @Test
     void testDeleteOneItem() {
         createItem();
         String deleteStatement = "DELETE " + testItem.getId();
-        databaseCLI.processInput(deleteStatement);
+        String consoleOutput = databaseCLI.processInput(deleteStatement);
+        assertFalse(consoleOutput.contains("ERROR"));
         assertEquals(0, database.getSizeOfTable(Database.ITEMS));
+    }
+
+    @Test
+    void testDeleteItemProducesNull() {
+        createItem();
+
+        int errorId = 1000;
+        String deleteStatement = "DELETE " + errorId;
+        String consoleOutput = databaseCLI.processInput(deleteStatement);
+        assertTrue(consoleOutput.contains("ERROR"));
+        assertEquals(1, database.getSizeOfTable(Database.ITEMS));
     }
 
     @Test
     void testRestoreOneItemReturnsCorrectItem() {
         testDeleteOneItem();
+
         String restoreStatement = "RESTORE " + testItem.getId();
         String restoredItemMessage = databaseCLI.processInput(restoreStatement);
         String[] itemValues = testItem.getValuesAsArray();
         itemValues[1] = "'" + itemValues[1] + "'"; // put apostrophes around name
         String values = String.join(", ", itemValues);
         assertTrue(restoredItemMessage.contains(values));
+        assertFalse(restoredItemMessage.contains("ERROR"));
     }
 
     @Test
@@ -117,5 +143,15 @@ public class DatabaseCLITest {
         databaseCLI.processInput(restoreStatement);
         assertEquals(0, database.getSizeOfTable(Database.DELETED_ITEMS));
         assertEquals(1, database.getSizeOfTable(Database.ITEMS));
+    }
+
+    @Test
+    void testRestoreItemInvalid() {
+        testDeleteOneItem();
+        int errorId = 1000;
+
+        String restoreStatement = "RESTORE " + errorId;
+        String consoleOutput = databaseCLI.processInput(restoreStatement);
+        assertTrue(consoleOutput.contains("ERROR"));
     }
 }

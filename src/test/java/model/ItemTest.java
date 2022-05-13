@@ -2,12 +2,19 @@ package model;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-// TODO
+/**
+ * ItemTest ensures that Item's methods are functioning correctly.
+ *
+ * @author Liam Tripp
+ */
 public class ItemTest {
 
     private Item item;
@@ -39,9 +46,13 @@ public class ItemTest {
         assertEquals(itemWithNoDecimalPrice, itemWithDecimalPrice);
     }
 
-    @Test
-    void testGettingPropertiesAsString() {
-        // TODO: eliminate?
-        System.out.println(Item.getAttributeNamesExceptId());
+    @ParameterizedTest
+    @ValueSource(strings = {"0", "0.", ".0", "100", "100.99"})
+    void testPriceInSQLFormat(String price) {
+        item.setPrice(price);
+        String sqlFormattedPrice = item.getPriceTimes100().toString();
+        assertTrue(item.getValuesInSQLFormat().contains(sqlFormattedPrice));
+        assertTrue(item.getValuesInSQLFormatExceptId().contains(sqlFormattedPrice));
+        assertTrue(item.getAttributeNameValueListExceptId().contains(sqlFormattedPrice));
     }
 }

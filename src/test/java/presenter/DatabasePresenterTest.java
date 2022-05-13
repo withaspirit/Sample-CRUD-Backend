@@ -8,11 +8,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import view.Command;
-import view.InputMatcher;
 
 import java.util.List;
-import java.util.regex.Matcher;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -42,7 +39,13 @@ public class DatabasePresenterTest {
         databasePresenter.terminateDatabase();
     }
 
-    public DeletedItem deleteItemWithComment(String comment) {
+    /**
+     * Deletes an item with the provided comment from the Items database.
+     *
+     * @param comment the optional comment for the item's deletion
+     * @return the item deleted from the Items database and insert into the Deleted_Items database
+     */
+    DeletedItem deleteItemWithComment(String comment) {
         databasePresenter.createItem(testItem);
         String itemId = String.valueOf(testItem.getId());
         DeletedItem deletedItem = new DeletedItem(testItem, comment);
@@ -76,25 +79,32 @@ public class DatabasePresenterTest {
 
     @Test
     void testUpdateOneItemOneAttribute() {
-        // TODO: move into DatabaseCLI
         databasePresenter.createItem(testItem);
+
         String updatedName = "chowder";
+        String itemId = String.valueOf(testItem.getId());
+        String nameValuePair = "name = '" + updatedName + "'";
+        Item item = databasePresenter.updateItem(itemId, nameValuePair);
 
-        String UPDATE_REGEX = Command.UPDATE.getRegex();
-        String updatePhrase = "UPDATE 1 name = '" + updatedName + "'";
-
-        // we need databaseCLI for its matcher methods
-        InputMatcher inputMatcher = new InputMatcher();
-        Matcher matcher = inputMatcher.getMatcher(UPDATE_REGEX, updatePhrase);
-        String matcherError = inputMatcher.validateMatcher(matcher);
-        assertEquals("", matcherError);
-
-        databasePresenter.updateItem(matcher);
-        testItem.setName(updatedName);
-
+        assertNotNull(item);
         assertEquals(1, database.getSizeOfTable(Database.ITEMS));
+
+        testItem.setName(updatedName);
         List<Item> items = databasePresenter.readFromTable(Database.ITEMS);
-        assertEquals(testItem, items.get(0));
+        Item updatedItem = items.get(0);
+        assertEquals(testItem, updatedItem);
+    }
+
+    @Test
+    void testUpdateItemInvalid() {
+        databasePresenter.createItem(testItem);
+
+        String updatedName = "chowder";
+        int errorId = -1;
+        String errorItemId = String.valueOf(errorId);
+        String nameValuePair = "name = '" + updatedName + "'";
+        Item item = databasePresenter.updateItem(errorItemId, nameValuePair);
+        assertNull(item);
     }
 
     @Test
@@ -122,6 +132,16 @@ public class DatabasePresenterTest {
         Item item = database.selectFromTable(Database.DELETED_ITEMS, "*", itemId).get(0);
         DeletedItem deletedItemFromTable = (DeletedItem) item;
         assertEquals(deletedItem, deletedItemFromTable);
+    }
+
+    @Test
+    void testDeletedItemWithInvalidIdProducesNull() {
+        databasePresenter.createItem(testItem);
+
+        int errorId = 1000;
+        String itemId = String.valueOf(errorId);
+        Item item = databasePresenter.deleteItem(itemId, "");
+        assertNull(item);
     }
 
     @Test
@@ -153,5 +173,15 @@ public class DatabasePresenterTest {
         databasePresenter.restoreItem(itemId);
         assertEquals(1, database.getSizeOfTable(Database.ITEMS));
         assertEquals(0, database.getSizeOfTable(Database.DELETED_ITEMS));
+    }
+
+    @Test
+    void testRestoreItemInvalid() {
+        deleteItemWithComment("");
+
+        int errorId = 1000;
+        String itemId = String.valueOf(errorId);
+        Item item = databasePresenter.restoreItem(itemId);
+        assertNull(item);
     }
 }
