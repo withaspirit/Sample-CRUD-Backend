@@ -10,7 +10,6 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * DatabaseCLI is a command-line interface that allows users to interact with
@@ -22,14 +21,14 @@ public class DatabaseCLI {
 
     /** DatabaseCLI interacts with the model through databasePresenter */
     private DatabasePresenter databasePresenter;
-    private InputReader inputReader;
+    private InputMatcher inputMatcher;
     private boolean userWantsToQuit;
 
     /**
      * Constructor for Database CLI.
      */
     public DatabaseCLI() {
-        inputReader = new InputReader();
+        inputMatcher = new InputMatcher();
         userWantsToQuit = false;
     }
 
@@ -70,8 +69,8 @@ public class DatabaseCLI {
      * @return output message if input is valid, error message otherwise
      */
     public String processInput(String userInput) {
-        Matcher matcher = inputReader.matchInput(userInput);
-        String matcherError = inputReader.validateMatcher(matcher);
+        Matcher matcher = inputMatcher.matchInputToCommandRegex(userInput);
+        String matcherError = inputMatcher.validateMatcher(matcher);
         if (!matcherError.equals("")) {
             return matcherError + "\nError text: " + userInput;
         }

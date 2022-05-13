@@ -4,11 +4,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * InputReader provides methods to read in user inputs.
+ * InputMatcher is a helper class for DatabaseCLI that provides methods to read
+ * in user inputs.
  *
  * @author Liam Tripp
  */
-public class InputReader {
+public class InputMatcher {
 
     /**
      * Matches an input to one of the Command's Regexes.
@@ -16,7 +17,7 @@ public class InputReader {
      * @param userInput the user's input
      * @return a matcher matching the user's input, null otherwise
      */
-    public Matcher matchInput(String userInput) {
+    public Matcher matchInputToCommandRegex(String userInput) {
         Matcher matcher = null;
         for (Command command : Command.values()) {
             matcher = getMatcher(command.getRegex(), userInput);
