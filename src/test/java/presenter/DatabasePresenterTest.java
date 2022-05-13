@@ -39,7 +39,13 @@ public class DatabasePresenterTest {
         databasePresenter.terminateDatabase();
     }
 
-    public DeletedItem deleteItemWithComment(String comment) {
+    /**
+     * Deletes an item with the provided comment from the Items database.
+     *
+     * @param comment the optional comment for the item's deletion
+     * @return the item deleted from the Items database and insert into the Deleted_Items database
+     */
+    DeletedItem deleteItemWithComment(String comment) {
         databasePresenter.createItem(testItem);
         String itemId = String.valueOf(testItem.getId());
         DeletedItem deletedItem = new DeletedItem(testItem, comment);

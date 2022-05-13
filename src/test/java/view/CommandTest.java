@@ -55,7 +55,7 @@ public class CommandTest {
      * @param validity the validity of the command (either valid or invalid)
      * @return a jsonObject containing the valid/invalid tests
      */
-    public JSONObject getCommandTest(String commandName, String validity) {
+    JSONObject getCommandTest(String commandName, String validity) {
         return (JSONObject) ((JSONObject) inputs.get(commandName)).get(validity);
     }
 
