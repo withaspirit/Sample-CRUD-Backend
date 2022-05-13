@@ -7,6 +7,11 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 
+/**
+ * Item is a data class simulating an item in a Store.
+ *
+ * @author Liam Tripp
+ */
 public class Item {
 
     private final int id;
@@ -14,24 +19,18 @@ public class Item {
     private BigDecimal price;
     private int stock;
 
-    public Item(int id, String name) {
+    public Item(int id, String name, String price, int stock) {
         this.id = id;
         this.name = name;
-        price = new BigDecimal(0);
-        stock = 0;
-    }
-
-    public Item(int id, String name, String price) {
-        this(id, name);
         this.price = new BigDecimal(price);
-        this.stock = 0;
-    }
-
-    public Item(int id, String name, String price, int stock) {
-        this(id, name, price);
         this.stock = stock;
     }
 
+    /**
+     * Constructs an Item from a ResultSet.
+     *
+     * @param resultSet the ResultSet from an JDBC SQL query
+     */
     public Item(ResultSet resultSet) {
         final Field[] attributes = Item.class.getDeclaredFields();
 
@@ -46,6 +45,12 @@ public class Item {
         }
     }
 
+    /**
+     * Constructs an Item from a Matcher. Used when adding a new item to a
+     * table.
+     *
+     * @param matcher contains the new Item's name, price, and stock
+     */
     public Item(Matcher matcher) {
         id = -1; // id is not used
         // group(1) is the CREATE command

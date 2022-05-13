@@ -15,14 +15,14 @@ public class ItemTest {
 
     @BeforeEach
     void setup() {
-        item = new Item(0, testName);
+        item = new Item(0, testName, "0.0", 0);
     }
 
     @Test
     void testItemInitialization() {
         assertEquals(0, item.getId());
         assertEquals(testName, item.getName());
-        assertEquals(new BigDecimal(0), item.getPrice());
+        assertEquals(new BigDecimal("0.0"), item.getPrice());
         assertEquals(0, item.getStock());
     }
 
@@ -41,6 +41,7 @@ public class ItemTest {
 
     @Test
     void testGettingPropertiesAsString() {
+        // TODO: eliminate?
         System.out.println(Item.getAttributeNamesExceptId());
     }
 }
