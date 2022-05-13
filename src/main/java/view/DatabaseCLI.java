@@ -19,6 +19,7 @@ public class DatabaseCLI {
     /** DatabaseCLI interacts with the model through databasePresenter */
     private DatabasePresenter databasePresenter;
     private InputMatcher inputMatcher;
+    private Scanner scanner;
     private boolean userWantsToQuit;
 
     /**
@@ -27,6 +28,17 @@ public class DatabaseCLI {
     public DatabaseCLI() {
         inputMatcher = new InputMatcher();
         userWantsToQuit = false;
+        scanner = new Scanner(System.in);
+        scanner.useLocale(Locale.US);
+    }
+
+    /**
+     * Indicates whether the user wants to terminate the program.
+     *
+     * @return true if the user wants to quit, false otherwise.
+     */
+    public boolean userWantsToQuit() {
+        return userWantsToQuit;
     }
 
     /**
@@ -52,19 +64,15 @@ public class DatabaseCLI {
     }
 
     /**
-     * Asks user for input and delegates to methods, returning output statement.
+     * Asks user for input and delegates to methods, printing output statement.
      */
-    public void inputLoop() {
-        Scanner scanner = new Scanner(System.in);
-        scanner.useLocale(Locale.US);
+    public void promptUserForInput() {
+        System.out.print("Enter command: ");
+        String initialInput = scanner.nextLine().toLowerCase().trim();
+        String consoleOutput = processInput(initialInput);
 
-        while (userWantsToQuit == false) {
-            System.out.print("Enter command: ");
-            String initialInput = scanner.nextLine().toLowerCase().trim();
-            String consoleOutput = processInput(initialInput);
-            System.out.println(consoleOutput);
-            System.out.println();
-        }
+        System.out.println(consoleOutput);
+        System.out.println();
     }
 
     /**
@@ -93,10 +101,11 @@ public class DatabaseCLI {
         String commandAsString = commandMatcher.group(1);
         Command command = Command.getCommand(commandAsString);
         if (command == null) {
-            String errorMessage = "Please enter a valid command. " + "Enter ' " +
+            String errorMessage = "Please enter a valid command. " +"Enter ' " +
                     Command.HELP.getName() + "' for a list of them.";
             return errorMessage;
         }
+
         String consoleOutput;
         switch (command) {
             case CREATE -> consoleOutput = createItem(commandMatcher);
@@ -132,7 +141,7 @@ public class DatabaseCLI {
      * @return a String containing the contents of the table
      */
     public String read(Matcher matcher) {
-        // matcher.group(1) is "READ", group(2) is tableName
+        // matcher.group(1) is "read"
         String tableName = matcher.group(2);
         List<Item> items = databasePresenter.readFromTable(tableName);
 
@@ -193,6 +202,7 @@ public class DatabaseCLI {
      * @return a string indicating the completion of restoring the item
      */
     public String restore(Matcher matcher) {
+        // matcher.group(1) is "restore"
         String itemId = matcher.group(2);
         Item restoredItem = databasePresenter.restoreItem(itemId);
 

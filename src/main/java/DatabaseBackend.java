@@ -34,8 +34,11 @@ public class DatabaseBackend {
     public void execute() {
         database.initializeDatabase();
         database.populateDatabase();
+
         databaseCLI.introduction();
-        databaseCLI.inputLoop();
+        while (databaseCLI.userWantsToQuit() == false) {
+            databaseCLI.promptUserForInput();
+        }
     }
 
     public static void main(String[] args) {
