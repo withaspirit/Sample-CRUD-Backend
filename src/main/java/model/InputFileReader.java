@@ -52,12 +52,17 @@ public class InputFileReader {
         return sqlTable;
     }
 
+    /**
+     * Returns values for Database to insert into the appropriate table(s).
+     *
+     * @return SQL-formatted values for Database to insert into the appropriate table.
+     */
     public String[] getValuesToInsertFromJSONFile() {
         if (!fileEnding.equals(JSON)) {
             throw new IllegalArgumentException("File type must be .json");
         }
-        JSONArray itemsJSONArray = createJSONArray(fileName);
 
+        JSONArray itemsJSONArray = createJSONArray(fileName);
         String[] valuesToInsert = new String[itemsJSONArray.size()];
         for (int i = 0; i < itemsJSONArray.size(); i++) {
             JSONObject jsonItem = (JSONObject) itemsJSONArray.get(i);
