@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class CommandTest {
 
-    private DatabaseCLI databaseCLI;
+    private InputMatcher inputMatcher;
     private JSONObject inputs;
 
     @BeforeEach
@@ -28,7 +28,7 @@ public class CommandTest {
         InputFileReader inputFileReader = new InputFileReader("inputs", "json");
         JSONObject jsonObject = inputFileReader.getJSONFileAsObject();
         inputs = (JSONObject) jsonObject.get("inputs");
-        databaseCLI = new DatabaseCLI();
+        inputMatcher = new InputMatcher();
     }
 
     @ParameterizedTest
@@ -68,8 +68,8 @@ public class CommandTest {
 
         for (Object object : validStatements) {
             String validStatement = (String) object;
-            Matcher matcher = databaseCLI.getMatcher(command.getRegex(), validStatement);
-            assertEquals("", databaseCLI.validateMatcher(matcher));
+            Matcher matcher = inputMatcher.getMatcher(command.getRegex(), validStatement);
+            assertEquals("", inputMatcher.validateMatcher(matcher));
             assertNotEquals("", matcher.group(0));
             assertEquals(validStatement, matcher.group(0));
         }
@@ -84,8 +84,8 @@ public class CommandTest {
 
         for (Object object : InvalidStatements) {
             String invalidStatements = (String) object;
-            Matcher matcher = databaseCLI.getMatcher(command.getRegex(), invalidStatements);
-            String error = databaseCLI.validateMatcher(matcher);
+            Matcher matcher = inputMatcher.getMatcher(command.getRegex(), invalidStatements);
+            String error = inputMatcher.validateMatcher(matcher);
             assertNotEquals("", error);
         }
     }

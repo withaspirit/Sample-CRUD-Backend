@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import view.Command;
-import view.DatabaseCLI;
+import view.InputMatcher;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -77,9 +77,9 @@ public class DatabasePresenterTest {
         String updatePhrase = "UPDATE 1 name = '" + updatedName + "'";
 
         // we need databaseCLI for its matcher methods
-        DatabaseCLI databaseCLI = new DatabaseCLI();
-        Matcher matcher = databaseCLI.getMatcher(UPDATE_REGEX, updatePhrase);
-        String matcherError = databaseCLI.validateMatcher(matcher);
+        InputMatcher inputMatcher = new InputMatcher();
+        Matcher matcher = inputMatcher.getMatcher(UPDATE_REGEX, updatePhrase);
+        String matcherError = inputMatcher.validateMatcher(matcher);
         assertEquals("", matcherError);
 
         databasePresenter.updateItem(matcher);
