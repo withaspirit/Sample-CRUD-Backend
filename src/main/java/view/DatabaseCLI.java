@@ -101,7 +101,7 @@ public class DatabaseCLI {
         String commandAsString = commandMatcher.group(1);
         Command command = Command.getCommand(commandAsString);
         if (command == null) {
-            String errorMessage = "Please enter a valid command. " +"Enter ' " +
+            String errorMessage = "ERROR: Please enter a valid command. " +"Enter ' " +
                     Command.HELP.getName() + "' for a list of them.";
             return errorMessage;
         }
@@ -131,7 +131,7 @@ public class DatabaseCLI {
         Item item;
         item = new Item(matcher);
         databasePresenter.createItem(item);
-        return "Successfully created item: " + item.getValuesInSQLFormatExceptId();
+        return "Created item: " + item.getValuesInSQLFormatExceptId();
     }
 
     /**
