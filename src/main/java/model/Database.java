@@ -121,6 +121,12 @@ public class Database {
         return selectFromTable(tableName, selectedColumns, "");
     }
 
+    /**
+     * Updates a single attribute of a single item from a table
+     *
+     * @param itemId the item being updated
+     * @param columnValuePairs the name-value pairs used to update the Item
+     */
     public void updateItems(String itemId, String columnValuePairs) {
         String statementToExecute = "UPDATE " + ITEMS + " SET " +
                 columnValuePairs + " WHERE id = " + itemId;
