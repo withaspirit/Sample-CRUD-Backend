@@ -151,8 +151,7 @@ public class Item {
     // FIXME: used for database insertion
     //  probably should use string array instead
     public String getAttributeValuesExceptId() {
-        int idPartOfStringEnd = (id + ", ").length();
-        return toString().substring(idPartOfStringEnd);
+        return "'" + name + "'," + price.scaleByPowerOfTen(2).intValue() + ", " + stock;
     }
 
     public String getAttributeNameValueListExceptId() {
@@ -179,11 +178,10 @@ public class Item {
 
     @Override
     public String toString() {
-                 return id + ", '" + name + "', " + price + ", " + stock;
-//        return String.join(", ",
-//                String.valueOf(id),
-//                "'" + name + "'",
-//                price.toString(),
-//                String.valueOf(stock));
+        return String.join(", ",
+                String.valueOf(id),
+                "'" + name + "'",
+                price.toString(),
+                String.valueOf(stock));
     }
 }
