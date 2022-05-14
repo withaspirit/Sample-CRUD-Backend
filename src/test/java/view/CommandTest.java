@@ -25,7 +25,7 @@ public class CommandTest {
 
     @BeforeEach
     void setup() {
-        InputFileReader inputFileReader = new InputFileReader("inputs", "json");
+        InputFileReader inputFileReader = new InputFileReader("testUserInputs", "json");
         JSONObject jsonObject = inputFileReader.getJSONFileAsObject();
         inputs = (JSONObject) jsonObject.get("inputs");
         inputMatcher = new InputMatcher();
