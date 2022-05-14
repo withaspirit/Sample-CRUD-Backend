@@ -63,7 +63,7 @@ public class DatabaseCLI {
                 String.join(", ", Item.getAttributeNamesAsArray()) + "\n";
         introduction += "The following are the commands you may choose from:\n";
         introduction += help() + "\n\n";
-        introduction += "These are the tables you may choose from: " + tables() + "\n";
+        introduction += "You may read from any of the following " + tables() + "\n";
         System.out.println(introduction);
     }
 
@@ -247,8 +247,8 @@ public class DatabaseCLI {
         stringBuilder.append("`DELETE [id] [optionalComment]` - delete a row in").append(itemsEnding).append(" while providing an optional comment").append(itemsEnding).append("\n");
         stringBuilder.append("`RESTORE [id]` - restores a row with the provided id to its corresponding table.\n");
         stringBuilder.append("`HELP` - view the list of valid commands\n");
-        stringBuilder.append("`TABLES` - view the list of tables");
-        stringBuilder.append("`QUIT` - exit the command-line interface\n");
+        stringBuilder.append("`TABLES` - view the list of tables\n");
+        stringBuilder.append("`QUIT` - exit the command-line interface");
         return stringBuilder.toString();
     }
 
