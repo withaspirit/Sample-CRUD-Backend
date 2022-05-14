@@ -1,0 +1,88 @@
+{
+  "inputs": {
+    "create": {
+      "valid": {
+        "goodFormat": "CREATE testName 1.99 1"
+      },
+      "invalid": {
+        "commandOnly": "CREATE",
+        "missingName": "CREATE 1.99 1",
+        "missingPrice": "CREATE testName 1",
+        "missingStock": "CREATE testName 1.99",
+        "badName": "CREATE ta~0e3[- 1.99 1",
+        "badPrice": "CREATE testName 1 1",
+        "badPriceOnlyPeriod": "CREATE testName 1. 1",
+        "badStock": "CREATE testName 1.99 a"
+      }
+    },
+    "update": {
+      "valid": {
+        "newName": "UPDATE 1 name = 'newName'",
+        "newPrice": "UPDATE 1 price = 2.00",
+        "newStock": "UPDATE 1 stock = 2"
+      },
+      "invalid": {
+        "commandOnly": "UPDATE",
+        "missingQuotes": "UPDATE name = newName",
+        "missingId": "UPDATE name = 'newName'",
+        "missingColumn": "UPDATE = 'newName'"
+      }
+    },
+    "read": {
+      "valid": {
+        "readItems": "READ items",
+        "readDeleteItems": "READ deleted_items"
+      },
+      "invalid": {
+        "commandOnly": "READ",
+        "nonexistentTable": "READ schmitems"
+      }
+    },
+    "delete": {
+      "valid": {
+        "deleteId": "DELETE 1",
+        "deleteIdWithOneWordComment": "DELETE 1 comment",
+        "deleteIdWithMultiWordComment": "DELETE 1 comment topic discussion"
+      },
+      "invalid": {
+        "commandOnly": "DELETE",
+        "badIdNegative": "DELETE -1"
+      }
+    },
+    "restore" : {
+      "valid": {
+        "goodItemRestore": "RESTORE 1"
+      },
+      "invalid": {
+        "missingId": "RESTORE",
+        "badId": "RESTORE -1"
+      }
+    },
+    "help": {
+      "valid": {
+        "goodFormat": "HELP"
+      },
+      "invalid": {
+        "extraText": "HELP extraText"
+      }
+    },
+    "tables": {
+      "valid": {
+        "goodFormat": "TABLES"
+      },
+      "invalid": {
+        "appendedText": "TABLESappendedText",
+        "extraText": "TABLES extraText"
+      }
+    },
+    "quit": {
+      "valid": {
+        "goodFormat": "QUIT"
+      },
+      "invalid": {
+        "appendedText": "QUITappendedText",
+        "extraText": "QUIT extraText"
+      }
+    }
+  }
+}

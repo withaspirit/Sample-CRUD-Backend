@@ -1,3 +1,5 @@
+package model;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,22 +20,22 @@ public class InputFileReaderTest {
 
     @BeforeEach
     void setup() {
-        final InputFileReader inputFileReader = new InputFileReader(Database.ITEMS, "json");
+        InputFileReader inputFileReader = new InputFileReader(Table.ITEMS.getName(), "json");
         jsonObject = inputFileReader.getJSONFileAsObject();
-        itemsJSONArray = inputFileReader.createJSONArray(Database.ITEMS);
+        itemsJSONArray = inputFileReader.createJSONArray(Table.ITEMS.getName());
     }
 
     @Test
     void testJSONArrayRetrieved() {
-        final Object obj = jsonObject.get(Database.ITEMS);
-        final JSONArray jsonArray = (JSONArray) obj;
+        Object obj = jsonObject.get(Table.ITEMS.getName());
+        JSONArray jsonArray = (JSONArray) obj;
         assertEquals(jsonArray.size(), itemsJSONArray.size());
         assertEquals(jsonArray, itemsJSONArray);
     }
 
     @Test
     void testReadingOfSQLFile() {
-        final InputFileReader inputFileReader = new InputFileReader("DDL", "sql");
+        InputFileReader inputFileReader = new InputFileReader("DDL", "sql");
         assertNotNull(inputFileReader.getSQLFileAsString());
     }
 }
