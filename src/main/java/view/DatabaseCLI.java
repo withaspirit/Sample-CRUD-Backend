@@ -270,6 +270,7 @@ public class DatabaseCLI {
     public String quit() {
         userWantsToQuit = true;
         databasePresenter.terminateDatabase();
+        scanner.close();
         return "Exiting program.";
     }
 }
