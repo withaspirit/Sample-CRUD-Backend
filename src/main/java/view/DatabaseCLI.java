@@ -59,10 +59,11 @@ public class DatabaseCLI {
     public void introduction() {
         String introduction = "\nWelcome to Liam Tripp's Backend CRUD Sample.\n\n";
         introduction += "The database for this program emulates an online store manager.\n";
-        introduction += "It contains Items which have ids, names, prices, and stock.\n";
+        introduction += "It contains Items which each have: " +
+                String.join(", ", Item.getAttributeNamesAsArray()) + "\n";
         introduction += "The following are the commands you may choose from:\n";
         introduction += help() + "\n\n";
-        introduction += "You may interact with any of the following " + tables() + "\n";
+        introduction += "These are the tables you may choose from: " + tables() + "\n";
         System.out.println(introduction);
     }
 
