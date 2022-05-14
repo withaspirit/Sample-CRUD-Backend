@@ -21,8 +21,8 @@ public class DatabaseCLI {
 
     /** DatabaseCLI interacts with the model through databasePresenter */
     private DatabasePresenter databasePresenter;
-    private InputMatcher inputMatcher;
-    private Scanner scanner;
+    private final InputMatcher inputMatcher;
+    private final Scanner scanner;
     private boolean userWantsToQuit;
 
     /**

@@ -12,8 +12,8 @@ import java.util.List;
  */
 public class Database {
 
-    private Connection connection;
-    private Statement statement;
+    private final Connection connection;
+    private final Statement statement;
     private final static String CLASS_LOADER_NAME = "org.sqlite.JDBC";
     private final static String DATABASE_NAME = "jdbc:sqlite:warehouse.db";
 

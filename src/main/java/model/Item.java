@@ -78,7 +78,7 @@ public class Item {
         this(-1, // not used
                 matcher.group(2),
                 matcher.group(3),
-               Integer.parseInt((matcher.group(4))));
+                Integer.parseInt((matcher.group(4))));
     }
 
     public int getId() {
@@ -146,7 +146,7 @@ public class Item {
      * @return the values of Item as a String array
      */
     public String[] getValuesAsArray() {
-        return new String[] {
+        return new String[]{
                 String.valueOf(id),
                 name,
                 price.toString(),

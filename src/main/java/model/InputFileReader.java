@@ -25,7 +25,7 @@ public class InputFileReader {
 
     /**
      * Constructor for InputFileReader.
-     * 
+     *
      * @param fileName the name of the file being read
      */
     public InputFileReader(String fileName, String fileEnding) {

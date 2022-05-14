@@ -10,9 +10,9 @@ import view.DatabaseCLI;
  */
 public class DatabaseBackend {
 
-    private Database database;
-    private DatabasePresenter databasePresenter;
-    private DatabaseCLI databaseCLI;
+    private final Database database;
+    private final DatabasePresenter databasePresenter;
+    private final DatabaseCLI databaseCLI;
 
     /**
      * Constructor for DatabaseBackend.

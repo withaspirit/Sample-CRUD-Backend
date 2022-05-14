@@ -19,7 +19,7 @@ public enum Command {
     TABLES("(tables)"),
     QUIT("(quit)");
 
-    private String regex;
+    private final String regex;
 
     /**
      * Constructor for Command.
