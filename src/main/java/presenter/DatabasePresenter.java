@@ -6,7 +6,6 @@ import model.Item;
 import model.Table;
 
 import java.util.List;
-import java.util.regex.Matcher;
 
 /**
  * DatabasePresenter allows the DatabaseCLI to interact with the Database and

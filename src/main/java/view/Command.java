@@ -1,6 +1,5 @@
 package view;
 
-import model.Database;
 import model.Table;
 
 /**
@@ -14,13 +13,13 @@ public enum Command {
             Table.ITEMS.getName(),
             Table.DELETED_ITEMS.getName()) + ")"),
     UPDATE("(UPDATE) (\\d+) (name = '\\w+'|price = \\d+\\.\\d+|stock = \\d+)"),
-    DELETE("(DELETE) (\\d+) ?((?:\\w+)\\W*)*"),
+    DELETE("(DELETE) (\\d+) ?(.+)?"),
     RESTORE("(RESTORE) (\\d+)"),
     HELP("(help)"),
     TABLES("(tables)"),
     QUIT("(quit)");
 
-    private String regex;
+    private final String regex;
 
     /**
      * Constructor for Command.

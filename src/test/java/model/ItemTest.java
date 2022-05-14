@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class ItemTest {
 
     private Item item;
-    private String testName = "testName";
+    private final String testName = "testName";
 
     @BeforeEach
     void setup() {

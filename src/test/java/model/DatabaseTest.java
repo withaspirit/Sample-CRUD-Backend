@@ -74,7 +74,8 @@ public class DatabaseTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"1", "-1"}) // empty table, invalid id
+    @ValueSource(strings = {"1", "-1"})
+        // empty table, invalid id
     void testSelectingFromTableWithInvalidInputProducesNull(String itemId) {
         List<Item> items = database.selectFromTable(Table.DELETED_ITEMS.getName(),
                 "*", itemId);
@@ -121,7 +122,7 @@ public class DatabaseTest {
 
         int invalidId = -3;
         Item item = database.updateItem(String.valueOf(invalidId),
-                        testItem.getAttributeNameValueListExceptId());
+                testItem.getAttributeNameValueListExceptId());
         assertNull(item);
     }
 

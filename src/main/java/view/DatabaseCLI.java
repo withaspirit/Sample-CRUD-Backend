@@ -1,12 +1,14 @@
 package view;
 
-import model.Database;
 import model.DeletedItem;
 import model.Item;
 import model.Table;
 import presenter.DatabasePresenter;
 
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 
 /**
@@ -19,8 +21,8 @@ public class DatabaseCLI {
 
     /** DatabaseCLI interacts with the model through databasePresenter */
     private DatabasePresenter databasePresenter;
-    private InputMatcher inputMatcher;
-    private Scanner scanner;
+    private final InputMatcher inputMatcher;
+    private final Scanner scanner;
     private boolean userWantsToQuit;
 
     /**
@@ -57,10 +59,11 @@ public class DatabaseCLI {
     public void introduction() {
         String introduction = "\nWelcome to Liam Tripp's Backend CRUD Sample.\n\n";
         introduction += "The database for this program emulates an online store manager.\n";
-        introduction += "It contains Items which have ids, names, prices, and stock.\n";
+        introduction += "It contains Items which each have: " +
+                String.join(", ", Item.getAttributeNamesAsArray()) + "\n";
         introduction += "The following are the commands you may choose from:\n";
         introduction += help() + "\n\n";
-        introduction += "You may interact with any of the following " + tables() + "\n";
+        introduction += "You may read from any of the following " + tables() + "\n";
         System.out.println(introduction);
     }
 
@@ -102,7 +105,7 @@ public class DatabaseCLI {
         String commandAsString = commandMatcher.group(1);
         Command command = Command.getCommand(commandAsString);
         if (command == null) {
-            String errorMessage = "ERROR: Please enter a valid command. " +"Enter ' " +
+            String errorMessage = "ERROR: Please enter a valid command. Enter '" +
                     Command.HELP.getName() + "' for a list of them.";
             return errorMessage;
         }
@@ -244,8 +247,8 @@ public class DatabaseCLI {
         stringBuilder.append("`DELETE [id] [optionalComment]` - delete a row in").append(itemsEnding).append(" while providing an optional comment").append(itemsEnding).append("\n");
         stringBuilder.append("`RESTORE [id]` - restores a row with the provided id to its corresponding table.\n");
         stringBuilder.append("`HELP` - view the list of valid commands\n");
-        stringBuilder.append("`TABLES` - view the list of tables");
-        stringBuilder.append("`QUIT` - exit the command-line interface\n");
+        stringBuilder.append("`TABLES` - view the list of tables\n");
+        stringBuilder.append("`QUIT` - exit the command-line interface");
         return stringBuilder.toString();
     }
 
@@ -267,6 +270,7 @@ public class DatabaseCLI {
     public String quit() {
         userWantsToQuit = true;
         databasePresenter.terminateDatabase();
+        scanner.close();
         return "Exiting program.";
     }
 }
