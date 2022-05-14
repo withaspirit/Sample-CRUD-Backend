@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * ItemTest ensures that Item's methods are functioning correctly.
+ * ItemTest ensures that Item's price conversion methods work properly.
  *
  * @author Liam Tripp
  */

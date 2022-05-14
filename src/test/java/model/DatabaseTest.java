@@ -12,7 +12,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * DatabaseTest ensures the Database methods function properly.
+ * DatabaseTest ensures the Database's CRUD methods work properly.
  *
  * @author Liam Tripp
  */

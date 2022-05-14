@@ -14,7 +14,8 @@ import java.util.regex.Matcher;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * CommandTest ensures that Command's search method functions correctly.
+ * CommandTest ensures that Command's search method work properly with the
+ * inputs found in testUserInputs.json.
  *
  * @author Liam Tripp
  */
