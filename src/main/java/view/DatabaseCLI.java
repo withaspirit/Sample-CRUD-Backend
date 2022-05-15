@@ -244,8 +244,8 @@ public class DatabaseCLI {
         stringBuilder.append("`CREATE [name] [dollar.cents] [stock]` - insert a row into").append(itemsEnding).append("\n");
         stringBuilder.append("`READ [tableName]` - view the rows from one of the following ").append(tables()).append("\n");
         stringBuilder.append("`UPDATE [id] [columnName] = [value]` - update a value corresponding to a column name in").append(itemsEnding).append(". Text values must be quoted like 'this'\n");
-        stringBuilder.append("`DELETE [id] [optionalComment]` - delete a row in").append(itemsEnding).append(" while providing an optional comment").append(itemsEnding).append("\n");
-        stringBuilder.append("`RESTORE [id]` - restores a row with the provided id to its corresponding table.\n");
+        stringBuilder.append("`DELETE [id] [optionalComment]` - delete a row in").append(itemsEnding).append(" while providing an optional comment\n");
+        stringBuilder.append("`RESTORE [id]` - restores a row with the provided id to its corresponding table\n");
         stringBuilder.append("`HELP` - view the list of valid commands\n");
         stringBuilder.append("`TABLES` - view the list of tables\n");
         stringBuilder.append("`QUIT` - exit the command-line interface");
