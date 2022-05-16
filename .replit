@@ -1,0 +1,17 @@
+
+run = "bash startup.sh"
+
+[packager]
+language = "java"
+
+[packager.features]
+packageSearch = true
+
+[languages.java]
+pattern = "**/*.java"
+
+[unitTest]
+language = "java"
+
+[nix]
+channel="stable-21_11"
