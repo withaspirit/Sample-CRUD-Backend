@@ -37,7 +37,9 @@
                         <version>2.0.17</version>
                     </docletArtifact>
                     <additionalOptions>
-                        <!--<additionalOption>...</additionalOption>-->
+                        <option>-private</option><!-- show all members -->
+                        <additionalOption>-umlImageFormat svg,svg_img</additionalOption>
+                        <!-- (Not working) <additionalOption>-includeMethodParamNames true</additionalOption> -->
                     </additionalOptions>
                 </configuration>
             </plugin>
