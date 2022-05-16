@@ -49,8 +49,6 @@ require_executable() {
     chmod +x "$1"
 }
 
-# server files
-
 # java
 require_dir "jre"
 require_executable "jre/bin/java"
