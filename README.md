@@ -10,7 +10,7 @@ Instructions on how to run the app from terminal are provided in [General Instru
 
 ### Replit Instructions
 
-[![Run on Repl.it](https://repl.it/badge/github/cyberphoria/Sample-CRUD-Backend)](https://repl.it/github/cyberphoria/Sample-CRUD-Backend)
+[![Run on Repl.it](https://repl.it/badge/github/cyberphoria/Sample-CRUD-Backend)](https://replit.com/@liamtripp/Sample-CRUD-Backend)
 
 The badge above directs the user to the app on Replit. Once there, click the large green button. The app will ask you in the `Shell` tab to confirm before proceeding. Various packages will be downloaded before the application begins. 
 
@@ -43,7 +43,7 @@ These commands interact with the application itself. They can be run on any Oper
 * `mvn compile exec:java` - execute the application
 * `mvn test` - run the app's unit tests
 
-### Application Commands
+#### Application Commands
 
 A list of Commands the user may use in the application is provided below. The square brackets should be omitted for all commands.
 
