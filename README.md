@@ -127,20 +127,20 @@ The packages for the project are divided amongst the view, presenter, and model.
 
 ## Resources
 
-- `DDL.sql` contains the SQL statements used to define the database schema.
-- `items.json` contains the information used to populate the table `items`.
-- `testUserInpust.json` - contains valid and invalid inputs that a user might enter. Used for testing with CommandTest.
+* `DDL.sql` contains the SQL statements used to define the database schema.
+* `items.json` contains the information used to populate the table `items`.
+* `testUserInpust.json` - contains valid and invalid inputs that a user might enter. Used for testing with CommandTest.
 
 ## Tests
 
 Rigorous unit testing was used throughout development to verify project functions. Below is a descriptions of the test files.
 
- - `DatabaseTest` ensures the Database's CRUD methods work properly.
- - `DatabasePresenterTest` ensures the DatabasePresenter's CRUD methods work properly with the Database.
- - `DatabaseCLITest` ensures that DatabaseCLI's CRUD methods work properly with the DatabasePresenter.
- - `CommandTest` ensures that Command's search method work properly with the inputs found in `testUserInputs.json`.
- - `ItemTest` ensures that Item's price conversion methods work properly.
- - `InputFileReaderTest` ensures that inputs files are read properly.
+ * `DatabaseTest` ensures the Database's CRUD methods work properly.
+ * `DatabasePresenterTest` ensures the DatabasePresenter's CRUD methods work properly with the Database.
+ * `DatabaseCLITest` ensures that DatabaseCLI's CRUD methods work properly with the DatabasePresenter.
+ * `CommandTest` ensures that Command's search method work properly with the inputs found in `testUserInputs.json`.
+ * `ItemTest` ensures that Item's price conversion methods work properly.
+ * `InputFileReaderTest` ensures that inputs files are read properly.
 
 ## Technologies
 
@@ -151,8 +151,6 @@ If the user is running the application using the [General Instructions](#general
 - [SQLite](https://github.com/xerial/sqlite-jdbc) - a relational database that is self-contained, meaning it does not require as much client-server configuration like MySQL or PostgreSQL
 - [JSONSimple](https://github.com/fangyidong/json-simple) - JSON file manipulation
 - [UMLDoclet](https://github.com/talsma-ict/umldoclet) - that generates interactive Javadoc pages and UML Class Diagrams for packages. It is executed when the user runs ```mvn install```
-
-It currently lacks integration as a web application. My background is mainly in backend-type languages. Therefore, I built a Java command-line application instead.
 
 ## Project Demonstrates:
 
