@@ -70,6 +70,7 @@ public class DatabaseCLI {
     public void promptUserForInput() {
         System.out.print("Enter command: ");
         String initialInput = scanner.nextLine().toLowerCase().trim();
+        System.out.println();
         String consoleOutput = processInput(initialInput);
 
         System.out.println(consoleOutput);
