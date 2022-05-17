@@ -1,15 +1,15 @@
 #!/bin/bash
-# Java download code from: https://replit.com/@SimerLol/Minecraft-Server-Template?v=1#Startup.sh
+# Java download code from here: https://replit.com/@SimerLol/Minecraft-Server-Template?v=1#Startup.sh
 
 set -e
 root=$PWD
 
-export JAVA_HOME=/usr/lib/jvm/java-1.11.0-openjdk-amd64
+export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 export PATH=$JAVA_HOME/bin:$PATH
 
 download() {
     set -e
-    echo By executing this script you agree to the JRE License, Maven License
+    echo By executing this script you agree to the JRE License
     echo and the licenses of all packages used \in this project.
     echo Press Ctrl+C \if you \do not agree to any of these licenses.
     echo Press Enter to agree.
@@ -19,12 +19,6 @@ download() {
     tar -zxf jre.tar.gz
     rm -rf jre.tar.gz
     mv ./jre* ./jre
-    echo JRE downloaded
-    wget "https://dlcdn.apache.org/maven/maven-3/3.8.5/binaries/apache-maven-3.8.5-bin.tar.gz"
-    tar -xvf apache-maven-3.8.5-bin.tar.gz
-    rm -rf apache-maven-3.8.5-bin.tar.gz
-    mv apache-maven-3.8.5 apache-maven
-    echo maven downloaded
     echo "Download complete" 
 }
 
@@ -49,7 +43,7 @@ require_executable() {
     chmod +x "$1"
 }
 
-# java
+# install java
 require_dir "jre"
 require_executable "jre/bin/java"
 require_executable "apache-maven/bin/mvn"
