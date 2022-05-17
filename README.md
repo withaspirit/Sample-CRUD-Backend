@@ -14,44 +14,46 @@ Instructions on how to run the app from terminal are provided in [General Instru
 
 The badge above directs the user to the app on Replit. Once there, click the large green button. The app will ask you in the `Shell` tab to confirm before proceeding. Various packages will be downloaded before the application begins. 
 
-See [Application Commands](#application-commands) for the available commands in the application. See [Shell Commands](#shell-commands) for commands you can use to interact with the shell and the application itself.
+See [Application Commands](#application-commands) for the available commands in the application. See [Shell Commands](#shell-commands) for commands to interact with the shell.
 
 ### General Instructions
 
-The app requires at least [JDK 17](https://www.oracle.com/java/technologies/downloads/) and [Maven](https://maven.apache.org/download.cgi) 3.8.x to run. [Graphviz](https://graphviz.org/download/) must also be installed for a plugin this app uses (See [Once those are installed, the app can be run manually by executing the two commands below in a terminal navigated to app's folder. If you don't know what the `cd` is, read about what it is [here](https://en.wikipedia.org/wiki/Cd_(command)#Usage), and enter `cd yourFilePathToProjectFolder` in terminal.
+The app requires at least [JDK 17](https://www.oracle.com/java/technologies/downloads/) and [Maven](https://maven.apache.org/download.cgi) 3.8.x to run. [Graphviz](https://graphviz.org/download/) must also be installed for a plugin this app uses. 
+
+Once those are installed, the app can be run manually by executing the two commands below in a terminal navigated to app's folder (for more details about the commands see [Maven Commands](#maven-commands)).
+
+If you don't know what the `cd` is, read about what it is [here](https://en.wikipedia.org/wiki/Cd_(command)#Usage), and enter `cd yourFilePathToProjectFolder` in terminal.
 
 ```mvn clean install```
 
 ```mvn compile exec:java```
 
-See [Maven Commands](#maven-commands) for more details on the above commands. 
+### Shell Commands
 
-#### Shell Commands
-
-These are meant for a Linux shell. Note that `file` refers to `java`, `javac`, or `mvn`.
+These commands are meant for a Linux shell. Note that `file` refers to `java`, `javac`, or `mvn`.
 
 * `Ctrl+C` (keyboard) - cancel a process in action
 * `kill 1` - restart the application
-* `[file] -version` - check a framework's version of a file, without the brackets
-* `command -v [file]` - check a language's filepath of a file, without the brackets
+* `[file] -version` - check the version of a file, without the brackets
+* `command -v [file]` - check the filepath of a file, without the brackets
 
-#### Maven Commands 
+### Maven Commands 
 
-These commands interact with the application itself. They can be run on any Operating System. On Replit, the first two are done with the green 'run' button.
+These commands interact with the application itself. They can be run on any operating system from terminal in the same folder as the project. On Replit, the first two commands are done automatically with the green 'run' button.
 
 * `mvn clean install` - download the packages for the app to Replit
 * `mvn compile exec:java` - execute the application
 * `mvn test` - run the app's unit tests
 
-#### Application Commands
+### Application Commands
 
-A list of Commands the user may use in the application is provided below. The square brackets should be omitted for all commands.
+The user can use these commands while the application is running. The square brackets should be omitted.
 
 * `CREATE [name] [dollar.cents] [stock]` - insert a row into the table `items`. The attribute `name` must be one word with alphanumeric characters
 
 * `READ [tableName]` - view the rows from one of the following tables: `items`, `deleted_items`
 
-* `UPDATE [id] [columnName] = [value]` - update a value corresponding to a column name in the table items. Text values must be quoted like 'this' (ex: `update name = 'Mint)Os'`)
+* `UPDATE [id] [columnName] = [value]` - update a value corresponding to a column name in the table items. Text values must be quoted like 'this' (ex: `update name = 'Green Fresh'`)
 
 * `DELETE [id] [optionalComment]` - delete a row in the table `items` while providing an optional comment
 
@@ -63,7 +65,7 @@ A list of Commands the user may use in the application is provided below. The sq
 
 * `QUIT` - exit the application
 
-Note that the `UPDATE` command is currently limited to updating one value on one item at a time.
+Note that the `UPDATE` command is limited to updating one value on one item at a time.
 
 ## Design
 
@@ -73,22 +75,23 @@ This program emulates an online store manager. It currently lacks integration as
 
 The design pattern used for the GUI is [Model-View-Presenter](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter). This separates responsibilities for different functions among different classes.
 
+[SQLite]((https://github.com/xerial/sqlite-jdbc)) is used as a database because it required less time to configure.
+
 See [Classes](#classes) for more details on how the application is designed. See [Tests](#tests) for descriptions of the unit tests performed. See [Technologies](#technologies) for some plugins used.
 
 ### Details
 
 The method to run this program is found in the file `DatabaseBackend`. It begins a loop that prompts the user for input in the form of a [Command](#application-commands) and displays an appropriate output. This loop continues until the user enters `QUIT`.
 
-The tables for this project are `items` and `deleted_items`. Both contain `Items`, which each have an id, name, price, and stock. `DeletedItem`, a subclass of Item, may contain an optional comment.
+The tables for this project are `items` and `deleted_items`. Both contain `Items`, which each have an id, name, price, and stock. Id is specified by the database. `DeletedItem`, a subclass of Item, may contain an optional comment.
 
 When an Item is deleted from a table using the `DELETE` Command, it is inserted into the `deleted_items` table. The `RESTORE` Command deletes the item from the `deleted_items` table, returning the DeletedItem to its original table as an item.
 
 Commands are captured by pattern-matching with Regex. The captured inputs are passed and formatted for an SQL command before being executed. The Regex capturing also prevents the user from entering input that doesn't match the allowed format. However, it also limits the user's use of the program to whatever is hard-coded.
 
-
 ### Classes
 
-The class descriptions and UML diagrams below provide an overview of the system. They were generated using the [UMLDoclet]() plugin (more details found in [Technologies](#technologies)). The documents generated are located in the folder `target/apidocs`.
+The class descriptions and UML diagrams below provide an overview of the system. They were generated using the [UMLDoclet](https://github.com/talsma-ict/umldoclet) plugin (more details under [Technologies](#technologies)).
 
 #### Class Descriptions
 
@@ -146,7 +149,9 @@ Rigorous unit testing was used throughout development to verify project function
 
 As this project is managed with [Maven](https://maven.apache.org/), the plugins and dependencies and plugins used are contained in the file `pom.xml`. Alternatively, an up-to-date list of dependencies can be found [on GitHub](https://github.com/cyberphoria/Sample-CRUD-Backend/network/dependencies). However, it does not include plugins.
 
-If the user is running the application using the [General Instructions](#general-instructions], full API documentation including UML Class Diagrams can be generated using UMLDoclet. [Graphviz](https://graphviz.org/download/) must be installed for this. Run `mvn install` in terminal to activate [UMLDoclet](https://github.com/talsma-ict/umldoclet).
+If the user is running the application using the [General Instructions](#general-instructions], full API documentation including UML Class Diagrams can be generated using UMLDoclet. 
+
+To use UMLDoclet, [Graphviz](https://graphviz.org/download/) must be installed. To activate it, run `mvn install` in terminal. The documents generated are located in the folder `target/apidocs`.
 
 - [SQLite](https://github.com/xerial/sqlite-jdbc) - a relational database that is self-contained, meaning it does not require as much client-server configuration like MySQL or PostgreSQL
 - [JSONSimple](https://github.com/fangyidong/json-simple) - JSON file manipulation
