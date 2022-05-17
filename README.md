@@ -67,7 +67,7 @@ Note that the `UPDATE` command is currently limited to updating one value on one
 
 ## Design
 
-This program emulates an online store manager. The method to run this program is found in the file `DatabaseBackend`. It begins a loop that prompts the user for input in the form of a [Command](#application-commands) and displays an appropriate output. This loop continues until the user enters the `Command` `QUIT`.
+This program emulates an online store manager. The method to run this program is found in the file `DatabaseBackend`. It begins a loop that prompts the user for input in the form of a [Command](#application-commands) and displays an appropriate output. This loop continues until the user enters `QUIT`.
 
 The tables for this project are `items` and `deleted_items`. Both contain Items which each have an id, name, price, and stock. DeletedItem, a subclass of Item, may contain an optional comment.
 
@@ -81,9 +81,11 @@ See [Classes](#classes) for more details on how the application is designed. See
 
 ### Classes
 
-Below is a brief overview. The documents will be in the folder `target/apidocs`.
+The class descriptions and UML diagrams below provide an overview of the system. They were generated using the [UMLDoclet]() plugin (more details found in [Technologies](#technologies)). The documents generated are located in the folder `target/apidocs`.
 
 #### Class Descriptions
+
+All classes and almost all methods are fully documented.
 
 <img src="images/all_classes.png" alt="Class Descriptions">
 
@@ -91,7 +93,9 @@ Below is a brief overview. The documents will be in the folder `target/apidocs`.
 
 <img src="images/package-dependencies.png" alt="Package Overview">
 
-### Diagrams
+### UML Class Diagrams
+
+The packages for the project are divided amongst the view, presenter, and model.
 
 <details>
   <summary><b>Show Package Diagrams</b></summary>
@@ -122,7 +126,7 @@ Below is a brief overview. The documents will be in the folder `target/apidocs`.
 
 ## Tests
 
-Rigorous unit testing that was used throughout development to verify project functions. Below is a descriptions of the test files.
+Rigorous unit testing was used throughout development to verify project functions. Below is a descriptions of the test files.
 
  - `DatabaseTest` ensures the Database's CRUD methods work properly.
  - `DatabasePresenterTest` ensures the DatabasePresenter's CRUD methods work properly with the Database.
@@ -137,7 +141,7 @@ As this project is managed with [Maven](https://maven.apache.org/), the plugins 
 
 If the user is running the application using the [General Instructions](#general-instructions], full API documentation including UML Class Diagrams can be generated using UMLDoclet. [Graphviz](https://graphviz.org/download/) must be installed for this. Run `mvn install` in terminal to activate [UMLDoclet](https://github.com/talsma-ict/umldoclet).
 
-- [SQLite](https://github.com/xerial/sqlite-jdbc) - a relational database that is self-contained, meaning it does not require client-server configuration like MySQL or PostgreSQL
+- [SQLite](https://github.com/xerial/sqlite-jdbc) - a relational database that is self-contained, meaning it does not require as much client-server configuration like MySQL or PostgreSQL
 - [JSONSimple](https://github.com/fangyidong/json-simple) - JSON file manipulation
 - [UMLDoclet](https://github.com/talsma-ict/umldoclet) - that generates interactive Javadoc pages and UML Class Diagrams for packages. It is executed when the user runs ```mvn install```
 
@@ -155,4 +159,4 @@ It currently lacks integration as a web application. My background is mainly in 
 
 ### Takeaways 
 
-It would be fun to learn to make a CRUD application using more frontend technologies.
+In hindsight, the presenter could have returned Strings formatted for view instead of Items. Overall, I am satisfied with this project. It would be fun to do a similar one with more frontend technologies.
