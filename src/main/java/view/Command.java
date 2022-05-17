@@ -8,7 +8,7 @@ import model.Table;
  * @author Liam Tripp
  */
 public enum Command {
-    CREATE("(CREATE) (\\w+) (\\d+\\.\\d+) (\\d+)"),
+    CREATE("(CREATE) (\\w+) (\\d+(?:\\.\\d+)?) (\\d+)"), // name price stock
     READ("(READ) (" + String.join("|",
             Table.ITEMS.getName(),
             Table.DELETED_ITEMS.getName()) + ")"),

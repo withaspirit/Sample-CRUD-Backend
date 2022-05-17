@@ -183,7 +183,7 @@ public class Item {
         return String.join(", ", attributeNamesExceptId);
     }
 
-    // used for SQL table population
+    // used for updating SQL table with multiple values
     public String getAttributeNameValueListExceptId() {
         return String.join(", ",
                 "name = " + getNameInQuotes(),
