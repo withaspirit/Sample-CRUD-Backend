@@ -5,10 +5,7 @@ import model.Item;
 import model.Table;
 import presenter.DatabasePresenter;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Matcher;
 
 /**
@@ -73,6 +70,7 @@ public class DatabaseCLI {
     public void promptUserForInput() {
         System.out.print("Enter command: ");
         String initialInput = scanner.nextLine().toLowerCase().trim();
+        System.out.println();
         String consoleOutput = processInput(initialInput);
 
         System.out.println(consoleOutput);
@@ -135,7 +133,11 @@ public class DatabaseCLI {
         Item item;
         item = new Item(matcher);
         databasePresenter.createItem(item);
-        return "Created item: " + item.getValuesInSQLFormatExceptId();
+
+        String values = String.join(", ", item.getValuesAsArray());
+        // get rid of invalid id
+        values = values.replace("-1, ", "");
+        return "Created item: " + values;
     }
 
     /**
