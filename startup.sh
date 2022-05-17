@@ -1,4 +1,5 @@
 #!/bin/bash
+# This script is configured for *nix systems
 # Java download code by SimerLol: https://replit.com/@SimerLol/Minecraft-Server-Template?v=1#Startup.sh
 
 # javac compiles java classes
@@ -6,10 +7,8 @@
 # mvn is used to execute Maven goals
 
 # To check the version of any of the above three, do `[file] -version` without the brackets
-
 # To find the path leading to java, javac, or mvn, do `command -v [file]` without the brackets
 
-# Installation starts here
 set -e
 root=$PWD
 
@@ -56,11 +55,11 @@ require_executable() {
     chmod +x "$1"
 }
 
-# install java
+# install Java
 require_dir "jre"
 require_executable "jre/bin/java"
 
-# Set path to present working directory
+# Set PATH to present working directory (?)
 PATH=$PWD/jre/bin:$PATH
 
 echo "Exit code $?"
