@@ -65,7 +65,7 @@
                         <version>2.0.17</version>
                     </docletArtifact>
                     <additionalOptions>
-                        <option>-private</option> <!-- show all members -->
+                        <option>-private</option> <!-- show all fields and methods -->
                         <additionalOption>-umlImageFormat png,svg,svg_img</additionalOption>
                         <!-- (Not working) <additionalOption>-includeMethodParamNames true</additionalOption> -->
                     </additionalOptions>
