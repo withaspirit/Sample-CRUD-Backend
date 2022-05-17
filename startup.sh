@@ -1,10 +1,23 @@
 #!/bin/bash
-# Java download code from here: https://replit.com/@SimerLol/Minecraft-Server-Template?v=1#Startup.sh
+# Java download code by SimerLol: https://replit.com/@SimerLol/Minecraft-Server-Template?v=1#Startup.sh
 
+# javac compiles java classes
+# java runs java classes
+# mvn is used to execute Maven goals
+
+# To check the version of any of the above three, do `[file] -version` without the brackets
+
+# To find the path leading to java, javac, or mvn, do `command -v [file]` without the brackets
+
+# Installation starts here
 set -e
 root=$PWD
 
+# set JAVA_HOME to the folder shown by where `printenv JAVA_HOME` is located
 export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+# export MAVEN_HOME=/usr/share/maven -> failed attempt at changing MAVEN_HOME, doesn't do anything
+
+# set PATH to bin of JAVA_HOME 
 export PATH=$JAVA_HOME/bin:$PATH
 
 download() {
@@ -46,7 +59,6 @@ require_executable() {
 # install java
 require_dir "jre"
 require_executable "jre/bin/java"
-require_executable "apache-maven/bin/mvn"
 
 # Set path to present working directory
 PATH=$PWD/jre/bin:$PATH
