@@ -2,16 +2,16 @@
   "inputs": {
     "create": {
       "valid": {
-        "goodFormat": "CREATE testName 1.99 1"
+        "goodFormat": "CREATE testName 1.99 1",
+        "noDecimalPrice": "CREATE testName 1 1"
       },
       "invalid": {
         "commandOnly": "CREATE",
         "missingName": "CREATE 1.99 1",
         "missingPrice": "CREATE testName 1",
         "missingStock": "CREATE testName 1.99",
+        "onlyPeriodPrice": "CREATE testName 1. 1",
         "badName": "CREATE ta~0e3[- 1.99 1",
-        "badPrice": "CREATE testName 1 1",
-        "badPriceOnlyPeriod": "CREATE testName 1. 1",
         "badStock": "CREATE testName 1.99 a"
       }
     },
