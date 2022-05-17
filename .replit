@@ -1,5 +1,12 @@
+compile = """
+bash startup.sh
+mvn -f /home/runner/Sample-Crud-Database/pom.xml clean install
+"""
 
-run = "bash startup.sh"
+run = "mvn compile exec:java"
+
+entrypoint = "DatabaseBackend.java"
+hidden = ["**/*.class"]
 
 [packager]
 language = "java"
