@@ -67,17 +67,24 @@ Note that the `UPDATE` command is currently limited to updating one value on one
 
 ## Design
 
-This program emulates an online store manager. The method to run this program is found in the file `DatabaseBackend`. It begins a loop that prompts the user for input in the form of a [Command](#application-commands) and displays an appropriate output. This loop continues until the user enters `QUIT`.
+### Overview
 
-The tables for this project are `items` and `deleted_items`. Both contain Items which each have an id, name, price, and stock. DeletedItem, a subclass of Item, may contain an optional comment.
+This program emulates an online store manager. It currently lacks integration as a web application. My experience with frontend languages like JS and Python is limited to scripting, so I chose to simulate a web application with Java.
+
+The design pattern used for the GUI is [Model-View-Presenter](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter). This separates responsibilities for different functions among different classes.
+
+See [Classes](#classes) for more details on how the application is designed. See [Tests](#tests) for descriptions of the unit tests performed. See [Technologies](#technologies) for some plugins used.
+
+### Details
+
+The method to run this program is found in the file `DatabaseBackend`. It begins a loop that prompts the user for input in the form of a [Command](#application-commands) and displays an appropriate output. This loop continues until the user enters `QUIT`.
+
+The tables for this project are `items` and `deleted_items`. Both contain `Items`, which each have an id, name, price, and stock. `DeletedItem`, a subclass of Item, may contain an optional comment.
 
 When an Item is deleted from a table using the `DELETE` Command, it is inserted into the `deleted_items` table. The `RESTORE` Command deletes the item from the `deleted_items` table, returning the DeletedItem to its original table as an item.
 
 Commands are captured by pattern-matching with Regex. The captured inputs are passed and formatted for an SQL command before being executed. The Regex capturing also prevents the user from entering input that doesn't match the allowed format. However, it also limits the user's use of the program to whatever is hard-coded.
 
-The design pattern used for the GUI is [Model-View-Presenter](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter). This separates responsibilities for different functions among different classes. 
-
-See [Classes](#classes) for more details on how the application is designed. See [Tests](#tests) for descriptions of the unit tests performed.
 
 ### Classes
 
