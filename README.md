@@ -12,9 +12,9 @@ Instructions on how to run the app from terminal are provided in [General Instru
 
 [![Run on Repl.it](https://repl.it/badge/github/cyberphoria/Sample-CRUD-Backend)](https://replit.com/@liamtripp/Sample-CRUD-Backend)
 
-The badge above directs the user to the app on Replit. Once there, click the large green button. The app will ask in the `Shell` tab for user confirmation before proceeding. Various packages will be downloaded before the application begins. 
+The badge above directs the user to the app on Replit. Once there, click the large green button. The app will ask in the `Console` tab for user confirmation before proceeding. Various packages will be downloaded before the application begins. 
 
-See [Application Commands](#application-commands) for the available commands in the application. See [Shell Commands](#shell-commands) for commands to interact with the shell.
+See [Application Commands](#application-commands) for the available commands in the application. See [Console Commands](#console-commands) for commands to interact with the console.
 
 ### General Instructions
 
@@ -48,15 +48,15 @@ Note that the `UPDATE` command is limited to updating one value on one item at a
 
 ### Maven Commands 
 
-These commands interact with the application itself. They can be run on any operating system from the terminal navigated to the project folder. On Replit, the shell is already in the project folder and the first two commands below are done automatically with the green 'run' button.
+These commands interact with the application itself. They can be run on any operating system from the terminal navigated to the project folder. On Replit, the console is already in the project folder and the first two commands below are done automatically with the green 'run' button.
 
 * `mvn clean install` - download the packages for the app to Replit
 * `mvn compile exec:java` - execute the application
 * `mvn test` - run the app's unit tests
 
-### Shell Commands
+### Console Commands
 
-These commands are meant for a Linux shell. Note that `file` refers to `java`, `javac`, or `mvn`.
+These commands are meant for a Linux terminal. Note that `file` refers to `java`, `javac`, or `mvn`.
 
 * `Ctrl+C` (keyboard) - cancel a process in action
 * `kill 1` - restart the application
