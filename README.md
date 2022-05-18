@@ -26,7 +26,7 @@ The app requires at least [JDK 17](https://www.oracle.com/java/technologies/down
 
 ### Application Commands
 
-These commands can be used while the application is running. The square brackets should be omitted.
+These commands can be used while the application is running. They are case-insensitive. The square brackets should be omitted.
 
 * `CREATE [name] [dollar.cents] [stock]` - insert a row into the table `items`. The attribute `name` must be one word with alphanumeric characters
 
@@ -67,11 +67,15 @@ These commands are meant for a Linux shell. Note that `file` refers to `java`, `
 
 ### Overview
 
-This application simulates an online store manager. It lacks integration as a web application as it does not use an online server. My experience with less strict languages like JS and Python is limited to scripting. I chose to simulate a web application using a Java command-line interface. For the databaes, I used [SQLite](https://github.com/xerial/sqlite-jdbc) for its ability to be embedded within the application. 
+This application simulates an online store manager. It lacks integration as a web application as it does not use an online server. My experience with less strict languages like JavaScript and Python is limited to scripting. I chose to simulate a web application using a Java command-line interface. For the database, I used [SQLite](https://github.com/xerial/sqlite-jdbc) for its ability to be embedded within the application. 
 
 The architectural design pattern used for the GUI is [Model-View-Presenter](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter). This separates responsibilities for different functions among different classes.
 
 See [Classes](#classes) for more details on how the application is designed. See [Tests](#tests) for descriptions of the unit tests performed. See [Technologies](#technologies) for some plugins used.
+
+<details>
+  <summary><b>Show Design Details</b></summary>
+<br>
 
 ### Details
 
@@ -82,9 +86,6 @@ The tables for this project are `items` and `deleted_items`. Both contain `Items
 When an Item is deleted from a table using the `DELETE` Command, it is inserted into the `deleted_items` table. The `RESTORE` Command deletes the item from the `deleted_items` table, returning the DeletedItem to its original table as an item.
 
 Commands are processed by pattern-matching and group capturing with Regex. The captured input groups are passed and formatted for the SQL database before being executed. The Regex group capturing limits the application to whatever is hard-coded. It favors security by disallowing input that doesn't match the required format. 
-
-<details>
-  <summary>*Show 
 
 ### Classes
 
@@ -106,6 +107,7 @@ This diagram illustrates the relationship between the application's packages. `o
 
 The packages for the project are divided amongst the `view`, `presenter`, and `model` per the Model-View-Presenter pattern. `backend` contains the main method.
 
+<br>
 <details>
   <summary><b>Show Package Diagrams</b></summary>
 
@@ -133,6 +135,7 @@ Backend creates the `Database`, `DatabasePresenter`, and `DatabaseCLI` before be
 
 <img src="images/backend.png" alt="Backend">
 
+</details>
 </details>
   
 ## Resources
