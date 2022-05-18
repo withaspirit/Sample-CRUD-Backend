@@ -1,6 +1,7 @@
 compile = """
+mvn clean
 bash startup.sh
-mvn -f /home/runner/Sample-Crud-Database/pom.xml clean install
+mvn -f /home/runner/Sample-CRUD-Backend/pom.xml install
 """
 
 run = "mvn compile exec:java"
@@ -21,4 +22,4 @@ pattern = "**/*.java"
 language = "java"
 
 [nix]
-channel="stable-21_11"
+channel = "stable-21_11"
