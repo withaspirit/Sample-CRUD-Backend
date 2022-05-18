@@ -1,36 +1,25 @@
 #!/bin/bash
-# This script is configured for *nix systems
-# Java download code by SimerLol: https://replit.com/@SimerLol/Minecraft-Server-Template?v=1#Startup.sh
-
-# javac compiles java classes
-# java runs java classes
-# mvn is used to execute Maven goals
-
-# To check the version of any of the above three, do `[file] -version` without the brackets
-# To find the path leading to java, javac, or mvn, do `command -v [file]` without the brackets
+# Java download code from: https://replit.com/@SimerLol/Minecraft-Server-Template?v=1#Startup.sh
 
 set -e
 root=$PWD
 
-# set JAVA_HOME to the folder shown by where `printenv JAVA_HOME` is located
-export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
-# export MAVEN_HOME=/usr/share/maven -> failed attempt at changing MAVEN_HOME, doesn't do anything
-
-# set PATH to bin of JAVA_HOME 
+export JAVA_HOME=/usr/lib/jvm/java-1.11.0-openjdk-amd64
 export PATH=$JAVA_HOME/bin:$PATH
 
 download() {
     set -e
-    echo By executing this script you agree to the JRE License
+    echo By executing this script you agree to the JRE License, Maven License
     echo and the licenses of all packages used \in this project.
-    echo Press Ctrl+C \if you \do not agree to any of these licenses.
-    echo Press Enter to agree.
-    read -s agree_text
-    echo Thank you \for agreeing, the download will now begin.
+    # echo Press Ctrl+C \if you \do not agree to any of these licenses.
+    # echo Press Enter to agree.
+    # read -s agree_text
+    # echo Thank you \for agreeing, the download will now begin.
     wget -O jre.tar.gz "https://javadl.oracle.com/webapps/download/AutoDL?BundleId=242050_3d5a2bb8f8d4428bbe94aed7ec7ae784"
     tar -zxf jre.tar.gz
     rm -rf jre.tar.gz
     mv ./jre* ./jre
+    echo JRE downloaded
     echo "Download complete" 
 }
 
@@ -55,11 +44,11 @@ require_executable() {
     chmod +x "$1"
 }
 
-# install Java
+# java
 require_dir "jre"
 require_executable "jre/bin/java"
 
-# Set PATH to present working directory (?)
+# Set path to present working directory
 PATH=$PWD/jre/bin:$PATH
 
 echo "Exit code $?"
