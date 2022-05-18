@@ -35,7 +35,7 @@ These commands are meant for a Linux shell. Note that `file` refers to `java`, `
 
 ### Maven Commands 
 
-These commands interact with the application itself. They can be run on any operating system from the terminal navigated to the project folder. On Replit, the shell is already in the project folder and the first two commands nelow are done automatically with the green 'run' button.
+These commands interact with the application itself. They can be run on any operating system from the terminal navigated to the project folder. On Replit, the shell is already in the project folder and the first two commands below are done automatically with the green 'run' button.
 
 * `mvn clean install` - download the packages for the app to Replit
 * `mvn compile exec:java` - execute the application
@@ -91,7 +91,7 @@ The class descriptions and UML diagrams below provide an overview of the system.
 
 #### Class Descriptions
 
-All classes and almost all methods are fully documented. Below is are the class descriptions.
+All classes and almost all methods are fully documented. Below are the class descriptions.
 
 <img src="images/all_classes.png" alt="Class Descriptions">
 
@@ -147,7 +147,7 @@ Rigorous unit testing was used throughout development to verify application func
 
 As this project is managed with [Maven](https://maven.apache.org/), the plugins and dependencies used are contained in the file `pom.xml`. Alternatively, an up-to-date list of dependencies can be found [on GitHub](https://github.com/cyberphoria/Sample-CRUD-Backend/network/dependencies). However, it does not include plugins.
 
-If the user is running the application using with the [General Instructions](#general-instructions], full API documentation including UML Class Diagrams can be generated using UMLDoclet. 
+If the user is running the application with the [General Instructions](#general-instructions], full API documentation including UML Class Diagrams can be generated using UMLDoclet. 
 
 To use UMLDoclet, [Graphviz](https://graphviz.org/download/) must be installed. To activate it, run `mvn install` in terminal. The documents generated are located in the folder `target/apidocs`.
 
