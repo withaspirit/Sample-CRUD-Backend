@@ -99,17 +99,16 @@ All classes and almost all methods are fully documented. Below are the class des
 
 #### Package Dependencies
 
-This diagram illustrates the relationship between the application's packages. `org.json.simple` is a [dependency](#technologies).
+This diagram illustrates the relationship between the application's packages. The packages for the project are divided amongst the `view`, `presenter`, and `model` per the Model-View-Presenter pattern. `backend` contains the main method. `org.json.simple` is a [dependency](#technologies).
 
 <img src="images/package-dependencies.png" alt="Package Overview">
 
-### UML Class Diagrams
-
-The packages for the project are divided amongst the `view`, `presenter`, and `model` per the Model-View-Presenter pattern. `backend` contains the main method.
-
+<br>
 <br>
 <details>
-  <summary><b>Show Package Diagrams</b></summary>
+  <summary><b>Show Class Diagrams</b></summary>
+  
+### UML Class Diagrams
 
 #### Model
 
