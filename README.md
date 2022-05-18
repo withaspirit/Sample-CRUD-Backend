@@ -4,7 +4,7 @@ A project for Shopify's Fall 2022 Backend Engineer Intern Challenge. This projec
 
 ## How to Run
 
-The app has been prepared to run without the user installing anything with an online IDE called `Replit.` For more details on how to run the app this way, see the [Replit Instructions](#replit-instructions) section.
+This application prepared to run with an online IDE called `Replit.` See the [Replit Instructions](#replit-instructions) section for details.
 
 Instructions on how to run the app from terminal are provided in [General Instructions](#general-instructions).
 
@@ -12,7 +12,7 @@ Instructions on how to run the app from terminal are provided in [General Instru
 
 [![Run on Repl.it](https://repl.it/badge/github/cyberphoria/Sample-CRUD-Backend)](https://replit.com/@liamtripp/Sample-CRUD-Backend)
 
-The badge above directs the user to the app on Replit. Once there, click the large green button. The app will ask in the `Shell` tab for user confirmation before proceeding. Various packages will then be downloaded before the application begins. 
+The badge above directs the user to the app on Replit. Once there, click the large green button. The app will ask in the `Shell` tab for user confirmation before proceeding. Various packages will be downloaded before the application begins. 
 
 See [Application Commands](#application-commands) for the available commands in the application. See [Shell Commands](#shell-commands) for commands to interact with the shell.
 
@@ -23,23 +23,6 @@ The app requires at least [JDK 17](https://www.oracle.com/java/technologies/down
 ```mvn clean install```
 
 ```mvn compile exec:java```
-
-### Shell Commands
-
-These commands are meant for a Linux shell. Note that `file` refers to `java`, `javac`, or `mvn`.
-
-* `Ctrl+C` (keyboard) - cancel a process in action
-* `kill 1` - restart the application
-* `[file] -version` - check the version of a file, without the brackets
-* `command -v [file]` - check the filepath of a file, without the brackets
-
-### Maven Commands 
-
-These commands interact with the application itself. They can be run on any operating system from the terminal navigated to the project folder. On Replit, the shell is already in the project folder and the first two commands below are done automatically with the green 'run' button.
-
-* `mvn clean install` - download the packages for the app to Replit
-* `mvn compile exec:java` - execute the application
-* `mvn test` - run the app's unit tests
 
 ### Application Commands
 
@@ -63,13 +46,30 @@ The user can use these commands while the application is running. The square bra
 
 Note that the `UPDATE` command is limited to updating one value on one item at a time.
 
+### Maven Commands 
+
+These commands interact with the application itself. They can be run on any operating system from the terminal navigated to the project folder. On Replit, the shell is already in the project folder and the first two commands below are done automatically with the green 'run' button.
+
+* `mvn clean install` - download the packages for the app to Replit
+* `mvn compile exec:java` - execute the application
+* `mvn test` - run the app's unit tests
+
+### Shell Commands
+
+These commands are meant for a Linux shell. Note that `file` refers to `java`, `javac`, or `mvn`.
+
+* `Ctrl+C` (keyboard) - cancel a process in action
+* `kill 1` - restart the application
+* `[file] -version` - check the version of a file, without the brackets
+* `command -v [file]` - check the filepath of a file, without the brackets
+
 ## Design
 
 ### Overview
 
 This application simulates an online store manager. It currently lacks integration as a web application. My experience with frontend languages like JS and Python is limited to scripting, so I chose to simulate a web application with Java.
 
-The design pattern used for the GUI is [Model-View-Presenter](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter). This separates responsibilities for different functions among different classes.
+The architectural design pattern used for the GUI is [Model-View-Presenter](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter). This separates responsibilities for different functions among different classes.
 
 [SQLite]((https://github.com/xerial/sqlite-jdbc)) is used as a database because it required less time to configure.
 
@@ -83,7 +83,7 @@ The tables for this project are `items` and `deleted_items`. Both contain `Items
 
 When an Item is deleted from a table using the `DELETE` Command, it is inserted into the `deleted_items` table. The `RESTORE` Command deletes the item from the `deleted_items` table, returning the DeletedItem to its original table as an item.
 
-Commands are processed by pattern-matching and group capturing with Regex. The captured input groups are passed and formatted for the SQL database before being executed. The Regex group capturing limits the the application to whatever is hard-coded. It favors security by disallowing input that doesn't match the required format. 
+Commands are processed by pattern-matching and group capturing with Regex. The captured input groups are passed and formatted for the SQL database before being executed. The Regex group capturing limits the application to whatever is hard-coded. It favors security by disallowing input that doesn't match the required format. 
 
 ### Classes
 
@@ -97,13 +97,13 @@ All classes and almost all methods are fully documented. Below are the class des
 
 #### Package Dependencies
 
-This diagram illustarates the relationship between the application's packages. org.json.simple is a [dependency](#technology).
+This diagram illustrates the relationship between the application's packages. org.json.simple is a [dependency](#technology).
 
 <img src="images/package-dependencies.png" alt="Package Overview">
 
 ### UML Class Diagrams
 
-The packages for the project are divided amongst the `view`, `presenter`, and `model` per the Model-View-Presenter design pattern. `backend` contains the main method.
+The packages for the project are divided amongst the `view`, `presenter`, and `model` per the Model-View-Presenter pattern. `backend` contains the main method.
 
 <details>
   <summary><b>Show Package Diagrams</b></summary>
@@ -147,7 +147,7 @@ Rigorous unit testing was used throughout development to verify application func
 
 As this project is managed with [Maven](https://maven.apache.org/), the plugins and dependencies used are contained in the file `pom.xml`. Alternatively, an up-to-date list of dependencies can be found [on GitHub](https://github.com/cyberphoria/Sample-CRUD-Backend/network/dependencies). However, it does not include plugins.
 
-If the user is running the application with the [General Instructions](#general-instructions], full API documentation including UML Class Diagrams can be generated using UMLDoclet. 
+If the user is running the application with the [General Instructions](#general-instructions], full API documentation including UML Class Diagrams can be generated using UMLDoclet. UMLDoclet is not included in the Replit.
 
 To use UMLDoclet, [Graphviz](https://graphviz.org/download/) must be installed. To activate it, run `mvn install` in terminal. The documents generated are located in the folder `target/apidocs`.
 
