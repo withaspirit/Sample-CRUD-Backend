@@ -14,9 +14,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * DatabaseCLITest ensures that DatabaseCLI's CRUD methods work properly. It
- * also ensures the Command.Regex functions work properly with DatabaseCLI's
- * Matcher functions.
+ * DatabaseCLITest ensures that DatabaseCLI's CRUD methods work properly
+ * with the DatabasePresenter.
  *
  * @author Liam Tripp
  */

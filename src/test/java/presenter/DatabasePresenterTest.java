@@ -15,8 +15,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * DatabasePresenterTest ensures the DatabasePresenter's methods work
- * correctly.
+ * DatabasePresenterTest ensures the DatabasePresenter's CRUD methods work
+ * properly with the Database.
  *
  * @author Liam Tripp
  */

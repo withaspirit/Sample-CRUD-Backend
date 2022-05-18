@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * InputFileReaderTest ensures that the input is read correctly.
+ * InputFileReaderTest ensures that inputs files are read properly.
  *
  * @author Liam Tripp
  */
