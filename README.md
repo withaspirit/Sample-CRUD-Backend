@@ -2,7 +2,7 @@
 
 A project for Shopify's Fall 2022 Backend Engineer Intern Challenge. This project involves independently creating a simple CRUD application. The additional requirement satisfied for the challenge is: `When deleting, allow deletion comments and undeletion`.
 
-## How to Run
+## How to Use
 
 This application prepared to run with an online IDE called `Replit.` See the [Replit Instructions](#replit-instructions) section for details.
 
