@@ -56,10 +56,10 @@ These commands interact with the application itself. They can be run on any oper
 
 ### Console Commands
 
-These commands are meant for a Linux terminal. Note that `file` refers to `java`, `javac`, or `mvn`.
+These commands are meant for the Replit 'Console' configured for Linux. Note that `file` refers to `java`, `javac`, or `mvn`.
 
 * `Ctrl+C` (keyboard) - cancel a process in action
-* `kill 1` - restart the application
+* `kill 1` - type in the 'Shell' while a process is running in 'Console' to cancel it and restart the application
 * `[file] -version` - check the version of a file, without the brackets
 * `command -v [file]` - check the filepath of a file, without the brackets
 
