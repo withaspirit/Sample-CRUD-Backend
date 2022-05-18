@@ -12,9 +12,9 @@ Instructions on how to run the app from terminal are provided in [General Instru
 
 [![Run on Repl.it](https://repl.it/badge/github/cyberphoria/Sample-CRUD-Backend)](https://replit.com/@liamtripp/Sample-CRUD-Backend)
 
-The badge above directs the user to the app on Replit. Once there, click the large green button. The app will ask in the `Console` tab for user confirmation before proceeding. Various packages will be downloaded before the application begins. 
+The badge above directs the user to the app on Replit. Once there, click the large green button. Various packages will be downloaded before the application begins. 
 
-See [Application Commands](#application-commands) for the available commands in the application. See [Console Commands](#console-commands) for commands to interact with the console.
+See [Application Commands](#application-commands) for the available commands in the application. See [Console Commands](#console-commands) for commands to interact with the 'Console' tab on Replit.
 
 ### General Instructions
 
@@ -56,7 +56,7 @@ These commands interact with the application itself. They can be run on any oper
 
 ### Console Commands
 
-These commands are meant for the Replit 'Console' configured for Linux. Note that `file` refers to `java`, `javac`, or `mvn`.
+These commands are meant for the Replit 'Console' tab configured for Linux. Note that `file` refers to `java`, `javac`, or `mvn`.
 
 * `Ctrl+C` (keyboard) - cancel a process in action
 * `kill 1` - type in the 'Shell' while a process is running in 'Console' to cancel it and restart the application
