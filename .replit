@@ -1,6 +1,6 @@
 compile = """
 bash startup.sh
-mvn -f /home/runner/Sample-Crud-Database/pom.xml clean install
+mvn -f /home/runner/Sample-CRUD-Backend/pom.xml clean install
 """
 
 run = "mvn compile exec:java"
