@@ -1,13 +1,10 @@
 compile = """
 mvn clean
 bash startup.sh
-mvn -f /home/runner/Sample-CRUD-Backend/pom.xml install
+mvn install
 """
 
 run = "mvn compile exec:java"
-
-entrypoint = "DatabaseBackend.java"
-hidden = ["**/*.class"]
 
 [packager]
 language = "java"
