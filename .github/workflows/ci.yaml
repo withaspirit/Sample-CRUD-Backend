@@ -1,3 +1,4 @@
+# references: [https://mfaisalkhatri.github.io/2022/04/26/githubactions-for-java-maven-project/]
 name: Java CI
 
 on:
