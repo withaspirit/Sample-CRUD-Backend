@@ -24,7 +24,7 @@ jobs:
         - name: Validate the project
           run: mvn validate
         - name: Build the project
-          run: mvn clean install -Dmaven.test.skip --no-transfer-progress
+          run: mvn clean install '-Dmaven.test.skip' --no-transfer-progress
         - name: Compile source classes with Maven
           run: mvn compiler:compile
         - name: Compile test classes with Maven
