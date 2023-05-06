@@ -31,5 +31,8 @@ jobs:
           run: mvn compiler:testCompile
         - name: Test with Maven
           run: mvn test --no-transfer-progress
+        - name: Publish Test Report
+          if: success() || failure()
+          uses: scacap/action-surefire-report@v1
 #        - name: Build project with Maven
 #          run: mvn --no-transfer-progress package --file pom.xml
