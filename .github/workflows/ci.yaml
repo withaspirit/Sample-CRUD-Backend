@@ -11,5 +11,6 @@ jobs:
           with:
             distribution: 'temurin' # See 'Supported distributions' for available options
             java-version: '17'
+            cache: maven
         - name: Build project with Maven
           run: mvn -B package --file pom.xml
