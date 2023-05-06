@@ -21,8 +21,9 @@ jobs:
             distribution: 'temurin' # See 'Supported distributions' for available options
             java-version: '17'
             cache: maven
-
-        - name: Build the Project
+        - name: Validate the project
+          run: mvn validate
+        - name: Build the project
           run: mvn clean install -Dmaven.test.skip=true --no-transfer-progress
         - name: Compile source classes with Maven
           run: mvn compiler:compile
