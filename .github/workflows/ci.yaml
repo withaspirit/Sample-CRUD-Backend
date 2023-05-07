@@ -36,7 +36,7 @@ jobs:
 #          uses: scacap/action-surefire-report@v1
 
     checkstyle_job:
-      runs-on: [windows-latest]
+      runs-on: [ubuntu-latest]
       name: Checkstyle job
       steps:
         - name: Checkout
