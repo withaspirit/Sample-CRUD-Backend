@@ -31,8 +31,22 @@ jobs:
           run: mvn compiler:testCompile
         - name: Test with Maven
           run: mvn test --no-transfer-progress
-        - name: Publish Test Report
-          if: success() || failure()
-          uses: scacap/action-surefire-report@v1
+#        - name: Publish Test Report
+#          if: success() || failure()
+#          uses: scacap/action-surefire-report@v1
+
+    checkstyle_job:
+      runs-on: [windows-latest]
+      name: Checkstyle job
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v2
+        - name: Run check style
+          uses: nikitasavinov/checkstyle-action@master
+          with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            reporter: 'github-pr-check'
+            tool_name: 'testtool'
+
 #        - name: Build project with Maven
 #          run: mvn --no-transfer-progress package --file pom.xml
