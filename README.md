@@ -156,7 +156,7 @@ Rigorous unit testing was used throughout development to verify application func
 
 ## Technologies
 
-As this project is managed with [Maven](https://maven.apache.org/), the plugins and dependencies used are contained in the file `pom.xml`. Alternatively, an up-to-date list of dependencies can be found [on GitHub](https://github.com/liamtripp/Sample-CRUD-Backend/network/dependencies). However, it does not include plugins.
+As this project is managed with [Maven](https://maven.apache.org/), the plugins and dependencies used are contained in the file `pom.xml`. Alternatively, an up-to-date list of dependencies can be found [on GitHub](https://github.com/withaspirit/Sample-CRUD-Backend/network/dependencies). However, it does not include plugins.
 
 If the user is running the application with the [General Instructions](#general-instructions), full API documentation including UML class diagrams can be generated using UMLDoclet. UMLDoclet is not included in the Replit.
 
