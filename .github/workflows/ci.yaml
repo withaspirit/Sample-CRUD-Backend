@@ -1,0 +1,52 @@
+# references: [https://mfaisalkhatri.github.io/2022/04/26/githubactions-for-java-maven-project/]
+name: Java CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    types: [opened, reopened]
+
+jobs:
+    build:
+      runs-on: [windows-latest]
+
+      steps:
+        - name: Checkout repo
+          uses: actions/checkout@v3
+
+        - name: Setup JDK 17
+          uses: actions/setup-java@v3
+          with:
+            distribution: 'temurin' # See 'Supported distributions' for available options
+            java-version: '17'
+            cache: maven
+        - name: Validate the project
+          run: mvn validate
+        - name: Install the project
+          run: mvn clean install '-Dmaven.test.skip' --no-transfer-progress
+        - name: Compile source classes with Maven
+          run: mvn compiler:compile
+        - name: Compile test classes with Maven
+          run: mvn compiler:testCompile
+        - name: Test with Maven
+          run: mvn test --no-transfer-progress
+#        - name: Publish Test Report
+#          if: success() || failure()
+#          uses: scacap/action-surefire-report@v1
+
+    checkstyle_job:
+      runs-on: [ubuntu-latest]
+      name: Checkstyle job
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v2
+        - name: Run check style
+          uses: nikitasavinov/checkstyle-action@master
+          with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            reporter: 'github-pr-check'
+            tool_name: 'testtool'
+
+#        - name: Build project with Maven
+#          run: mvn --no-transfer-progress package --file pom.xml
